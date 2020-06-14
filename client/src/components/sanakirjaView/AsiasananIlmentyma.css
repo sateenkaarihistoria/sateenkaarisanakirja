@@ -1,0 +1,16 @@
+.ui.table tr td {
+  border-top: 0px !important;
+  padding: 0px !important;
+}
+
+.table-label-cell {
+  width: 30%;
+}
+
+.table-content-cell {
+  width: 70%;
+}
+
+.table-citation-cell {
+  width: 100%;
+}

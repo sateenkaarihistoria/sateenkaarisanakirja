@@ -1,0 +1,29 @@
+.kirjainhaku {
+  padding-top: 0rem;
+  padding-bottom: 0rem;
+  margin-top: 0rem;
+  margin-bottom: 0rem;
+}
+
+.hakukirjain {
+  color: blue;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+@media screen and (max-width: 685px) {
+  .hakukirjain {
+    margin-left: 0.4rem;
+    margin-right: 0.4rem;
+  }
+}
+
+@media screen and (max-width: 605px) {
+  .hakukirjain {
+    margin-left: 0.30rem;
+    margin-right: 0.30rem;
+  }
+}
+
