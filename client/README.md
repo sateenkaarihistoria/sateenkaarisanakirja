@@ -1,10 +1,3 @@
-# React Boilerplate
+# Sateenkaarisanakirja CLIENT
 
-React, AirBnB ESLint, Prettier
-
-See `package.json` for `npm` scripts.
-
-## TODO
-
-- Create proper README
-- Add gh-pages publishing
+Sateenkaarisanakirja-sovelluksen Frontend/UI on toteutettu React-sovelluskehyksellä. Client-kansion sisältämä React-projekti on generoitu create-react-app -moduulia hyödyntämällä.
