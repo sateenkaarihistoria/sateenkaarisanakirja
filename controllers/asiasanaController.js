@@ -95,9 +95,11 @@ const kaikkiSanat = async (hakusanat) => {
         reject(error)
       } else if (results.rows[0].min != null) {
         pv = results.rows[0].min
+        // HUOM - Poistettu koska Herokussa tämä aiheutti pvm tulostumisen väärin
         // Lisataan yksi paiva, koska lokaali aika ottaa kaksi tuntia pois.
         // pv.setDate(pv.getDate() +1);
         pv = pv.toISOString()
+
         pv = pv.substring(0,10)
       }
       resolve(pv)
@@ -111,9 +113,11 @@ const kaikkiSanat = async (hakusanat) => {
         reject(error)
       } else if (results.rows[0].max != null) {
         pv = results.rows[0].max
+        // HUOM - Poistettu koska Herokussa tämä aiheutti pvm tulostumisen väärin
         // Lisataan yksi paiva, koska lokaali aika ottaa kaksi tuntia pois.
         // pv.setDate(pv.getDate() +1);
-        // console.log(results.rows[0].max + " moi");
+
+
         pv = pv.toISOString()
         // console.log(pv + " hei");
         pv = pv.substring(0,10)
