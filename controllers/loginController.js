@@ -50,6 +50,7 @@ exports.tarkistaSalasana = function (req, res, next) {
       next();
     }
     else {
+      console.log(req);
       console.log('Nimi ja salasana eivät täsmää');
       res.sendStatus(401);
     }

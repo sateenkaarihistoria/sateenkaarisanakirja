@@ -10,8 +10,8 @@ const connection = new Pool({
     port: process.env.DB_PORT,
 });
 //testataan yhteys
-//connection.query('SELECT NOW()', (err, res) => {
-//    console.log(err, res)
-//})
+connection.query('SELECT NOW()', (err, res) => {
+   console.log(err, res)
+})
 
 module.exports = connection;
