@@ -77,7 +77,7 @@ const AsiasananIlmentyma = ({ ilmentyma, poistoHandler, updateHandler }) => {
         </Table.Row>
         <Table.Row>
           <Table.Cell><b>Asiasana</b></Table.Cell>
-          <Table.Cell>{ilmentyma.asiasana}</Table.Cell>
+          <Table.Cell>{ilmentyma.asiasana.join(", ")}</Table.Cell>
         </Table.Row>
         {naytaViestiTutkijalle()}
         {naytaMuokkauspainikkeet()}

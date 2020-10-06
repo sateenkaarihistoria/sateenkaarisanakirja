@@ -17,7 +17,7 @@ const AktiivinenAsiasana = ({ aktiivinenAsiasana, suodatus, poistoHandler, updat
     if (suodatusPaalla && suodatusoptio === 'asiasana' ) {
       let { hakutermiTrim, predikaatti } = valitseHakumetodi (hakutermi)
       suodatetutIlmentymat = aktiivinenAsiasana.ilmentymat.filter(ilmentyma => 
-        predikaatti (hakutermiTrim) (ilmentyma['asiasana'][0]))
+        ilmentyma['asiasana'].some(sana => predikaatti (hakutermiTrim) (sana)))
     } else {
       suodatetutIlmentymat = aktiivinenAsiasana.ilmentymat
     }

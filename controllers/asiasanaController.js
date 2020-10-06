@@ -82,6 +82,7 @@ const kaikkiSanat = async (hakusanat) => {
         for (let k = 0; k < results.rows.length; k++) {
           aSanat.push(results.rows[k].kuvaus)
         }
+        
         resolve(aSanat)
       }
     }))
@@ -95,7 +96,7 @@ const kaikkiSanat = async (hakusanat) => {
       } else if (results.rows[0].min != null) {
         pv = results.rows[0].min
         // Lisataan yksi paiva, koska lokaali aika ottaa kaksi tuntia pois.
-        pv.setDate(pv.getDate() +1);
+        // pv.setDate(pv.getDate() +1);
         pv = pv.toISOString()
         pv = pv.substring(0,10)
       }
@@ -111,8 +112,10 @@ const kaikkiSanat = async (hakusanat) => {
       } else if (results.rows[0].max != null) {
         pv = results.rows[0].max
         // Lisataan yksi paiva, koska lokaali aika ottaa kaksi tuntia pois.
-        pv.setDate(pv.getDate() +1);
+        // pv.setDate(pv.getDate() +1);
+        // console.log(results.rows[0].max + " moi");
         pv = pv.toISOString()
+        // console.log(pv + " hei");
         pv = pv.substring(0,10)
       }
       resolve(pv)
