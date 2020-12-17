@@ -19,62 +19,119 @@ const MainStructure = ({ className }) => {
         <Responsive {...Responsive.onlyComputer}>
           <RdMenu history={history} activeItem="johdanto" />
         </Responsive>
-        <h1 id="infoHeader" className="ui header">JOHDANTO</h1>
+        <h1 id="infoHeader" className="ui header">
+          JOHDANTO
+        </h1>
         <div className="ui padded segment">
           <p>
-            Ihmiset ovat kaikkina aikoina ilmaisseet sukupuoltaan monin tavoin, etsineet intiimiä läheisyyttä 
-            toisistaan ja harrastaneet seksuaalisia tekoja keskenään. Mutta se, mitä merkityksiä näille teoille 
-            on annettu, miten niihin on suhtauduttu, miten niistä on puhuttu ja mitä niistä on kirjoitettu, 
-            riippuu ratkaisevasti kulloisestakin ajasta ja paikasta. Suomessa on tehty toistaiseksi vain vähän 
-            historiallista tutkimusta siitä, miten meillä on käsitelty sellaista sukupuolen moninaisuutta, joka ylittää 
-            yksiselitteisen nais–mies-jaon, tai sellaisia intiimejä suhteita, jotka poikkeavat heteroseksuaalisesta 
-            oletuksesta. Seuraavassa puhutaan sukupuolen ja seksuaalisuuden moninaisuutena niistä historiallisista ilmiöistä, 
-            joista puhuessamme käyttäisimme nykyisin esimerkiksi sellaisia sanoja kuin muunsukupuolisuus, transsukupuolisuus 
-            tai intersukupuolisuus, tai sitten homous, lesbous tai biseksuaalisuus.
+            Ihmiset ovat kaikkina aikoina ilmaisseet sukupuoltaan monin tavoin,
+            etsineet intiimiä läheisyyttä toisistaan ja harrastaneet
+            seksuaalisia tekoja keskenään. Mutta se, mitä merkityksiä näille
+            teoille on annettu, miten niihin on suhtauduttu, miten niistä on
+            puhuttu ja mitä niistä on kirjoitettu, riippuu ratkaisevasti
+            kulloisestakin ajasta ja paikasta. Suomessa on tehty toistaiseksi
+            vain vähän historiallista tutkimusta siitä, miten meillä on
+            käsitelty sellaista sukupuolen moninaisuutta, joka ylittää
+            yksiselitteisen nais–mies-jaon, tai sellaisia intiimejä suhteita,
+            jotka poikkeavat heteroseksuaalisesta oletuksesta. Käsillä olevassa
+            <i>Sateenkaarihistorian hakusanakirjassa</i> tuodaan esiin
+            sukupuolen ja seksuaalisuuden moninaisuutta, eli sellaisia
+            historiallisia ilmiöitä, joista puhuessamme käyttäisimme nykyisin
+            esimerkiksi sanoja muunsukupuolisuus, transsukupuolisuus tai
+            intersukupuolisuus, tai sitten homous, lesbous, bi- tai
+            panseksuaalisuus.
           </p>
-          <div className="ui divider"/>
+          <div className="ui divider" />
           <p>
-            Tämän <i>Sateenkaarihistorian hakusanakirjan</i> tarkoituksena on auttaa niin tutkijoita kuin muitakin asiasta 
-            kiinnostuneita lähestymään sukupuolen ja seksuaalisuuden moninaisuuden historiaa sanomalehtikirjoittelun 
-            varassa. Hakusanakirjaan on kerätty <i>Helsingin Sanomissa</i> vuosina 1904–1939 julkaistuista teksteistä sellaisia 
-            1) ilmaisuja, joilla on viitattu sukupuolen 
-            ja seksuaalisuuden moninaisuuteen, 2) kulttuurituotteita, joissa näitä aiheita on käsitelty, sekä 3) organisaatioita, 
-            jotka ovat olleet asian kanssa tavalla tai toisella tekemisissä.
+            <i>Sateenkaarihistorian hakusanakirjan</i> tarkoituksena on auttaa
+            niin tutkijoita kuin muitakin asiasta kiinnostuneita lähestymään
+            sukupuolen ja seksuaalisuuden moninaisuuden historiaa
+            sanomalehtikirjoittelun varassa. Hakusanakirjaan on kerätty
+            <i>Helsingin Sanomissa</i> vuosina 1904–1939 julkaistuista
+            teksteistä löytyneitä 1) sanoja ja ilmaisuja, joilla on viitattu
+            sukupuolen ja seksuaalisuuden moninaisuuteen, 2) kulttuurituotteita,
+            joissa näitä aiheita on käsitelty, sekä 3) organisaatioita, jotka
+            ovat olleet asian kanssa tavalla tai toisella tekemisissä.
           </p>
-          <div className="ui divider"/>
+          <div className="ui divider" />
           <p>
-            Lainsäädännön muutokset ovat vaikuttaneet vahvasti nykyisten sukupuolen ja seksuaalisuuden moninaisuutta 
-            kuvaavien käsitteiden syntyyn, käyttöön ja erityisesti niiden saamiin merkityksiin. Vuonna 1971 laillistettiin 
-            niin naisten kuin miestenkin homoseksuaaliset teot. Näistä oli tullut rikollisia lakiuudistuksen astuttua voimaan
-            vuonna 1894, ja teoista voitiin tuomita kaksi vuotta vankeutta. Vuonna 1981 homoseksuaalisuus poistettiin 
-            sairausluokituksesta. Lisäksi lesbo- ja homoliike on 1970-luvulta lähtien hyödyntänyt tavoitteittensa ajamisessa 
-            avoimuuteen kannustavaa identiteettipolitiikkaa, kuten sittemmin myös sukupuolten moninaisuuden yhdenvertaisuutta 
-            ajamaan ryhtynyt transyhteisökin. Tämä poliittinen liikehdintä on ratkaisevasti muuttanut ymmärrystämme 
-            seksuaalisuuden ja sukupuolen moninaisuudesta, ja siten myös sanomalehtien kirjoittelua aiheesta. Esimerkiksi 
-            muunsukupuolisuudesta, transsukupuolisuudesta ja intersukupuolisuudesta käytävässä keskustelussa viitataan 
-            nykyisin usein ihmisoikeuksiin, mikä ei aiemmin olisi monille tullut mieleenkään.
+            Sanakirjan hakusanoja ja niiden taustalla olevia uutisia
+            tarkasteltaessa on hyvä muistaa, että lainsäädännön muutokset ovat
+            vaikuttaneet vahvasti nykyisten sukupuolen ja seksuaalisuuden
+            moninaisuutta kuvaavien käsitteiden syntyyn, käyttöön ja erityisesti
+            niiden saamiin merkityksiin. Vuonna 1894 Suomessa tuli voimaan
+            lakimuutos, jonka myötä niin naisten kuin miestenkin
+            homoseksuaaliset teot määriteltiin rikoksiksi, ja tekoihin
+            syyllistyneet voitiin tuomita kahdeksi vuodeksi vankeuteen. Tämä
+            laki kumottiin vuonna 1971, jolloin aikuisten väliset
+            homoseksuaaliset teot lakkasivat olemasta rikoksia. Vuonna 1981
+            homoseksuaalisuus poistettiin sairausluokituksesta. Lisäksi lesbo-
+            ja homoliike on 1970-luvulta lähtien hyödyntänyt tavoitteittensa
+            ajamisessa avoimuuteen kannustavaa identiteettipolitiikkaa, kuten
+            sittemmin myös sukupuolten moninaisuuden yhdenvertaisuutta ajamaan
+            ryhtynyt transyhteisökin. Tämä poliittinen liikehdintä on
+            ratkaisevasti muuttanut ymmärrystämme seksuaalisuuden ja sukupuolen
+            moninaisuudesta ja siten myös sanomalehtien kirjoittelua aiheesta.
+            Esimerkiksi muunsukupuolisuudesta, transsukupuolisuudesta ja
+            intersukupuolisuudesta käytävässä keskustelussa viitataan nykyisin
+            usein ihmisoikeuksiin, mikä ei aiemmin olisi monille tullut
+            mieleenkään.
           </p>
           <p>
-            Seksuaalisuuden moninaisuudesta 1900-luvun ensimmäisellä puoliskolla käytyä sanomalehtikirjoittelua sen sijaan 
-            väritti vielä vahvasti ”samaa sukupuolta olevan henkilön kanssa harjoitetun haureuden” rikollinen ja siksi tuomittavaksi 
-            leimattu luonne. Rikosuutisointi oli siksi tavallisimmin se tapa, jolla homoseksuaalisia teemoja käsiteltiin julkisesti. 
-            Tuohon aikaan aihepiiriä koskeva sanastokin etsi vielä muotoaan, ja hankalaksi koetusta ilmiöstä puhuttiin kernaasti erilaisia 
-            kiertoilmauksia käyttäen. Näitä kiertoilmaisuja on siksi otettu mukaan myös sanakirjaan. Sukupuolen moninaisuudesta taas 
-            tavallisimmin vaiettiin lehdistössä. 
-            Jos asia nostettiin esille, sitä koskeva käsitteistö oli sangen horjuvaa ja nykypäivästä käsin arvioituna vähintäänkin monimerkityksellistä.
+            Seksuaalisuuden moninaisuudesta 1900-luvun ensimmäisellä puoliskolla
+            käyty sanomalehtikirjoittelu puolestaan käsitteli usein rikoksia,
+            joten sitä väritti vahvasti ”samaa sukupuolta olevan henkilön kanssa
+            harjoitetun haureuden” paheksunta. Myös ajatus homoseksuaalisuudesta
+            luonnottomana poikkeavuutena oli tuolloin yleinen. Mutta
+            kulttuurituotteita koskevasta uutisoinnista löytyy myös yrityksiä
+            ymmärtää heteroseksuaalisuudesta poikkeavia haluja. Sukupuolen
+            moninaisuutta koskeva uutisointi puolestaan käsitteli lähinnä niissä
+            tilanteissa syntynyttä hämmennystä, joissa henkilön sukupuoli ei
+            vastannutkaan sille asetettuja odotuksia.
           </p>
           <p>
-            Ankarasta lainsäädännöstä huolimatta niin naisten kuin miestenkin rikostuomiot homoseksuaalisista teoista olivat ennen 1950-lukua 
-            kaiken kaikkiaan hyvin harvinaisia. Näin ollen sanomalehtien uutisointi antaa meille vain kalpean kuvan siitä, millaista seksuaalisuuden 
-            moninaisuuden kanssa eläneiden ihmisten arkielämä on ollut. Rajoittunut uutisointi koskee myös sukupuolen moninaisuutta. Muiden lähteiden 
-            nojalla tiedämme kuitenkin, että puhekielessä on käytetty monenlaisia ronskejakin ilmaisuja, joilla vallitsevasta sukupuolen ja seksuaalisuuden
-            normistosta poikkeaminen on kuitattu yhteisön sisällä siihen sen 
-            kummemmin muuten puuttumatta. Sanomalehtien välityksellä saamme kuitenkin tietoa siitä, miten julkisuudessa on pyritty määrittelemään ja kontrolloimaan poikkeavuuksia. 
+            Sanakirjan selaaminen tuo hyvin esiin sen, kuinka 1900-luvun
+            alkuvuosikymmeninä seksuaalisuuden moninaisuutta koskeva sanasto
+            etsi muotoaan ja myös vakiintunutta kirjoitustapaa. Hankalaksi
+            koetusta ilmiöstä puhuttiin kernaasti erilaisia kiertoilmauksia
+            käyttäen, ja siksi niitäkin on otettu mukaan sanakirjaan. Samoin
+            sukupuolen moninaisuutta koskeva käsitteistö oli sangen horjuvaa ja
+            nykypäivästä käsin arvioituna vähintäänkin monimerkityksellistä.
           </p>
-          <div className="ui divider"/>
           <p>
-            Lisätietoja sukupuolen ja seksuaalisuuden moninaisuuden historiaa koskevasta kotimaisesta tutkimuksesta 
-            löydät esimerkiksi Sateenkaarihistorian ystävien kotisivuilta <a href="https://sateenkaarihistoria.fi" target="_blank" rel="noopener noreferrer" >sateenkaarihistoria.fi</a>
+            Sanomalehtien välityksellä saamme tietoa lähinnä siitä, miten
+            julkisuudessa on pyritty määrittelemään ja kontrolloimaan
+            poikkeavuuksia. Siksi se antaa meille vain kapean käsityksen siitä,
+            millaista sukupuolen tai seksuaalisuuden moninaisuuden kanssa
+            eläneiden ihmisten arkielämä on ollut. Toivottavasti
+            Sateenkaarihistorian hakusanakirja auttaa käyttäjiään löytämään myös
+            muita aineistoja, joiden varassa ymmärryksemme sukupuolen ja
+            seksuaalisuuden moninaisuuden historiasta voi avartua edelleen.
+          </p>
+          <p>
+            Sateenkaarihistorian hakusanakirjassa esiintyvien hakusanojen
+            varassa itse kukin voi tehdä omia hakujaan Kansalliskirjaston
+            digitoiduista sanomalehtikokoelmista:{' '}
+            <a
+              href="https://digi.kansalliskirjasto.fi/collections?id=82"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              https://digi.kansalliskirjasto.fi/collections?id=82
+            </a>
+          </p>
+          <div className="ui divider" />
+          <p>
+            Lisätietoja sukupuolen ja seksuaalisuuden moninaisuuden historiaa
+            koskevasta kotimaisesta tutkimuksesta löydät esimerkiksi
+            Sateenkaarihistorian ystävien kotisivuilta{' '}
+            <a
+              href="https://sateenkaarihistoria.fi"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              sateenkaarihistoria.fi
+            </a>
           </p>
         </div>
       </Container>
@@ -87,11 +144,11 @@ const RdIntroduction = styled(MainStructure)`
   height: 100vh;
   background-color: ${({ theme }) => theme.palette.primary.main};
 
-  #infoHeader{
+  #infoHeader {
     margin-top: 3rem;
     margin-bottom: 3rem;
   }
-  .header{
+  .header {
     color: ${({ theme }) => theme.palette.primary.dark};
   }
   .ui.segment {
