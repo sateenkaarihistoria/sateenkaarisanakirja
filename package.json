@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "heroku-postbuild": "cd client && npm install && npm run build"
+    "heroku-postbuild": "cd client && npm install && npm run build",
+    "test-server": "cross-env DB_USER=root DB_HOST=localhost DB_DATABASE=test_db DB_PASS=test DB_PORT=5432 node server.js"
   },
   "author": "",
   "license": "ISC",
@@ -20,5 +21,8 @@
     "helmet": "^3.21.2",
     "jsonwebtoken": "^8.5.1",
     "pg": "^7.18.2"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.3"
   }
 }
