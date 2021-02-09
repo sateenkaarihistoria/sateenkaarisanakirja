@@ -13,3 +13,5 @@
 ## Wiki
 - Sovelluksen Wiki-sivulta löytyy sovelluksen dokumentaatio sekä asennusohjeet
 
+## Toisen kehityskierroksen projektiryhmäläiset
+- Loviisa Halttunen
