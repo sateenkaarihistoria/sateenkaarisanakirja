@@ -16,3 +16,4 @@
 ## Toisen kehityskierroksen projektiryhmäläiset
 - Loviisa Halttunen
 - Tellervo Kettunen
+- Joel Rauma
