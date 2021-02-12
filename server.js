@@ -4,12 +4,13 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const helmet = require("helmet");
 const cors = require("cors");
-
+const compression = require("compression")
 const app = express();
 const port = process.env.PORT || 8000;
 const api = require("./routes/api_router");
 
 // Setup middleware stack
+app.use(compression());
 app.use(helmet());
 app.use(cors());
 app.use(express.json());
