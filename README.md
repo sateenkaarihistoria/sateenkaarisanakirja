@@ -17,3 +17,4 @@
 - Loviisa Halttunen
 - Tellervo Kettunen
 - Joel Rauma
+- Sauli Nevalainen
