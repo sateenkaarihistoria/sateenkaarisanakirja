@@ -1,5 +1,6 @@
-'use strict';
+
 const express = require('express');
+
 const api = express.Router();
 const asiasanaController = require('../controllers/asiasanaController');
 const organisaatioController = require('../controllers/organisaatioController');
@@ -14,8 +15,8 @@ const loginController = require('../controllers/loginController.js');
 const validointiController = require('../controllers/validointiController.js');
 const inputController =  require('../controllers/inputController.js');
 
-//----------------------------- AVOIMET REITIT -----------------------------//
-//////////////////////////////////////////////////////////////////////////////
+// ----------------------------- AVOIMET REITIT -----------------------------//
+/// ///////////////////////////////////////////////////////////////////////////
 
 // Apureitti devaukseen
 // POST: luo yhden Admin-nimisen käyttäjän vapaavalintaisella salasanalla, estää useamman käytön
@@ -25,9 +26,9 @@ api.post('/api/kayttaja/admin', kayttajaController.luoAdmin, kayttajaController.
 // LOGIN
 // POST: sovellukseen kirjautuminen
 // @body: JSON-objekti: nimi, salasana
-api.post('/login', 
-  loginController.sanitoiParametrit, 
-  loginController.tarkistaParametrit, 
+api.post('/login',
+  loginController.sanitoiParametrit,
+  loginController.tarkistaParametrit,
   loginController.etsiKayttaja,
   loginController.tarkistaSalasana,
   loginController.login
@@ -50,7 +51,7 @@ api.get('/api/organisaatio', organisaatioController.listOrganizations);
 
 // GET: palauttaa yhden tietokannassa olevan organisaation
 // @param: id
-api.get('/api/organisaatio/:id', 
+api.get('/api/organisaatio/:id',
   validointiController.tarkistaParam,
   organisaatioController.returnOrganization
 );
@@ -66,8 +67,8 @@ api.get('/api/henkilo/:id',
   kulttuuriteosController.returnHenkilo
 );
 
-//------------------------------ SUOJATUT REITIT ----------------------------//
-///////////////////////////////////////////////////////////////////////////////
+// ------------------------------ SUOJATUT REITIT ----------------------------//
+/// ////////////////////////////////////////////////////////////////////////////
 
 // Kaikki alla olevat reitit vaativat, että käyttäjä on kirjautunut sovellukseen
 // Tarkistetaan, että pyynnössä on mukana JWT-token ja tarkistetaan, että token on validi
@@ -83,7 +84,7 @@ api.get('/api/kayttaja/:id', loginController.tarkistaOikeudet, kayttajaControlle
 
 // POST: lisätään yksi uusi käyttäjä tietokantaan, vaatii admin-oikeudet
 // @body: JSON-objekti: nimi, salasana, rooli
-api.post('/api/kayttaja', 
+api.post('/api/kayttaja',
   loginController.tarkistaAdmin,
   kayttajaController.tarkistaData,
   kayttajaController.uusiKayttaja
@@ -114,7 +115,7 @@ api.delete('/api/kayttaja/:id', loginController.tarkistaOikeudet, kayttajaContro
 
 // HAKUSANAT
 // POST: lisätään tietokantaan yksi hakusana ja sen ilmentymä
-// @body: JSON-objekti: hs_osio, paivays, sana, selite, sanaluokka, tyyli, kayttoala, lause, 
+// @body: JSON-objekti: hs_osio, paivays, sana, selite, sanaluokka, tyyli, kayttoala, lause,
 // kuvaus, viesti, valmis
 api.post('/api/hakusana',
   validointiController.tarkistaSananLisays,
@@ -130,7 +131,7 @@ api.post('/api/hakusana',
 // PUT: muutetaan yhden hakusanan tietoja
 // @param: id
 // @body: JSON-objekti: sana, sanaluokka
-api.put('/api/hakusana/:id', 
+api.put('/api/hakusana/:id',
   validointiController.tarkistaParam,
   validointiController.tarkistaHakusananMuutos,
   inputController.muunnaSanojenKirjaimet,
