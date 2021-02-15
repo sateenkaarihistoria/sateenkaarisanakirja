@@ -16,3 +16,10 @@ exports.haeKaikki = async () => {
   const paluu = await hakusana.haeKaikkiTiedot();
   return paluu;
 }
+
+exports.haeKaikkiVuosilla = async (alku = 0, loppu = 9999) => {
+  const alkuPvm = new Date(alku, 1, 1);
+  const loppuPvm = new Date(loppu, 12, 31);
+  const paluu = await hakusana.haeKaikkiTiedotVuosilla(alkuPvm, loppuPvm);
+  return paluu;
+}

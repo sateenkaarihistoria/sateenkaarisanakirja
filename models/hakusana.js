@@ -73,12 +73,22 @@ y as (SELECT i.sana_id,
 SELECT i.sana_id as id, sana, sanaluokka, array_to_json(asiasanat),  to_char(MIN(paivays), 'YYYY-MM-DD') aikaisin, to_char(MAX(paivays), 'YYYY-MM-DD') viimeisin, json_agg(js) ilmentymat
 FROM t JOIN ilmentyma i ON i.id = t.id, y, hakusana h
 WHERE t.sana_id = y.sana_id AND h.id = t.sana_id
-GROUP BY t.sana_id, i.sana_id, sana, y.asiasanat, sanaluokka;
+GROUP BY t.sana_id, i.sana_id, sana, y.asiasanat, sanaluokka
 `
 
 exports.haeKaikkiTiedot = async () => {
   try {
     const tulos = await connection.query(sqlHaeKaikkiTiedot)
+    return tulos.rows;
+  } catch (e) {
+    return e;
+  }
+}
+
+const sqlKaikkiVuosilla = ` HAVING MIN(paivays) >= $1 AND MAX(paivays) <= $2`;
+exports.haeKaikkiTiedotVuosilla = async (alkuPvm, loppuPvm) => {
+  try {
+    const tulos = await connection.query(sqlHaeKaikkiTiedot + sqlKaikkiVuosilla, [alkuPvm, loppuPvm]);
     return tulos.rows;
   } catch (e) {
     return e;

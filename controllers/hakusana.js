@@ -1,4 +1,4 @@
-const {haeLista, haeSana, haeKaikki} = require('../services/hakusana.js');
+const {haeLista, haeSana, haeKaikki, haeKaikkiVuosilla} = require('../services/hakusana.js');
 
 exports.hakuSanaLista = async (req, res, next) => {
   const {alkuvuosi, loppuvuosi} = req.body;
@@ -12,7 +12,13 @@ exports.hakuSanaTiedot = async (req, res, next) => {
 }
 
 exports.hakuKaikki = async (req, res, next) => {
-  const tiedot = await haeKaikki();
+  const {alkuvuosi, loppuvuosi} = req.body;
+  let tiedot;
+  if(alkuvuosi || loppuvuosi) {
+    tiedot = await haeKaikkiVuosilla(alkuvuosi, loppuvuosi);
+  } else {
+    tiedot = await haeKaikki();
+  }
   const paluu = {"sanat": tiedot};
   res.status(200).json(paluu);
 }
