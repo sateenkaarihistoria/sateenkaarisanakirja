@@ -6,3 +6,13 @@ exports.haeLista = async (alku = 0, loppu = 9999) => {
   const paluu = await hakusana.haeHakuSanat(alkuPvm, loppuPvm);
   return paluu;
 }
+
+exports.haeSana = async (id) => {
+  const paluu = await hakusana.haeSananTiedot(id);
+  return paluu;
+}
+
+exports.haeKaikki = async () => {
+  const paluu = await hakusana.haeKaikkiTiedot();
+  return paluu;
+}

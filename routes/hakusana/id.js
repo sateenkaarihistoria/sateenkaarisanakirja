@@ -1,7 +1,6 @@
-const Router = require('express').Router;
+const {Router} = require('express');
 
-const asiasanaController = require('../../controllers/asiasanaController');
-const validointiController = require('../../controllers/validointiController');
+const hakusana = require('../../controllers/hakusana');
 
 // Linkittyy /api/hakusana
 const api = Router( {mergeParams: true} );
@@ -10,7 +9,6 @@ const api = Router( {mergeParams: true} );
 // GET: palauttaa yhden tietokannassa olevan hakusanan
 // @param: id
 api.get('/',
-  validointiController.tarkistaParam,
-  asiasanaController.returnWord);
+  hakusana.hakuSanaTiedot);
 
 module.exports = api;
