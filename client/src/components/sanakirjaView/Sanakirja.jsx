@@ -113,7 +113,10 @@ const SanakirjaPlain = ({ className }) => {
             <Grid.Row key={index}>
               <div
                 className="menuitem"
-                onClick={() => setAktiivinenAsiasana(item)}
+                onClick={(event) => {
+                  item.y = event.target.offsetTop
+                  setAktiivinenAsiasana(item)
+                }}
               >
                 <b>
                   {String(item.sana)[0].toUpperCase() +
