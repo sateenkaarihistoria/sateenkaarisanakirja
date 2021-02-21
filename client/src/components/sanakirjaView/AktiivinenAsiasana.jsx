@@ -84,8 +84,12 @@ const AktiivinenAsiasana = ({
     }
   };
 
+  const positionFromTop = document.getElementById("tuloksetGrid").offsetTop * 2;
+  let divPlace = window.scrollY - positionFromTop;
+  divPlace = divPlace > 0 ? divPlace : 0;
+
   return (
-    <div className="" style={{ position: 'relative', top: aktiivinenAsiasana.y}}>
+  <div className="" style={{ position: "relative", top: divPlace + "px" }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
         {String(aktiivinenAsiasana.sana)[0].toUpperCase() +
           String(aktiivinenAsiasana.sana).slice(1)}

@@ -202,12 +202,12 @@ const SanakirjaPlain = ({ className }) => {
           defaultHaku={SANAKIRJA_DEFAULT}
           suodatusMuutettu={suodatusMuutettu}
         />
-        <Grid columns={16}>
+        <Grid columns={16} id="tuloksetGrid">
           <Grid.Row>
             <Grid.Column width={6} textAlign="left">
               {naytaAsiasanat()}
             </Grid.Column>
-            <Grid.Column width={10}>
+            <Grid.Column verticalAlign="top" width={10}>
               {aktiivinenAsiasana ? (
                 <AktiivinenAsiasana
                   aktiivinenAsiasana={aktiivinenAsiasana}
