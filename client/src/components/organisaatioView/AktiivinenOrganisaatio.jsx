@@ -64,8 +64,12 @@ const AktiivinenOrganisaatio = ({ aktiivinenOrganisaatio, suodatus, poistoHandle
     }
   }
 
+  const positionFromTop = document.getElementById("tuloksetGrid4").offsetTop * 2;
+  let divPlace = window.scrollY - positionFromTop;
+  divPlace = divPlace > 0 ? divPlace : 0;
+
   return (
-    <div className="">
+    <div className="" style={{ position: "relative", top: divPlace + "px" }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
         {aktiivinenOrganisaatio.nimi}
       </Header>

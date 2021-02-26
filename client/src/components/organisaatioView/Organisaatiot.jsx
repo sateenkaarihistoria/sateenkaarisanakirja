@@ -178,7 +178,7 @@ const OrganisaatiotPlain = ({ className, }) => {
             hakuOptiot={ORGANISAATIOT_HAKUOPTIOT}
             defaultHaku={ORGANISAATIOT_DEFAULT}
             suodatusMuutettu={suodatusMuutettu} />
-          <Grid columns={16}>
+          <Grid columns={16} id="tuloksetGrid4">
             <Grid.Row>
               <Grid.Column width={6} textAlign="left">
                   {naytaOrganisaatiot()}
