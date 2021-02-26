@@ -216,7 +216,7 @@ const TeosNaytto = ({ className }) => {
               defaultHaku={KULTTUURITUOTTEET_DEFAULT}
               suodatusMuutettu={suodatusMuutettu}
             />
-            <Grid columns={16}>
+            <Grid columns={16} id="tuloksetGrid3">
               <Grid.Row>
                 <Grid.Column width={6} textAlign="left">
                   {naytaTeokset()}
