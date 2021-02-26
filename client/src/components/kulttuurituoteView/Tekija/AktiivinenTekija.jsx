@@ -64,8 +64,12 @@ const AktiivinenTekija = ({ aktiivinenTekija, suodatus, poistoHandler, updateHan
     }
   }
 
+  const positionFromTop = document.getElementById("tuloksetGrid2").offsetTop * 2.5;
+  let divPlace = window.scrollY - positionFromTop;
+  divPlace = divPlace > 0 ? divPlace : 0;
+
   return (
-    <div className="">
+    <div className="" style={{ position: "relative", top: divPlace + "px" }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
         {aktiivinenTekija.etunimi + " " + aktiivinenTekija.sukunimi}
       </Header>

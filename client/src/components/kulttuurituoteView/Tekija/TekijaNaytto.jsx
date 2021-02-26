@@ -206,7 +206,7 @@ const TekijaNaytto = ({ className }) => {
               defaultHaku={KULTTUURITEKIJAT_DEFAULT}
               suodatusMuutettu={suodatusMuutettu}
             />
-            <Grid columns={16}>
+            <Grid columns={16} id="tuloksetGrid2">
               <Grid.Row>
                 <Grid.Column width={6} textAlign="left">
                   {naytaTekijat()}
