@@ -113,7 +113,10 @@ const SanakirjaPlain = ({ className }) => {
             <Grid.Row key={index}>
               <div
                 className="menuitem"
-                onClick={() => setAktiivinenAsiasana(item)}
+                onClick={(event) => {
+                  item.y = event.target.offsetTop
+                  setAktiivinenAsiasana(item)
+                }}
               >
                 <b>
                   {String(item.sana)[0].toUpperCase() +
@@ -199,12 +202,12 @@ const SanakirjaPlain = ({ className }) => {
           defaultHaku={SANAKIRJA_DEFAULT}
           suodatusMuutettu={suodatusMuutettu}
         />
-        <Grid columns={16}>
+        <Grid columns={16} id="tuloksetGrid">
           <Grid.Row>
             <Grid.Column width={6} textAlign="left">
               {naytaAsiasanat()}
             </Grid.Column>
-            <Grid.Column width={10}>
+            <Grid.Column verticalAlign="top" width={10}>
               {aktiivinenAsiasana ? (
                 <AktiivinenAsiasana
                   aktiivinenAsiasana={aktiivinenAsiasana}
