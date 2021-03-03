@@ -1,4 +1,4 @@
-'use strict';
+
 
 // Funktio muuntaa syötettyn sana-datan ensimmäiset kirjaimet oikeaan muotoon
 exports.muunnaSanojenKirjaimet = function (req, res, next) {

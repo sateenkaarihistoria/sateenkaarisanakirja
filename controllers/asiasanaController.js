@@ -1,17 +1,17 @@
-//haetaan tietokantayhteys config.js:stä
+// haetaan tietokantayhteys config.js:stä
 const connection = require("../config.js");
 
 ("use strict");
 
 // Hakee kaikki tietokannan sanat
 exports.listWords = async function (req, res, next) {
-  let result = await hakusanat();
+  const result = await hakusanat();
   res.status(200).json(result);
 };
 
 const hakusanat = async () => {
   // Etsitään kaikki hakusanat
-  let hakusanat = await new Promise((resolve, reject) =>
+  const hakusanat = await new Promise((resolve, reject) =>
     connection.query("SELECT * FROM hakusana", (error, results) => {
       if (error) {
         reject(error);
@@ -21,18 +21,18 @@ const hakusanat = async () => {
     })
   );
 
-  let res = await kaikkiSanat(hakusanat);
+  const res = await kaikkiSanat(hakusanat);
   return res;
 };
 
 const kaikkiSanat = async (hakusanat) => {
   // palautettava objekti
-  let palautus = { sanat: [] };
+  const palautus = { sanat: [] };
 
   for (let j = 0; j < hakusanat.length; j++) {
-    let hakuSana = hakusanat[j];
+    const hakuSana = hakusanat[j];
     // Etsitään sanan kaikki ilmentymät
-    let sanaIlmentymat = await new Promise((resolve, reject) =>
+    const sanaIlmentymat = await new Promise((resolve, reject) =>
       connection.query(
         "SELECT * FROM ilmentyma WHERE sana_id = $1",
         [hakuSana.id],
@@ -40,34 +40,33 @@ const kaikkiSanat = async (hakusanat) => {
           if (error) {
             reject(error);
           } else {
-            let sanat = results.rows;
+            const sanat = results.rows;
             // Etsitään ilmentyman asiasanat
-            let kysely =
+            const kysely =
               "SELECT DISTINCT (kuvaus) FROM ilmentyma, asiasana, edustaa WHERE asiasana.id = asiasana_id AND ilmentyma.id = ilmentyma_id AND ilmentyma_id = $1";
             for (let i = 0; i < results.rows.length; i++) {
-              let aSanat = [];
+              const aSanat = [];
               connection.query(
                 kysely,
                 [results.rows[i].id],
                 (error, results) => {
                   if (error) {
                     return error;
-                  } else {
-                    // Jos ilmentymalla ei ole asiasanoja, palautetaan ilmentymat
-                    if (results.rows.length === 0) {
-                      resolve(sanat);
-                    }
-                    // Etsitään ilmentyman kaikki asiasanat
-                    for (let k = 0; k < results.rows.length; k++) {
-                      aSanat.push(results.rows[k].kuvaus);
-                      // Jos viimeinen kierros
-                      if (results.rows.length - k === 1) {
-                        // Lisataan tapahtumaan asiasanat
-                        sanat[i].asiasana = aSanat;
-                        // Jos kaikki ilmentymat tarkistettu palautetaan ilmentymat
-                        if (sanat.length - i === 1) {
-                          resolve(sanat);
-                        }
+                  }
+                  // Jos ilmentymalla ei ole asiasanoja, palautetaan ilmentymat
+                  if (results.rows.length === 0) {
+                    resolve(sanat);
+                  }
+                  // Etsitään ilmentyman kaikki asiasanat
+                  for (let k = 0; k < results.rows.length; k++) {
+                    aSanat.push(results.rows[k].kuvaus);
+                    // Jos viimeinen kierros
+                    if (results.rows.length - k === 1) {
+                      // Lisataan tapahtumaan asiasanat
+                      sanat[i].asiasana = aSanat;
+                      // Jos kaikki ilmentymat tarkistettu palautetaan ilmentymat
+                      if (sanat.length - i === 1) {
+                        resolve(sanat);
                       }
                     }
                   }
@@ -84,14 +83,14 @@ const kaikkiSanat = async (hakusanat) => {
     );
 
     // Etsitään hakusanaan liittyvät asiasanat
-    let kysely =
+    const kysely =
       "SELECT DISTINCT (kuvaus) FROM ilmentyma, asiasana, edustaa WHERE asiasana.id = asiasana_id AND ilmentyma.id = ilmentyma_id AND sana_id = $1";
-    let asiasanat = await new Promise((resolve, reject) =>
+    const asiasanat = await new Promise((resolve, reject) =>
       connection.query(kysely, [hakuSana.id], (error, results) => {
         if (error) {
           reject(error);
         } else {
-          let aSanat = [];
+          const aSanat = [];
           for (let k = 0; k < results.rows.length; k++) {
             aSanat.push(results.rows[k].kuvaus);
           }
@@ -102,7 +101,7 @@ const kaikkiSanat = async (hakusanat) => {
     );
 
     // Etsitään aikaisin ilmentymä hakusanalle.
-    let aikaisin = await new Promise((resolve, reject) =>
+    const aikaisin = await new Promise((resolve, reject) =>
       connection.query(
         "SELECT MIN (paivays) FROM ilmentyma where sana_id = $1",
         [hakuSana.id],
@@ -125,7 +124,7 @@ const kaikkiSanat = async (hakusanat) => {
     );
 
     // Etsitään viimeisin ilmentyma hakusanalle.
-    let viimeisin = await new Promise((resolve, reject) =>
+    const viimeisin = await new Promise((resolve, reject) =>
       connection.query(
         "SELECT MAX (paivays) FROM ilmentyma where sana_id = $1",
         [hakuSana.id],
@@ -189,7 +188,7 @@ exports.insertHakusana = function (req, res, next) {
   }
 
   // Lisataan sana hakusana tauluun, jos sita ei viela ole.
-  let kysely =
+  const kysely =
     "INSERT INTO hakusana (sana, sanaluokka) VALUES ($1, $2) ON CONFLICT (sana, sanaluokka) DO UPDATE SET sana=EXCLUDED.sana RETURNING id";
   connection.query(kysely, [sana, sanaluokka], (error, results) => {
     if (error) {
@@ -207,13 +206,12 @@ exports.tarkistaIlmentyma = function (req, res, next) {
 
   let pvm;
   if (paivays != null) {
-    let pv = paivays.substring(2, 10);
+    const pv = paivays.substring(2, 10);
     // date YYYY-MM-DD
-    pvm =
-      pv.substring(0, 4) + "-" + pv.substring(4, 6) + "-" + pv.substring(6, 8);
+    pvm = `${pv.substring(0, 4)}-${pv.substring(4, 6)}-${pv.substring(6, 8)}`;
   }
 
-  let kysely =
+  const kysely =
     "SELECT * FROM ilmentyma WHERE sana_id = $1 AND lause = $2 AND sivunumero = $3 AND paivays = $4 AND hs_osio = $5 AND tyyli = $6 AND kayttoala = $7 AND selite = $8";
   connection.query(
     kysely,
@@ -223,7 +221,7 @@ exports.tarkistaIlmentyma = function (req, res, next) {
         return next(error);
       }
       // Jos ilmentyma ei ole jo tietokannassa
-      else if (results.rows[0] == null) {
+      if (results.rows[0] == null) {
         next();
       } else {
         return res
@@ -249,14 +247,13 @@ exports.insertIlmentyma = function (req, res, next) {
 
   let pvm;
   if (paivays != null) {
-    let pv = paivays.substring(2, 10);
+    const pv = paivays.substring(2, 10);
     // date YYYY-MM-DD
-    pvm =
-      pv.substring(0, 4) + "-" + pv.substring(4, 6) + "-" + pv.substring(6, 8);
+    pvm = `${pv.substring(0, 4)}-${pv.substring(4, 6)}-${pv.substring(6, 8)}`;
   }
 
   // Lisataan ilmentyma
-  let kysely =
+  const kysely =
     "INSERT INTO ilmentyma (sana_id, lause, sivunumero, paivays, hs_osio, tyyli, kayttoala, selite, valmis, viesti) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) ON CONFLICT ON CONSTRAINT uniikki_ilmentyma DO UPDATE SET sana_id=EXCLUDED.sana_id RETURNING *";
   connection.query(
     kysely,
@@ -275,11 +272,10 @@ exports.insertIlmentyma = function (req, res, next) {
     (error, results) => {
       if (error) {
         return next(error);
-      } else {
-        req.ilmentymaId = results.rows[0].id;
-        req.ilmentyma = results.rows[0];
-        next();
       }
+      req.ilmentymaId = results.rows[0].id;
+      req.ilmentyma = results.rows[0];
+      next();
     }
   );
 };
@@ -313,7 +309,7 @@ exports.addAsiasana = function (req, res, next) {
 
   if (kuvaus != null) {
     // Asiasanat erotetaan toisistaan
-    let aSanat = kuvaus.split(";");
+    const aSanat = kuvaus.split(";");
     for (let k = 0; k < aSanat.length; k++) {
       // Lisataan uudet asiasanat asiasana tauluun
       let asiasanaId = connection.query(
@@ -359,10 +355,12 @@ exports.updateIlmentyma = function (req, res, next) {
     viesti,
   } = req.body;
 
-  let pv = paivays.substring(2, 10);
+  const pv = paivays.substring(2, 10);
   // date YYYY-MM-DD
-  let pvm =
-    pv.substring(0, 4) + "-" + pv.substring(4, 6) + "-" + pv.substring(6, 8);
+  const pvm = `${pv.substring(0, 4)}-${pv.substring(4, 6)}-${pv.substring(
+    6,
+    8
+  )}`;
 
   connection.query(
     "UPDATE ilmentyma SET hs_osio = $1, paivays = $2, sivunumero = $3, selite = $4, tyyli = $5, kayttoala = $6, lause = $7, valmis = $8, viesti = $9 WHERE id = $10 RETURNING *",
