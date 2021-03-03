@@ -56,6 +56,17 @@ const Hakukomponentti = ({ suodatusMuutettu, hakuOptiot, defaultHaku }) => {
           onChange={hakuoptioMuutettu}
         >
         </Dropdown>
+        <div>
+          <Input 
+            type="checkbox"
+            className="hakukentta"
+            onChange={hakuTermiMuutettu}
+            onKeyPress={nappainPainettu}
+            style={{ marginTop: '0rem', }}
+            value={hakutermi}
+          /> <label>Vuosihaku</label>
+        </div>
+
       </Segment>
       ) 
   } else {
