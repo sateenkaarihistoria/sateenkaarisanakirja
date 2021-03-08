@@ -22,11 +22,16 @@ const Hakukomponentti = ({ suodatusMuutettu, hakuOptiot, defaultHaku }) => {
   }
 
   const hakuKlikattu = (e, data) => {
-    suodatusMuutettu(true, valittuSuodatusOptio, hakutermi)
-    setSuodatusPaalla(true)
-    setHakutermiValittu(hakutermi)
-    setHakutermi('')
-    //console.log(alkuvuosi + " - " + loppuvuosi)
+    if (lisaOptiot) {
+      suodatusMuutettu(true, valittuSuodatusOptio, hakutermi, alkuvuosi, loppuvuosi)
+      setSuodatusPaalla(true)
+      setHakutermi('')
+    }else {
+      suodatusMuutettu(true, valittuSuodatusOptio, hakutermi)
+      setSuodatusPaalla(true)
+      setHakutermiValittu(hakutermi)
+      setHakutermi('')
+    }
   }
 
   const resetoiHaku = () => {
@@ -43,7 +48,7 @@ const Hakukomponentti = ({ suodatusMuutettu, hakuOptiot, defaultHaku }) => {
   }
 
   const lisaOptiotMuutettu = () => {
-    setLisaOptiot(!lisaOptiot);
+    setLisaOptiot(!lisaOptiot)
   }
 
   const alkuvuosiMuutettu = (e, data) => {
