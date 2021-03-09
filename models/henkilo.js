@@ -18,7 +18,7 @@ WHERE asiasana.id = asiasana_id AND teos.id = teos_id
     FROM teos, y, tapahtuu_teos, sijainti
     WHERE teos.id = y.id AND sijainti_id = sijainti.id AND teos_id = teos.id)
 
-SELECT henkilo.id, etunimi, sukunimi, ammattinimike, MAX(maa), MAX(paikkakunta), json_agg(t.js) teokset
+SELECT henkilo.id, etunimi, sukunimi, ammattinimike, MAX(maa) as maa, MAX(paikkakunta) as paikkakunta, json_agg(t.js) teokset
 FROM henkilo, sijainti, toimii_henkilo, t, tekee
 WHERE sijainti_id = sijainti.id AND henkilo.id = toimii_henkilo.henkilo_id AND t.id = tekee.teos_id and tekee.henkilo_id = henkilo.id
 GROUP BY henkilo.id, etunimi, sukunimi, ammattinimike
