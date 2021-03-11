@@ -1,4 +1,4 @@
-const Router = require('express').Router;
+const { Router } = require('express');
 
 const kulttuuriteosController = require('../../controllers/kulttuuriteosController');
 const validointiController = require('../../controllers/validointiController');
@@ -6,16 +6,14 @@ const loginController = require('../../controllers/loginController');
 const yleinenController = require('../../controllers/yleinenController');
 const inputController = require('../../controllers/inputController');
 
-
-// Linkittyy /api/hakusana
-const api = Router( {mergeParams: true} );
+const api = Router({ mergeParams: true });
 api.use(loginController.etsiToken, loginController.tarkistaToken);
-
 
 // PUT: muutetaan yhden kulttuuriteoksen tietoja
 // @param: id
 // @body: JSON-objekti: kuvaus, teos_maa, teos_paikkakunta, nimi, lajityyppi, viesti, valmis
-api.put('/',
+api.put(
+  '/',
   validointiController.tarkistaParam,
   validointiController.tarkistaTeosMuutos,
   inputController.muunnaKulttuuriteostenKirjaimet,
@@ -30,7 +28,8 @@ api.put('/',
 
 // DELETE: poistetaan yksi kulttuuriteos
 // @param: id
-api.delete('/',
+api.delete(
+  '/',
   validointiController.tarkistaParam,
   kulttuuriteosController.poistaHenkiloYhteys,
   kulttuuriteosController.deleteCulture,
