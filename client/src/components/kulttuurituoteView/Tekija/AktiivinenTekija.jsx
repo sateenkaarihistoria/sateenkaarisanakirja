@@ -14,10 +14,10 @@ const AktiivinenTekija = ({ aktiivinenTekija, suodatus, poistoHandler, updateHan
   
   const naytaTeokset = () => {
     let suodatetutTeokset = []
-    if (suodatusPaalla && suodatusoptio === 'asiasana' ) {
+    if (suodatusPaalla && suodatusoptio === 'asiasanat' ) {
       let { hakutermiTrim, predikaatti } = valitseHakumetodi (hakutermi)
       suodatetutTeokset = aktiivinenTekija.teokset.filter(teos => 
-        predikaatti (hakutermiTrim) (teos['asiasana'][0]))
+        predikaatti (hakutermiTrim) (teos['asiasanat'][0]))
     } else {
       suodatetutTeokset = aktiivinenTekija.teokset
     }

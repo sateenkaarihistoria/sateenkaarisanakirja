@@ -2,13 +2,34 @@ import React, { useState, useContext } from 'react';
 import { Button, Confirm, Divider, Table, Header } from 'semantic-ui-react';
 import UserContext from '../../../context/userContext';
 import TeosIlmentyma from './TeosIlmentyma';
+import { valitseHakumetodi } from '../../../utilities/hakutoiminnot'
 import TeosPaivitys from '../Tekija/TeosPaivitys';
 
 import './AktiivinenTeos.css';
 
-const AktiivinenTeos = ({ aktiivinenTeos, poistoHandler, updateHandler }) => {
+const AktiivinenTeos = ({ aktiivinenTeos, suodatus, poistoHandler, updateHandler }) => {
+  const { suodatusPaalla, suodatusoptio, hakutermi } = suodatus
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
   const sessioData = useContext(UserContext);
+
+  const naytaTekijät = () => {
+    let suodatetutTekijat = []
+    if (suodatusPaalla && suodatusoptio === 'asiasana' ) {
+      let { hakutermiTrim, predikaatti } = valitseHakumetodi (hakutermi)
+      suodatetutTekijat = aktiivinenTeos.teokset.filter(teos => 
+        predikaatti (hakutermiTrim) (teos['asiasanat'][0]))
+    } else {
+      suodatetutTekijat = aktiivinenTeos.tekijat
+    }
+
+    return suodatetutTekijat
+      .map(tekija => 
+        <TeosIlmentyma
+          key={tekija.id}
+          teos_tekija ={tekija}
+        />
+    )
+  }
 
   const poistonVahvistus = () => {
     setVahvistaPoistoNakyvissa(true);
@@ -79,14 +100,14 @@ const AktiivinenTeos = ({ aktiivinenTeos, poistoHandler, updateHandler }) => {
               <b>Asiasana</b>
             </Table.Cell>
             <Table.Cell className="table-content-cell">
-              {aktiivinenTeos.asiasana.join(', ')}
+              {aktiivinenTeos.asiasanat.join(', ')}
             </Table.Cell>
           </Table.Row>
           {naytaMuokkauspainikkeet()}
         </Table.Body>
       </Table>
       <Divider />
-      <TeosIlmentyma teos_tekija={aktiivinenTeos.teos_tekija} />
+      {naytaTekijät()}
       <Confirm
         open={vahvistaPoistoNakyvissa}
         content="Oletko varma, teoksen"
