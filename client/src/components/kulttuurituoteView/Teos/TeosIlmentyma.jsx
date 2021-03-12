@@ -3,7 +3,7 @@ import { Table } from 'semantic-ui-react';
 
 import './TeosIlmentyma.css'
 
-const TekijaIlmentyma = ({ teos_tekija }) => (
+const TeosIlmentyma = ({ teos_tekija }) => (
   <>
     <Table className="very basic table" textAlign='left'>
       <Table.Body>
@@ -32,4 +32,4 @@ const TekijaIlmentyma = ({ teos_tekija }) => (
   </>
 );
 
-export default TekijaIlmentyma;
+export default TeosIlmentyma;

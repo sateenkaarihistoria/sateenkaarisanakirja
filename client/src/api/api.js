@@ -112,6 +112,21 @@ export function getKulttuurituotteet() {
   });
 }
 
+export function getHenkilot() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get('/api/henkilo')
+      .then(result => {
+        result.status === 200
+          ? resolve({ status: 'success', data: result.data })
+          : resolve({ status: 'failure', data: null });
+      })
+      .catch(error => {
+        reject({ status: 'error', data: error });
+      });
+  });
+}
+
 export function getOrganisaatiot() {
   return new Promise((resolve, reject) => {
     axios

@@ -84,7 +84,7 @@ const TekijaIlmentyma = ({ teos, poistoHandler, updateHandler }) => {
               <b>Asiasanat</b>
             </Table.Cell>
             <Table.Cell className="table-content-cell">
-              {teos.asiasana.join(', ')}
+              {teos.asiasanat.join(', ')}
             </Table.Cell>
           </Table.Row>
           {naytaViestiTutkijalle()}

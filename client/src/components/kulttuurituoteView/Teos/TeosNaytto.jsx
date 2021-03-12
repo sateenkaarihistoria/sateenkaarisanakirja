@@ -33,6 +33,14 @@ const TeosNaytto = ({ className }) => {
   const suodataMaalla = suodata('teos_maa');
   const suodataAsiasanalla = suodataKulttuurituotteet('asiasana');
 
+  const haeTeokset = React.useCallback(async () => {
+    const result = await getKulttuurituotteet();
+    if (result.status === 'success') {
+      result.data.teokset.sort((a, b) => (a['nimi'] < b['nimi'] ? -1 : 1));
+      setTeokset(result.data.teokset);
+    }
+  }, []);
+
   useEffect(() => {
     let mounted = true;
     if (mounted) {
@@ -41,41 +49,7 @@ const TeosNaytto = ({ className }) => {
     }
 
     return () => (mounted = false);
-  }, []);
-
-  const haeTeokset = async () => {
-    const result = await getKulttuurituotteet();
-    if (result.status === 'success') {
-      const teoksetKoonti = result.data.henkilot.reduceRight(
-        (kooste, tekija) =>
-          kooste.concat(
-            tekija.teokset.map(teos => ({
-              id: teos.id,
-              nimi: teos.nimi,
-              lajityyppi: teos.lajityyppi,
-              teos_maa: teos.teos_maa,
-              teos_paikkakunta: teos.teos_paikkakunta,
-              asiasana: teos.asiasana,
-              valmis: teos.valmis,
-              viesti: teos.viesti,
-              teos_tekija: {
-                id: tekija.id,
-                etunimi: tekija.etunimi,
-                sukunimi: tekija.sukunimi,
-                ammattinimike: tekija.ammattinimike,
-                maa: tekija.maa,
-                paikkakunta: tekija.paikkakunta,
-              },
-            })),
-          ),
-        [],
-      );
-      teoksetKoonti.sort((a, b) => (a['nimi'] < b['nimi'] ? -1 : 1));
-      setTeokset(teoksetKoonti);
-    } else {
-      // TODO FAILURE
-    }
-  };
+  }, [haeTeokset]);
 
   const suodatusMuutettu = (suodatusBool, optio, hakutermi) => {
     setAktiivinenTeos(undefined);
