@@ -36,6 +36,7 @@ const Hakukomponentti = ({ suodatusMuutettu, hakuOptiot, defaultHaku }) => {
 
   const resetoiHaku = () => {
     setSuodatusPaalla(false);
+    setLisaOptiot(false);
     suodatusMuutettu(false, valittuSuodatusOptio, hakutermi)
     setHakutermiValittu('')
     setHakutermi('')
@@ -79,19 +80,19 @@ const Hakukomponentti = ({ suodatusMuutettu, hakuOptiot, defaultHaku }) => {
         </Dropdown>
         <div>
           <Checkbox toggle 
-            label="Suodata"
+            label="Rajaa vuoden perusteella"
             onChange={lisaOptiotMuutettu}
             />
           { lisaOptiot ?
             <div>
-            Alku: 
+            Ensimmäinen: 
             <Input 
               className="hakukentta"
               style={{ marginTop: '0rem', }}
               value={alkuvuosi}
               onChange={alkuvuosiMuutettu}
-            />
-            Loppu: 
+            /> 
+            Viimeinen: 
             <Input 
               className="hakukentta"
               style={{ marginTop: '0rem', }}
