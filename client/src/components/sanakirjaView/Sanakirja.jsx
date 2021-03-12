@@ -97,7 +97,7 @@ const SanakirjaPlain = ({ className }) => {
   const haeAsiasanat = async () => {
     const result = await getAsiasanat();
     if (result.status === 'success') {
-      result.data.sanat.sort((a, b) => (a['sana'] < b['sana'] ? -1 : 1));
+      result.data.sanat.sort((a, b) => (a['sana'].toLowerCase() < b['sana'].toLowerCase() ? -1 : 1));
       setAsiasanat(result.data.sanat);
     } else {
       // TODO FAILURE
@@ -119,7 +119,7 @@ const SanakirjaPlain = ({ className }) => {
                 }}
               >
                 <b>
-                  {String(item.sana)[0].toUpperCase() +
+                  {String(item.sana)[0] +
                     String(item.sana).slice(1)}
                 </b>{' '}
                 {'(' + item.sanaluokka + ')'}
