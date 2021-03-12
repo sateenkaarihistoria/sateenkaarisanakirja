@@ -84,8 +84,28 @@ export function postLogin(nimi, salasana) {
  */
 export function getAsiasanat() {
   return new Promise((resolve, reject) => {
+    console.log("getAsiasanat()");
     axios
       .get('/api/hakusana')
+      .then(result => {
+        result.status === 200
+          ? resolve({ status: 'success', data: result.data })
+          : resolve({ status: 'failure', data: null });
+      })
+      .catch(error => {
+        reject({ status: 'error', data: error });
+      });
+  });
+}
+
+/**
+ * Hakee asiasanat annetulta aikaväliltä.
+ */
+export function getAsiasanatV(alku, loppu) {
+  return new Promise((resolve, reject) => {
+    console.log("getAsiasanatV()");
+    axios
+      .get('/api/hakusana', {params: {alkuvuosi: alku, loppuvuosi: loppu} })
       .then(result => {
         result.status === 200
           ? resolve({ status: 'success', data: result.data })

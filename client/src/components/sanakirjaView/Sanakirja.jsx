@@ -11,7 +11,7 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import RdHeader from '../RdHeader';
 import RdMenu from '../RdMenu';
-import { getAsiasanat, deleteData, putData } from '../../api/api';
+import { getAsiasanat, getAsiasanatV, deleteData, putData } from '../../api/api';
 import UserContext from '../../context/userContext';
 
 import AktiivinenAsiasana from './AktiivinenAsiasana';
@@ -87,17 +87,44 @@ const SanakirjaPlain = ({ className }) => {
     return suodatetutAsiasanat;
   };
 
-  const suodatusMuutettu = (suodatusBool, optio, hakutermi) => {
+  const suodatusMuutettu = (suodatusBool, optio, hakutermi, alku, loppu) => {
     setAktiivinenAsiasana(undefined);
     setSuodatusPaalla(suodatusBool);
     setSuodatusoptio(optio);
     setHakutermi(hakutermi);
+
+    if (alku === "undefined") {
+  		haeAsiasanat();
+    }else {
+    	haeAsiasanatV(alku, loppu);
+    }
   };
+
+  /*const suodatusVuosiMuutettu = (suodatusBool, optio, alku, loppu) => {
+    setAktiivinenAsiasana(undefined);
+    setSuodatusPaalla(suodatusBool);
+    setSuodatusoptio(optio);
+    setHakutermi(hakutermi);
+
+    haeAsiasanatV(alku, loppu);
+  };*/
+
 
   const haeAsiasanat = async () => {
     const result = await getAsiasanat();
     if (result.status === 'success') {
       result.data.sanat.sort((a, b) => (a['sana'].toLowerCase() < b['sana'].toLowerCase() ? -1 : 1));
+      setAsiasanat(result.data.sanat);
+    } else {
+      // TODO FAILURE
+    }
+  };
+
+  //Vuodella rajatut asiasanat
+  const haeAsiasanatV = async (alku, loppu) => {
+    const result = await getAsiasanatV(alku, loppu);
+    if (result.status === 'success') {
+      result.data.sanat.sort((a, b) => (a['sana'] < b['sana'] ? -1 : 1));
       setAsiasanat(result.data.sanat);
     } else {
       // TODO FAILURE
