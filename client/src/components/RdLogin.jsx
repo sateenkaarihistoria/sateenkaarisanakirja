@@ -19,6 +19,7 @@ const Kirjautuminen = ({ className }) => {
   const login = () => {
     postLogin(nimi, salasana).then(result => {
       if (result.status === 'success') {
+        window.localStorage.setItem('loginData', JSON.stringify(result.data))
         sessioData.setToken(result.data.token);
         sessioData.setId(result.data.id);
         sessioData.setNimi(result.data.nimi);

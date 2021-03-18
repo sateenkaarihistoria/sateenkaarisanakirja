@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import 'fomantic-ui-css/semantic.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import WebFont from 'webfontloader';
@@ -44,6 +44,17 @@ const App = function AppContent() {
     rooli,
     setRooli,
   }
+
+  useEffect(() => {
+    const data = JSON.parse(window.localStorage.getItem('loginData'))
+    if(data) {
+      console.log(data)
+      setToken(data.token)
+      setId(data.id)
+      setNimi(data.nimi)
+      setRooli(data.rooli)
+    }
+  }, [])
 
   return (
     <ThemeProvider theme={theme}>
