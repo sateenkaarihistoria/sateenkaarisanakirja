@@ -17,6 +17,7 @@ const Sanalomake = () => {
     kuvaus: '',
     hakusana: '',
     selite: '',
+    selitemuokkaus: '',
     sanaluokka: '',
     tyyli: '',
     kayttoala: '',
@@ -31,7 +32,7 @@ const Sanalomake = () => {
     paivaysVirhe: false,
     asiasanaVirhe: false,
     hakusanaVirhe: false,
-    seliteVirhe: false,
+    selitemuokkausVirhe: false,
     sanaluokkaVirhe: false,
     tyyliVirhe: false,
     kayttoalaVirhe: false,
@@ -88,6 +89,7 @@ const Sanalomake = () => {
       kuvaus: '',
       hakusana: '',
       selite: '',
+      selitemuokkaus: '',
       sanaluokka: '',
       tyyli: '',
       kayttoala: '',
@@ -98,7 +100,7 @@ const Sanalomake = () => {
       paivaysVirhe: false,
       asiasanaVirhe: false,
       hakusanaVirhe: false,
-      seliteVirhe: false,
+      selitemuokkausVirhe: false,
       sanaluokkaVirhe: false,
       tyyliVirhe: false,
       kayttoalaVirhe: false,
@@ -156,11 +158,11 @@ const Sanalomake = () => {
     } else {
       paivitaVirheet('hakusanaVirhe', false);
     }
-    if (hakusanaTila['selite'].trim() === '') {
-      paivitaVirheet('seliteVirhe', true);
+    if (hakusanaTila['selitemuokkaus'].trim() === '') {
+      paivitaVirheet('selitemuokkausVirhe', true);
       virhe = true;
     } else {
-      paivitaVirheet('seliteVirhe', false);
+      paivitaVirheet('selitemuokkausVirhe', false);
     }
     if (hakusanaTila['sanaluokka'].trim() === '') {
       paivitaVirheet('sanaluokkaVirhe', true);
@@ -193,7 +195,7 @@ const Sanalomake = () => {
         paivays: hakusanaTila['paivays'],
         hs_osio: hakusanaTila['hs_osio'],
         sana: hakusanaTila['hakusana'],
-        selite: hakusanaTila['selite'],
+        selite: hakusanaTila['selitemuokkaus'],
         kuvaus: hakusanaTila['kuvaus'],
         sanaluokka: hakusanaTila['sanaluokka'],
         tyyli: hakusanaTila['tyyli'],
@@ -202,12 +204,12 @@ const Sanalomake = () => {
         viesti: hakusanaTila['viesti'],
         valmis: hakusanaTila['valmis'],
       };
-      
+
       await postData('/api/hakusana', luoFormiobjekti, sessioData.token).then((result) => {
         if (result.status === 'success') {
           sessioData.setToken(result.data.token)
           setLisattyAuki(true);
-        } 
+        }
         else {
           hoidaVirheet(result);
         }
@@ -240,7 +242,7 @@ const Sanalomake = () => {
 
   //Typeaheadin hakusanan tilan muutosta käsittelevä metodi
   const handleSearchChange = (e) => {
-   const { name, value } = e.target;
+    const { name, value } = e.target;
 
     setIsLoading((prev) => ({
       ...prev,
@@ -363,16 +365,15 @@ const Sanalomake = () => {
             />
           </Form.Input>
           <Form.Input
-            label="Hakusanan selite"
+            label="Hakusanan selitteen haku tietokannasta"
             placeholder="Selite"
             name="selite"
             value={hakusanaTila['selite']}
             onChange={muutaHakusananTilaa}
-            error={virheet['seliteVirhe']}
           >
             <Search
               loading={isLoading['selite']}
-              onResultSelect={handleResultSelect('selite')}
+              onResultSelect={handleResultSelect('selitemuokkaus')}
               onSearchChange={handleSearchChange}
               name="selite"
               results={searchResults['selite']}
@@ -381,6 +382,16 @@ const Sanalomake = () => {
               icon={null}
             />
           </Form.Input>
+        </Form.Group>
+        <Form.Group widths="equal">
+          <Form.TextArea
+            label="SELITTEEN MUOKKAUSALUE (max. 255 merkkiä)"
+            placeholder="Tähän kopioituu selitehaun osio. Sen jälkeen tekstiä voi muokata."
+            name="selitemuokkaus"
+            value={hakusanaTila['selitemuokkaus']}
+            onChange={muutaHakusananTilaa}
+            error={virheet['selitemuokkausVirhe']}
+          />
         </Form.Group>
         <Form.Group widths="equal">
           <Form.Input
