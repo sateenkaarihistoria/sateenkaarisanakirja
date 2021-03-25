@@ -116,9 +116,10 @@ export default function IlmentymaPaivitys(props) {
               value={lomakeData.asiasana}
               onChange={handleChange}
             />
-            <Form.Input
+            <Form.TextArea
               label="Selite"
               name="selite"
+              rows="4"
               value={lomakeData.selite}
               onChange={handleChange}
             />
@@ -138,9 +139,10 @@ export default function IlmentymaPaivitys(props) {
             />
           </Form.Group>
           <Form.Group widths="equal">
-            <Form.Input
+            <Form.TextArea
               label="Lause"
               name="lause"
+              rows="4"
               value={lomakeData.lause}
               onChange={handleChange}
             />
