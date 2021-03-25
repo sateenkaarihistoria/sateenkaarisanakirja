@@ -1,6 +1,11 @@
 import React, { useEffect } from 'react';
 import 'fomantic-ui-css/semantic.css';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  useLocation,
+} from 'react-router-dom';
 import WebFont from 'webfontloader';
 import { ThemeProvider } from 'styled-components';
 
@@ -30,43 +35,32 @@ WebFont.load({
 });
 
 const App = function AppContent() {
+  const path = useLocation();
   const [{ user }, dispatch] = useStateValue();
 
   useEffect(() => {
-    const data = JSON.parse(window.localStorage.getItem('loginData'));
-    if (data) {
-      console.log(data);
-    }
-  }, []);
+    console.log('LOCATION:', path);
+  }, [path]);
 
   return (
     <ThemeProvider theme={theme}>
       <>
         <GlobalStyles />
-        <Router>
-          <Switch>
-            <Route exact path={routes.ROOT} component={Sanakirja} />
-            <Route path={routes.DICTIONARY} component={Sanakirja} />
-            <Route
-              path={routes.CULTUREPRODUCTS}
-              component={Kulttuurituotteet}
-            />
-            <Route path={routes.ORGANIZATIONS} component={Organisaatiot} />
-            <Route path={routes.LOGIN} component={RdLogin} />
-            <SuojattuReitti path={routes.WORDFORM} comp={SyottoLomake} />
-            <Route path={routes.BACKROUND} component={RdBackround} />
-            <Route path={routes.INFORMATION} component={RdInformation} />
-            <Route path={routes.INSTRUCTION} component={RdInstruction} />
-            <SuojattuReitti path={routes.USERS} comp={Kayttajat} />
-            <SuojattuReitti path={routes.NEWUSER} comp={KayttajaLomake} />
-            <Route
-              exact
-              path={routes.INTRODUCTION}
-              component={RdIntroduction}
-            />
-            <Route exact path={routes.OWNDATA} component={OmatTiedot} />
-          </Switch>
-        </Router>
+        <Switch>
+          <Route exact path={routes.ROOT} component={Sanakirja} />
+          <Route path={routes.DICTIONARY} component={Sanakirja} />
+          <Route path={routes.CULTUREPRODUCTS} component={Kulttuurituotteet} />
+          <Route path={routes.ORGANIZATIONS} component={Organisaatiot} />
+          <Route path={routes.LOGIN} component={RdLogin} />
+          <SuojattuReitti path={routes.WORDFORM} comp={SyottoLomake} />
+          <Route path={routes.BACKROUND} component={RdBackround} />
+          <Route path={routes.INFORMATION} component={RdInformation} />
+          <Route path={routes.INSTRUCTION} component={RdInstruction} />
+          <SuojattuReitti path={routes.USERS} comp={Kayttajat} />
+          <SuojattuReitti path={routes.NEWUSER} comp={KayttajaLomake} />
+          <Route exact path={routes.INTRODUCTION} component={RdIntroduction} />
+          <Route exact path={routes.OWNDATA} component={OmatTiedot} />
+        </Switch>
       </>
     </ThemeProvider>
   );
