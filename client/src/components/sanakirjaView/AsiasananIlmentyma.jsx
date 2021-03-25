@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Table, Button, Confirm } from 'semantic-ui-react';
-import UserContext from '../../context/userContext';
+import { useStateValue } from '../../context/';
 import IlmentymaPaivitys from './IlmentymaPaivitys';
 import ViestiTutkijalle from '../ViestiTutkijalle';
 
@@ -9,7 +9,7 @@ import './AsiasananIlmentyma.css';
 const AsiasananIlmentyma = ({ ilmentyma, poistoHandler, updateHandler }) => {
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
 
-  const sessioData = useContext(UserContext);
+  const [{ user }, dispatch] = useStateValue();
 
   const poistonVahvistus = () => {
     setVahvistaPoistoNakyvissa(true);
@@ -21,7 +21,7 @@ const AsiasananIlmentyma = ({ ilmentyma, poistoHandler, updateHandler }) => {
   };
 
   const naytaMuokkauspainikkeet = () => {
-    if (sessioData.token !== null) {
+    if (user) {
       return (
         <Table.Row>
           <Table.Cell>
@@ -44,7 +44,7 @@ const AsiasananIlmentyma = ({ ilmentyma, poistoHandler, updateHandler }) => {
   };
 
   const naytaViestiTutkijalle = () =>
-    sessioData.token &&
+    user &&
     ilmentyma.viesti !== null &&
     ilmentyma.viesti !== undefined &&
     ilmentyma.viesti !== '' ? (

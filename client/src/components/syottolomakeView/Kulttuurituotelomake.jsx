@@ -1,10 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { Button, Form, Search, Container, Modal, Message } from 'semantic-ui-react';
+import {
+  Button,
+  Form,
+  Search,
+  Container,
+  Modal,
+  Message,
+} from 'semantic-ui-react';
 import { postData, getSuojattuData } from '../../api/api';
-import UserContext from '../../context/userContext';
+import { useStateValue, setUser } from '../../context/';
 
-const Kulttuurituotelomake = (props) => {
-  const sessioData = useContext(UserContext);
+const Kulttuurituotelomake = props => {
+  const [{ user }, dispatch] = useStateValue();
   const [lisattyAuki, setLisattyAuki] = useState(false);
   const [errors, setErrors] = useState(null);
 
@@ -58,7 +65,7 @@ const Kulttuurituotelomake = (props) => {
 
   //virheidenpäivitys
   const paivitaVirheet = (virhe, arvo) => {
-    setVirheet((prev) => ({
+    setVirheet(prev => ({
       ...prev,
       [virhe]: arvo,
     }));
@@ -66,51 +73,49 @@ const Kulttuurituotelomake = (props) => {
 
   //Metodi joka hakee lomakkeen sisällön typeaheadia varten
   const fetchResults = () => {
-    getSuojattuData('/api/kulttuuriteoslomake', sessioData.token).then(
-      (result) => {
-        if (result.status === 'success') {
-          const mappedResults = result.data.reduce((prev, r) => {
-            const [key, value] = Object.entries(r)[0];
+    getSuojattuData('/api/kulttuuriteoslomake', user.token).then(result => {
+      if (result.status === 'success') {
+        const mappedResults = result.data.reduce((prev, r) => {
+          const [key, value] = Object.entries(r)[0];
 
-            // välimuuttuja jotta 'kuvaus' -> 'asiasana' mappays menee oikein
-            let objkey = key === 'kuvaus' ? 'asiasana' : key;
+          // välimuuttuja jotta 'kuvaus' -> 'asiasana' mappays menee oikein
+          let objkey = key === 'kuvaus' ? 'asiasana' : key;
 
-            prev[objkey] = value;
+          prev[objkey] = value;
 
-            if (objkey === 'paikkakunta') {
-              prev['tapahtumapaikkakunta'] = value;
-            }
+          if (objkey === 'paikkakunta') {
+            prev['tapahtumapaikkakunta'] = value;
+          }
 
-            if (objkey === 'maa') {
-              prev['tapahtumamaa'] = value;
-            }
+          if (objkey === 'maa') {
+            prev['tapahtumamaa'] = value;
+          }
 
-            return prev;
-          }, {});
+          return prev;
+        }, {});
 
-          setInitialResults(mappedResults);
-        } else {
-          console.error('Kulttuurituotelomakkeen tietojen haku epäonnistui');
-        }
-      },
-    );
+        setInitialResults(mappedResults);
+      } else {
+        console.error('Kulttuurituotelomakkeen tietojen haku epäonnistui');
+      }
+    });
   };
 
   // Effect hook hakee asiasanat valmiiksi kutsumalla api.js haeAsiasanat-funktiota
   // ennen komponentin renderöintiä
   useEffect(fetchResults, []);
 
-  const handleResultSelect = (name) => (e, { result }) =>
-    setKulttuurituoteTila((prev) => ({
+  const handleResultSelect = name => (e, { result }) =>
+    setKulttuurituoteTila(prev => ({
       ...prev,
       [name]: result.title,
     }));
 
   //Typeaheadin tulosten valintatilannetta käsittelevä metodi
-  const handleSearchChange = (e) => {
+  const handleSearchChange = e => {
     const { name, value } = e.target;
 
-    setIsLoading((prev) => ({
+    setIsLoading(prev => ({
       ...prev,
       [name]: true,
     }));
@@ -119,11 +124,11 @@ const Kulttuurituotelomake = (props) => {
 
     //Tyhjennetään hakutulokset jos pituus nolla
     if (value.length < 1) {
-      setSearchResults((prev) => ({
+      setSearchResults(prev => ({
         ...prev,
         [name]: [],
       }));
-      setIsLoading((prev) => ({
+      setIsLoading(prev => ({
         ...prev,
         [name]: false,
       }));
@@ -133,7 +138,7 @@ const Kulttuurituotelomake = (props) => {
     const re = new RegExp(`^${value.toLowerCase()}`);
 
     if (initialResults[name]) {
-      const filteredResults = initialResults[name].filter((result) => {
+      const filteredResults = initialResults[name].filter(result => {
         if (result.toLowerCase) {
           return re.test(result.toLowerCase());
         } else {
@@ -142,28 +147,28 @@ const Kulttuurituotelomake = (props) => {
       });
 
       //Metodi joka säilöö lomakkeen haetut tiedot muuttujaan
-      const results = filteredResults.map((filteredResult) => ({
+      const results = filteredResults.map(filteredResult => ({
         title: `${filteredResult}`,
       }));
 
       //Metodi joka asettaa hakutulokset
-      setSearchResults((prev) => ({
+      setSearchResults(prev => ({
         ...prev,
         [name]: results,
       }));
     }
 
     //Metodi "lataus" -ikonia varten kentän oikeassa reunassa, joka ei nyt ole käytössä, vaan piilotettuna
-    setIsLoading((prev) => ({
+    setIsLoading(prev => ({
       ...prev,
       [name]: false,
     }));
   };
 
   // kulttuurituotteen tilan muuttaminen
-  const muutaKulttuurituotteenTilaa = (e) => {
+  const muutaKulttuurituotteenTilaa = e => {
     const { name, value } = e.target;
-    setKulttuurituoteTila((prev) => ({
+    setKulttuurituoteTila(prev => ({
       ...prev,
       [name]: value,
     }));
@@ -171,7 +176,7 @@ const Kulttuurituotelomake = (props) => {
 
   // Checkboxin kontrolloiman valmis-arvon muuttaminen
   const muutaValmis = () => {
-    setKulttuurituoteTila((prev) => ({
+    setKulttuurituoteTila(prev => ({
       ...prev,
       valmis: !kulttuurituoteTila.valmis,
     }));
@@ -267,15 +272,16 @@ const Kulttuurituotelomake = (props) => {
         valmis: kulttuurituoteTila['valmis'],
       };
 
-      await postData('/api/kulttuuriteos', luoFormiobjekti2, sessioData.token).then((result) => {
-        if (result.status === 'success') {
-          sessioData.setToken(result.data.token)
-          setLisattyAuki(true);
-        } 
-        else {
-          hoidaVirheet(result);
-        }
-      });
+      await postData('/api/kulttuuriteos', luoFormiobjekti2, user.token).then(
+        result => {
+          if (result.status === 'success') {
+            dispatch(setUser({ ...user, token: result.data.token }));
+            setLisattyAuki(true);
+          } else {
+            hoidaVirheet(result);
+          }
+        },
+      );
 
       tyhjennaKulttuurituoteLomake();
       fetchResults();
@@ -285,12 +291,14 @@ const Kulttuurituotelomake = (props) => {
   };
 
   // Funktio palvelimen palauttamien virheiden käsittelyyn
-  const hoidaVirheet = (result) =>  {
-    setErrors(result.data.response.data.errors 
-      ? result.data.response.data.errors
-      // Jos serveri palauttaa yleisen virheen, sen muotdon käsittely vaatii kikkailua
-      : [{ msg: JSON.stringify(result.data.response.data) }]);
-  }
+  const hoidaVirheet = result => {
+    setErrors(
+      result.data.response.data.errors
+        ? result.data.response.data.errors
+        : // Jos serveri palauttaa yleisen virheen, sen muotdon käsittely vaatii kikkailua
+          [{ msg: JSON.stringify(result.data.response.data) }],
+    );
+  };
 
   //Metodi lomakkeen tietojen tyhjentämiselle
   const tyhjennaKulttuurituoteLomake = () => {
@@ -325,18 +333,21 @@ const Kulttuurituotelomake = (props) => {
   //Lomakkeen kentät ja niissä käytettävät tominnallisuudet
   return (
     <Container>
-      { errors 
-        ? <Message negative>
-            <Message.Header>Syöttö epäonnistui</Message.Header>
-            {errors.map((error) => { return (<p key={ error.param }> { error.msg }</p>) })}
-          </Message> 
-        : null }
+      {errors ? (
+        <Message negative>
+          <Message.Header>Syöttö epäonnistui</Message.Header>
+          {errors.map(error => {
+            return <p key={error.param}> {error.msg}</p>;
+          })}
+        </Message>
+      ) : null}
       <Form name="Kulttuurituotelomake" method="post">
         <font size="6" color="purple">
           Kulttuurituotelomake
         </font>
-        <Form.Group widths="equal" style={{ marginTop: '1rem'}}>
-          <Form.Input fluid
+        <Form.Group widths="equal" style={{ marginTop: '1rem' }}>
+          <Form.Input
+            fluid
             label="Tekijän etunimi"
             name="etunimi"
             value={kulttuurituoteTila['etunimi']}
@@ -354,7 +365,8 @@ const Kulttuurituotelomake = (props) => {
               icon={null}
             />
           </Form.Input>
-          <Form.Input fluid
+          <Form.Input
+            fluid
             label="Tekijän sukunimi"
             placeholder=""
             name="sukunimi"
@@ -373,7 +385,8 @@ const Kulttuurituotelomake = (props) => {
               icon={null}
             />
           </Form.Input>
-          <Form.Input fluid
+          <Form.Input
+            fluid
             label="Tekijän ammatti"
             name="ammatti"
             value={kulttuurituoteTila['ammatti']}
@@ -393,7 +406,8 @@ const Kulttuurituotelomake = (props) => {
           </Form.Input>
         </Form.Group>
         <Form.Group widths="equal">
-          <Form.Input fluid
+          <Form.Input
+            fluid
             label="Tekijän paikkakunta"
             placeholder=""
             name="paikkakunta"
@@ -412,7 +426,8 @@ const Kulttuurituotelomake = (props) => {
               icon={null}
             />
           </Form.Input>
-          <Form.Input fluid
+          <Form.Input
+            fluid
             label="Tekijän maa"
             name="maa"
             value={kulttuurituoteTila['maa']}
@@ -432,7 +447,8 @@ const Kulttuurituotelomake = (props) => {
           </Form.Input>
         </Form.Group>
         <Form.Group widths="equal">
-          <Form.Input fluid
+          <Form.Input
+            fluid
             label="Teoksen nimi"
             name="teos_nimi"
             value={kulttuurituoteTila['teos_nimi']}
@@ -450,7 +466,8 @@ const Kulttuurituotelomake = (props) => {
               icon={null}
             />
           </Form.Input>
-          <Form.Input fluid
+          <Form.Input
+            fluid
             label="Teoksen lajityyppi"
             placeholder="Kirja/musiikki/taideteos jne."
             name="lajityyppi"
@@ -471,7 +488,8 @@ const Kulttuurituotelomake = (props) => {
           </Form.Input>
         </Form.Group>
         <Form.Group>
-          <Form.Input width={ 8 }
+          <Form.Input
+            width={8}
             label="Teoksen asiasana"
             name="asiasana"
             value={kulttuurituoteTila['asiasana']}
@@ -491,7 +509,8 @@ const Kulttuurituotelomake = (props) => {
           </Form.Input>
         </Form.Group>
         <Form.Group widths="equal">
-          <Form.Input fluid
+          <Form.Input
+            fluid
             label="Teoksen paikkakunta"
             name="tapahtumapaikkakunta"
             value={kulttuurituoteTila['tapahtumapaikkakunta']}
@@ -509,7 +528,8 @@ const Kulttuurituotelomake = (props) => {
               icon={null}
             />
           </Form.Input>
-          <Form.Input fluid
+          <Form.Input
+            fluid
             label="Teoksen tapahtumamaa"
             name="tapahtumamaa"
             value={kulttuurituoteTila['tapahtumamaa']}
@@ -528,14 +548,14 @@ const Kulttuurituotelomake = (props) => {
             />
           </Form.Input>
         </Form.Group>
-        
+
         <Form.Field>
           <Form.Checkbox
             style={{ marginTop: '1.0rem', marginBottom: '1.0rem' }}
             label="Kulttuurituotteen syöttö on valmis julkaistavaksi"
             name="valmis"
-            checked={ kulttuurituoteTila.valmis }
-            onChange={ muutaValmis }
+            checked={kulttuurituoteTila.valmis}
+            onChange={muutaValmis}
           />
         </Form.Field>
         <Form.Group widths="equal">
@@ -543,24 +563,27 @@ const Kulttuurituotelomake = (props) => {
             label="Viesti"
             placeholder="Kommentti toiselle tutkijalle tms."
             name="viesti"
-            value={ kulttuurituoteTila.viesti }
-            onChange={ muutaKulttuurituotteenTilaa }
+            value={kulttuurituoteTila.viesti}
+            onChange={muutaKulttuurituotteenTilaa}
           />
         </Form.Group>
 
-        <Button onClick={tarkistaKulttuurituoteLomake}>
-          Tallenna
-        </Button>
+        <Button onClick={tarkistaKulttuurituoteLomake}>Tallenna</Button>
 
-        <Button onClick={tyhjennaKulttuurituoteLomake}style={{ marginLeft: '5.0rem' }}>
+        <Button
+          onClick={tyhjennaKulttuurituoteLomake}
+          style={{ marginLeft: '5.0rem' }}
+        >
           Tyhjennä
         </Button>
       </Form>
 
-      <Modal open={ lisattyAuki } size='tiny'>
+      <Modal open={lisattyAuki} size="tiny">
         <Modal.Content>Lisäys onnistui</Modal.Content>
         <Modal.Actions>
-          <Button color='green' onClick={ () => setLisattyAuki(false) }>Ok</Button>
+          <Button color="green" onClick={() => setLisattyAuki(false)}>
+            Ok
+          </Button>
         </Modal.Actions>
       </Modal>
     </Container>

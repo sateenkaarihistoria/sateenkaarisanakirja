@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import AktiivinenTekija from './AktiivinenTekija';
 import HakuKomponentti from '../../HakuKomponentti';
 import Kirjainhakukomponentti from '../../Kirjainhakukomponentti';
-import UserContext from '../../../context/userContext';
+import { useStateValue } from '../../../context/';
 import {
   suodata,
   suodataKokoelma,
@@ -22,7 +22,7 @@ const TekijaNaytto = ({ className }) => {
   const [hakutermi, setHakutermi] = useState('');
   const [suodatusPaalla, setSuodatusPaalla] = useState(false);
 
-  const sessioData = useContext(UserContext);
+  const [{ user }, dispatch] = useStateValue();
 
   const suodataSukunimella = suodata('sukunimi');
   const suodataAmmatilla = suodata('ammattinimike');
@@ -99,7 +99,7 @@ const TekijaNaytto = ({ className }) => {
 
     // jos käyttäjä ei ole kirjautuneena, poistetaan hakusanoista ne joissa ei ole
     // yhtään ilmentymää jossa valmis = true
-    if (!sessioData.token) {
+    if (!user) {
       suodatetutTekijat = suodatetutTekijat.filter(tek =>
         tek.teokset.some(teos => teos['valmis'] === true),
       );
@@ -136,7 +136,7 @@ const TekijaNaytto = ({ className }) => {
   const poistoHandler = poistettava => hlo_id => teos_id => {
     switch (poistettava) {
       case 'tekija':
-        deleteData('/api/henkilo/', hlo_id, sessioData.token).then(result => {
+        deleteData('/api/henkilo/', hlo_id, user.token).then(result => {
           if (result.status === 'success') {
             haeHenkilot().then(() => {
               setAktiivinenTekija(null);
@@ -145,15 +145,13 @@ const TekijaNaytto = ({ className }) => {
         });
         break;
       case 'teos':
-        deleteData('/api/kulttuuriteos/', teos_id, sessioData.token).then(
-          result => {
-            if (result.status === 'success') {
-              haeHenkilot().then(() => {
-                setAktiivinenTekija(null);
-              });
-            }
-          },
-        );
+        deleteData('/api/kulttuuriteos/', teos_id, user.token).then(result => {
+          if (result.status === 'success') {
+            haeHenkilot().then(() => {
+              setAktiivinenTekija(null);
+            });
+          }
+        });
         break;
       default:
         break;
@@ -164,18 +162,16 @@ const TekijaNaytto = ({ className }) => {
     const { tyyppi, id } = muutettava;
     switch (tyyppi) {
       case 'tekija':
-        putData('/api/henkilo/', uusiData, id, sessioData.token).then(
-          result => {
-            if (result.status === 'success') {
-              haeHenkilot().then(() => {
-                setAktiivinenTekija(null);
-              });
-            }
-          },
-        );
+        putData('/api/henkilo/', uusiData, id, user.token).then(result => {
+          if (result.status === 'success') {
+            haeHenkilot().then(() => {
+              setAktiivinenTekija(null);
+            });
+          }
+        });
         break;
       case 'teos':
-        putData('/api/kulttuuriteos/', uusiData, id, sessioData.token).then(
+        putData('/api/kulttuuriteos/', uusiData, id, user.token).then(
           result => {
             if (result.status === 'success') {
               haeHenkilot().then(() => {
@@ -197,34 +193,34 @@ const TekijaNaytto = ({ className }) => {
       {ladataan ? (
         Latauskomponentti()
       ) : (
-          <div className={className}>
-            <Segment basic>
-              <Kirjainhakukomponentti suodatusMuutettu={suodatusMuutettu} />
-              <HakuKomponentti
-                hakuOptiot={KULTTUURITEKIJAT_HAKUOPTIOT}
-                defaultHaku={KULTTUURITEKIJAT_DEFAULT}
-                suodatusMuutettu={suodatusMuutettu}
-              />
-              <Grid columns={16} id="tuloksetGrid2">
-                <Grid.Row>
-                  <Grid.Column width={6} textAlign="left">
-                    {naytaTekijat()}
-                  </Grid.Column>
-                  <Grid.Column width={10}>
-                    {aktiivinenTekija ? (
-                      <AktiivinenTekija
-                        aktiivinenTekija={aktiivinenTekija}
-                        suodatus={{ suodatusPaalla, suodatusoptio, hakutermi }}
-                        poistoHandler={poistoHandler}
-                        updateHandler={updateHandler}
-                      />
-                    ) : null}
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
-            </Segment>
-          </div>
-        )}
+        <div className={className}>
+          <Segment basic>
+            <Kirjainhakukomponentti suodatusMuutettu={suodatusMuutettu} />
+            <HakuKomponentti
+              hakuOptiot={KULTTUURITEKIJAT_HAKUOPTIOT}
+              defaultHaku={KULTTUURITEKIJAT_DEFAULT}
+              suodatusMuutettu={suodatusMuutettu}
+            />
+            <Grid columns={16} id="tuloksetGrid2">
+              <Grid.Row>
+                <Grid.Column width={6} textAlign="left">
+                  {naytaTekijat()}
+                </Grid.Column>
+                <Grid.Column width={10}>
+                  {aktiivinenTekija ? (
+                    <AktiivinenTekija
+                      aktiivinenTekija={aktiivinenTekija}
+                      suodatus={{ suodatusPaalla, suodatusoptio, hakutermi }}
+                      poistoHandler={poistoHandler}
+                      updateHandler={updateHandler}
+                    />
+                  ) : null}
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Segment>
+        </div>
+      )}
     </>
   );
 };

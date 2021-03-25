@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { Button, Confirm, Divider, Table, Header } from 'semantic-ui-react';
 import AsiasananIlmentyma from './AsiasananIlmentyma';
 import { valitseHakumetodi } from '../../utilities/hakutoiminnot';
-import UserContext from '../../context/userContext';
+import { useStateValue } from '../../context/';
 import SanaPaivitys from './SanaPaivitys';
 
 import './AktiivinenAsiasana.css';
@@ -15,7 +15,7 @@ const AktiivinenAsiasana = ({
 }) => {
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
   const { suodatusPaalla, suodatusoptio, hakutermi } = suodatus;
-  const sessioData = useContext(UserContext);
+  const [{ user }, dispatch] = useStateValue();
 
   const naytaIlmentymat = () => {
     let suodatetutIlmentymat = [];
@@ -29,7 +29,7 @@ const AktiivinenAsiasana = ({
     }
     // jos käyttäjä ei ole kirjautunut, poistetaan ne ilmentymät jotka eivät ole
     // valmis = true statuksella
-    if (!sessioData.token) {
+    if (!user) {
       suodatetutIlmentymat = suodatetutIlmentymat.filter(
         ilm => ilm['valmis'] === true,
       );
@@ -62,7 +62,7 @@ const AktiivinenAsiasana = ({
   };
 
   const naytaMuokkauspainikkeet = () => {
-    if (sessioData.token !== null) {
+    if (user) {
       return (
         <Table.Row>
           <Table.Cell colSpan="2">
@@ -84,12 +84,12 @@ const AktiivinenAsiasana = ({
     }
   };
 
-  const positionFromTop = document.getElementById("tuloksetGrid").offsetTop * 2;
+  const positionFromTop = document.getElementById('tuloksetGrid').offsetTop * 2;
   let divPlace = window.scrollY - positionFromTop;
   divPlace = divPlace > 0 ? divPlace : 0;
 
   return (
-  <div className="" style={{ position: "relative", top: divPlace + "px" }}>
+    <div className="" style={{ position: 'relative', top: divPlace + 'px' }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
         {String(aktiivinenAsiasana.sana)[0].toUpperCase() +
           String(aktiivinenAsiasana.sana).slice(1)}
