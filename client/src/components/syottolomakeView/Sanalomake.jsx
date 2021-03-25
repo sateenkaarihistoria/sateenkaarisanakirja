@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Button, Form, Search, Modal, Message } from 'semantic-ui-react';
 import { postData, getSuojattuData } from '../../api/api';
-import { useStateValue } from '../../context/';
+import { useStateValue, setToken } from '../../context/';
 
 import './Sanalomake.css';
 
@@ -206,7 +206,7 @@ const Sanalomake = () => {
       await postData('/api/hakusana', luoFormiobjekti, user.token).then(
         result => {
           if (result.status === 'success') {
-            user.setToken(result.data.token);
+            dispatch(setToken(result.data.token));
             setLisattyAuki(true);
           } else {
             hoidaVirheet(result);

@@ -9,7 +9,7 @@ import {
   Modal,
 } from 'semantic-ui-react';
 import { postData, getSuojattuData } from '../../api/api';
-import { useStateValue, setUser } from '../../context/';
+import { useStateValue, setToken } from '../../context/';
 
 const Organisaatiolomake = () => {
   const [{ user }, dispatch] = useStateValue();
@@ -249,7 +249,7 @@ const Organisaatiolomake = () => {
       await postData('/api/organisaatio', luoFormiobjekti, user.token).then(
         result => {
           if (result.status === 'success') {
-            dispatch(setUser({ ...user, token: result.data.token }));
+            dispatch(setToken(result.data.token));
             setLisattyAuki(true);
           } else {
             hoidaVirheet(result);

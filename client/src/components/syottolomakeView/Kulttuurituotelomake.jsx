@@ -8,7 +8,7 @@ import {
   Message,
 } from 'semantic-ui-react';
 import { postData, getSuojattuData } from '../../api/api';
-import { useStateValue, setUser } from '../../context/';
+import { useStateValue, setToken } from '../../context/';
 
 const Kulttuurituotelomake = props => {
   const [{ user }, dispatch] = useStateValue();
@@ -275,7 +275,7 @@ const Kulttuurituotelomake = props => {
       await postData('/api/kulttuuriteos', luoFormiobjekti2, user.token).then(
         result => {
           if (result.status === 'success') {
-            dispatch(setUser({ ...user, token: result.data.token }));
+            dispatch(setToken(result.data.token));
             setLisattyAuki(true);
           } else {
             hoidaVirheet(result);
