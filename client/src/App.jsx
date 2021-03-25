@@ -38,9 +38,9 @@ const App = function AppContent() {
   const path = useLocation();
   const [{ user }, dispatch] = useStateValue();
 
-  useEffect(() => {
-    console.log('LOCATION:', path);
-  }, [path]);
+  /*useEffect(() => {
+    
+  }, [path]);*/
 
   return (
     <ThemeProvider theme={theme}>
