@@ -43,13 +43,28 @@ const hakusanat = async () => {
   		}
   		edselite = sanalista.sanat[i].ilmentymat[j].selite;
 
-  		ilm += "<div><i>" + sanalista.sanat[i].ilmentymat[j].lause + "</i></div>";
+  		ilm += "<div><i>" + sanalista.sanat[i].ilmentymat[j].lause + "</i>";
+  		//ilm += "(" + sanalista.sanat[i].ilmentymat[j].paivays  + ", " + sanalista.sanat[i].ilmentymat[j].sivunumero;
+  		var pvm = new Date(sanalista.sanat[i].ilmentymat[j].paivays);
+  		ilm += "(" + pvm.getDay() + "." + pvm.getMonth() + "." + pvm.getFullYear() + ", " + sanalista.sanat[i].ilmentymat[j].sivunumero;
+
+  		ilm += ", " + sanalista.sanat[i].ilmentymat[j].hs_osio  + ", " + sanalista.sanat[i].ilmentymat[j].kayttoala + ")";
+
+  		var asanat = "";
+
+  		for (var k = 0; k < sanalista.sanat[i].ilmentymat[j].asiasana.length; k++) {
+  			asanat += sanalista.sanat[i].ilmentymat[j].asiasana[k];
+  			if (k != sanalista.sanat[i].ilmentymat[j].asiasana.length-1) {
+  				asanat += ", ";
+  			}
+  		}
+  		ilm += "(" + asanat + ")</div>";
   		ilm += "</div>"
 
   		res += ilm;
   	}
 
-  	res += "</div>";
+  	res += "</div><hr>";
   }
 
   res += "</html></body>";
