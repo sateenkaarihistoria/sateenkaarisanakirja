@@ -365,7 +365,7 @@ const Sanalomake = () => {
             />
           </Form.Input>
           <Form.Input
-            label="Hakusanan selitteen haku tietokannasta"
+            label="Selitteen haku tietokannasta"
             placeholder="Selite"
             name="selite"
             value={hakusanaTila['selite']}
@@ -385,8 +385,8 @@ const Sanalomake = () => {
         </Form.Group>
         <Form.Group widths="equal">
           <Form.TextArea
-            label="SELITTEEN MUOKKAUSALUE (max. 255 merkkiä)"
-            placeholder="Tähän kopioituu selitehaun osio. Sen jälkeen tekstiä voi muokata."
+            label="Selitteen muokkausalue"
+            placeholder="Jos selitteen haku kohdassa valitaan listauksesta jokin jo tietokannassa oleva selite, niin se kopioituu tähän. Sen jälkeen tekstiä voi muokata tarvittaessa."
             name="selitemuokkaus"
             value={hakusanaTila['selitemuokkaus']}
             onChange={muutaHakusananTilaa}
@@ -402,6 +402,7 @@ const Sanalomake = () => {
             error={virheet['asiasanaVirhe']}
           >
             <Search
+              placeholder="Asiasanat tulee erottaa toisistaan puolipisteellä, esim. queer;sukupuoli"
               loading={isLoading['kuvaus']}
               onResultSelect={handleResultSelect('kuvaus')}
               onSearchChange={handleSearchChange}
@@ -502,7 +503,7 @@ const Sanalomake = () => {
         <Form.Group widths="equal">
           <Form.TextArea
             label="Viesti"
-            placeholder="Kommentti toiselle tutkijalle tms."
+            placeholder="Kommentti toiselle tutkijalle tms. Viestit näkyvät vain kirjautuneille käyttäjille."
             name="viesti"
             value={hakusanaTila.viesti}
             onChange={muutaHakusananTilaa}
