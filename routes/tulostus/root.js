@@ -1,10 +1,15 @@
 const { Router } = require("express");
 
-const tulostus = require("../../controllers/tulostusController");
+const tulostusController = require("../../controllers/tulostusController");
+/*const asiasanaController = require("../../controllers/asiasanaController");
 
+const validator = require("../../controllers/validointiController.js");
+const hakusana = require("../../controllers/hakusana");
+*/
 
 const api = Router();
 
-api.get("/", tulostus.tulostaSanat);
+api.get("/", tulostusController.tulostaSanat);
+//api.get("/", validator.vuosiluvut, hakusana.hakuKaikki);
 
 module.exports = api;
