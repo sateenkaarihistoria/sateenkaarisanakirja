@@ -21,7 +21,7 @@ WHERE asiasana.id = asiasana_id AND teos.id = teos_id
     FROM teos, y, tapahtuu_teos, sijainti
     WHERE teos.id = y.id AND sijainti_id = sijainti.id AND teos_id = teos.id)
 
-SELECT henkilo.id, etunimi, sukunimi, ammattinimike, maa, paikkakunta, json_agg(t.js) teokset
+SELECT henkilo.id, etunimi, sukunimi, ammattinimike, maa, paikkakunta, json_agg(t.js ORDER BY js->>'nimi') teokset
 FROM (henkilo join tekee ON henkilo.id = tekee.henkilo_id) JOIN t ON t.id = teos_id, u
 WHERE u.id = henkilo.id
 GROUP BY henkilo.id, u.maa, u.paikkakunta
