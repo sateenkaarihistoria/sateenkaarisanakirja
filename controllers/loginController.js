@@ -66,7 +66,7 @@ exports.login = function (req, res, next) {
     nimi: req.user.nimi,
     rooli: req.user.rooli,
   };
-  const options = { algorithm: "HS256", expiresIn: "1h" };
+  const options = { algorithm: "HS256", expiresIn: "4h" };
 
   // Luodaan JWT-token etukäteen alustetuilla tiedoilla
   jwt.sign(payload, jwtSecret, options, (err, token) => {
@@ -127,7 +127,7 @@ exports.uusiToken = function (req, res, next) {
       nimi: req.locals.nimi,
       rooli: req.locals.rooli,
     };
-    const options = { algorithm: "HS256", expiresIn: "1h" };
+    const options = { algorithm: "HS256", expiresIn: "4h" };
 
     // Luodaan JWT-token etukäteen alustetuilla tiedoilla ja palautetaan se selaimelle
     jwt.sign(payload, jwtSecret, options, (err, token) => {

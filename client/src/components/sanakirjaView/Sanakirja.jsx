@@ -11,8 +11,13 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import RdHeader from '../RdHeader';
 import RdMenu from '../RdMenu';
-import { getAsiasanat, getAsiasanatV, deleteData, putData } from '../../api/api';
-import UserContext from '../../context/userContext';
+import {
+  getAsiasanat,
+  getAsiasanatV,
+  deleteData,
+  putData,
+} from '../../api/api';
+import { useStateValue } from '../../context/';
 
 import AktiivinenAsiasana from './AktiivinenAsiasana';
 import HakuKomponentti from '../HakuKomponentti';
@@ -29,7 +34,7 @@ const SanakirjaPlain = ({ className }) => {
   const [ladataan, setLadataan] = useState(true);
   const history = useHistory();
   const [aktiivinenAsiasana, setAktiivinenAsiasana] = useState(undefined);
-  const sessioData = useContext(UserContext);
+  const [{ user }, dispatch] = useStateValue();
 
   const [suodatusoptio, setSuodatusoptio] = useState('');
   const [hakutermi, setHakutermi] = useState('');
@@ -78,7 +83,7 @@ const SanakirjaPlain = ({ className }) => {
     }
     // jos käyttäjä ei ole kirjautuneena, poistetaan hakusanoista ne joissa ei ole
     // yhtään ilmentymää jossa valmis = true
-    if (!sessioData.token) {
+    if (!user) {
       suodatetutAsiasanat = suodatetutAsiasanat.filter(as =>
         as.ilmentymat.some(ilm => ilm['valmis'] === true),
       );
@@ -93,10 +98,10 @@ const SanakirjaPlain = ({ className }) => {
     setSuodatusoptio(optio);
     setHakutermi(hakutermi);
 
-    if (alku === "undefined") {
-  		haeAsiasanat();
-    }else {
-    	haeAsiasanatV(alku, loppu);
+    if (alku === 'undefined') {
+      haeAsiasanat();
+    } else {
+      haeAsiasanatV(alku, loppu);
     }
   };
 
@@ -109,11 +114,12 @@ const SanakirjaPlain = ({ className }) => {
     haeAsiasanatV(alku, loppu);
   };*/
 
-
   const haeAsiasanat = async () => {
     const result = await getAsiasanat();
     if (result.status === 'success') {
-      result.data.sanat.sort((a, b) => (a['sana'].toLowerCase() < b['sana'].toLowerCase() ? -1 : 1));
+      result.data.sanat.sort((a, b) =>
+        a['sana'].toLowerCase() < b['sana'].toLowerCase() ? -1 : 1,
+      );
       setAsiasanat(result.data.sanat);
     } else {
       // TODO FAILURE
@@ -140,15 +146,12 @@ const SanakirjaPlain = ({ className }) => {
             <Grid.Row key={index}>
               <div
                 className="menuitem"
-                onClick={(event) => {
-                  item.y = event.target.offsetTop
-                  setAktiivinenAsiasana(item)
+                onClick={event => {
+                  item.y = event.target.offsetTop;
+                  setAktiivinenAsiasana(item);
                 }}
               >
-                <b>
-                  {String(item.sana)[0] +
-                    String(item.sana).slice(1)}
-                </b>{' '}
+                <b>{String(item.sana)[0] + String(item.sana).slice(1)}</b>{' '}
                 {'(' + item.sanaluokka + ')'}
               </div>
             </Grid.Row>
@@ -168,7 +171,7 @@ const SanakirjaPlain = ({ className }) => {
   const poistoHandler = poistettava => as_id => ilm_id => {
     switch (poistettava) {
       case 'hakusana':
-        deleteData('/api/hakusana/', as_id, sessioData.token).then(result => {
+        deleteData('/api/hakusana/', as_id, user.token).then(result => {
           if (result.status === 'success') {
             haeAsiasanat().then(() => {
               setAktiivinenAsiasana(null);
@@ -177,7 +180,7 @@ const SanakirjaPlain = ({ className }) => {
         });
         break;
       case 'ilmentyma':
-        deleteData('/api/ilmentyma/', ilm_id, sessioData.token).then(result => {
+        deleteData('/api/ilmentyma/', ilm_id, user.token).then(result => {
           if (result.status === 'success') {
             haeAsiasanat().then(() => {
               setAktiivinenAsiasana(null);
@@ -194,26 +197,22 @@ const SanakirjaPlain = ({ className }) => {
     const { tyyppi, id } = muutettava;
     switch (tyyppi) {
       case 'hakusana':
-        putData('/api/hakusana/', uusiData, id, sessioData.token).then(
-          result => {
-            if (result.status === 'success') {
-              haeAsiasanat().then(() => {
-                setAktiivinenAsiasana(null);
-              });
-            }
-          },
-        );
+        putData('/api/hakusana/', uusiData, id, user.token).then(result => {
+          if (result.status === 'success') {
+            haeAsiasanat().then(() => {
+              setAktiivinenAsiasana(null);
+            });
+          }
+        });
         break;
       case 'ilmentyma':
-        putData('/api/ilmentyma/', uusiData, id, sessioData.token).then(
-          result => {
-            if (result.status === 'success') {
-              haeAsiasanat().then(() => {
-                setAktiivinenAsiasana(null);
-              });
-            }
-          },
-        );
+        putData('/api/ilmentyma/', uusiData, id, user.token).then(result => {
+          if (result.status === 'success') {
+            haeAsiasanat().then(() => {
+              setAktiivinenAsiasana(null);
+            });
+          }
+        });
         break;
       default:
         break;
