@@ -26,6 +26,8 @@ api.use('/api/kulttuuriteoslomake', require('./kulttuuriteoslomake'));
 api.use('/api/organisaatiolomake', require('./organisaatiolomake'));
 
 api.use('/api/sanalomake', require('./sanalomake'));
+
+api.use('/api/tulostus', require('./tulostus'));
 // LOGIN
 // POST: sovellukseen kirjautuminen
 // @body: JSON-objekti: nimi, salasana
