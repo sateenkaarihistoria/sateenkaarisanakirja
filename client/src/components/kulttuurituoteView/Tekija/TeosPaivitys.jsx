@@ -20,7 +20,7 @@ export default function TeosPaivitys(props) {
 
   useEffect(() => {
     setLomakeData({
-      kuvaus: teos.asiasana.join(';'),
+      kuvaus: teos.asiasanat.join(';'),
       teos_maa: teos.teos_maa,
       teos_paikkakunta: teos.teos_paikkakunta,
       nimi: teos.nimi,

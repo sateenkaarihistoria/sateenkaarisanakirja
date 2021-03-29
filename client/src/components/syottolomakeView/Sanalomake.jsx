@@ -17,6 +17,7 @@ const Sanalomake = () => {
     kuvaus: '',
     hakusana: '',
     selite: '',
+    selitemuokkaus: '',
     sanaluokka: '',
     tyyli: '',
     kayttoala: '',
@@ -31,7 +32,7 @@ const Sanalomake = () => {
     paivaysVirhe: false,
     asiasanaVirhe: false,
     hakusanaVirhe: false,
-    seliteVirhe: false,
+    selitemuokkausVirhe: false,
     sanaluokkaVirhe: false,
     tyyliVirhe: false,
     kayttoalaVirhe: false,
@@ -88,6 +89,7 @@ const Sanalomake = () => {
       kuvaus: '',
       hakusana: '',
       selite: '',
+      selitemuokkaus: '',
       sanaluokka: '',
       tyyli: '',
       kayttoala: '',
@@ -98,7 +100,7 @@ const Sanalomake = () => {
       paivaysVirhe: false,
       asiasanaVirhe: false,
       hakusanaVirhe: false,
-      seliteVirhe: false,
+      selitemuokkausVirhe: false,
       sanaluokkaVirhe: false,
       tyyliVirhe: false,
       kayttoalaVirhe: false,
@@ -156,11 +158,11 @@ const Sanalomake = () => {
     } else {
       paivitaVirheet('hakusanaVirhe', false);
     }
-    if (hakusanaTila['selite'].trim() === '') {
-      paivitaVirheet('seliteVirhe', true);
+    if (hakusanaTila['selitemuokkaus'].trim() === '') {
+      paivitaVirheet('selitemuokkausVirhe', true);
       virhe = true;
     } else {
-      paivitaVirheet('seliteVirhe', false);
+      paivitaVirheet('selitemuokkausVirhe', false);
     }
     if (hakusanaTila['sanaluokka'].trim() === '') {
       paivitaVirheet('sanaluokkaVirhe', true);
@@ -193,7 +195,7 @@ const Sanalomake = () => {
         paivays: hakusanaTila['paivays'],
         hs_osio: hakusanaTila['hs_osio'],
         sana: hakusanaTila['hakusana'],
-        selite: hakusanaTila['selite'],
+        selite: hakusanaTila['selitemuokkaus'],
         kuvaus: hakusanaTila['kuvaus'],
         sanaluokka: hakusanaTila['sanaluokka'],
         tyyli: hakusanaTila['tyyli'],
@@ -368,16 +370,15 @@ const Sanalomake = () => {
             />
           </Form.Input>
           <Form.Input
-            label="Hakusanan selite"
+            label="Selitteen haku tietokannasta"
             placeholder="Selite"
             name="selite"
             value={hakusanaTila['selite']}
             onChange={muutaHakusananTilaa}
-            error={virheet['seliteVirhe']}
           >
             <Search
               loading={isLoading['selite']}
-              onResultSelect={handleResultSelect('selite')}
+              onResultSelect={handleResultSelect('selitemuokkaus')}
               onSearchChange={handleSearchChange}
               name="selite"
               results={searchResults['selite']}
@@ -388,6 +389,16 @@ const Sanalomake = () => {
           </Form.Input>
         </Form.Group>
         <Form.Group widths="equal">
+          <Form.TextArea
+            label="Selitteen muokkausalue"
+            placeholder="Jos selitteen haku kohdassa valitaan listauksesta jokin jo tietokannassa oleva selite, niin se kopioituu tähän. Sen jälkeen tekstiä voi muokata tarvittaessa."
+            name="selitemuokkaus"
+            value={hakusanaTila['selitemuokkaus']}
+            onChange={muutaHakusananTilaa}
+            error={virheet['selitemuokkausVirhe']}
+          />
+        </Form.Group>
+        <Form.Group widths="equal">
           <Form.Input
             label="Asiasana"
             name="kuvaus"
@@ -396,6 +407,7 @@ const Sanalomake = () => {
             error={virheet['asiasanaVirhe']}
           >
             <Search
+              placeholder="Asiasanat tulee erottaa toisistaan puolipisteellä, esim. queer;sukupuoli"
               loading={isLoading['kuvaus']}
               onResultSelect={handleResultSelect('kuvaus')}
               onSearchChange={handleSearchChange}
@@ -496,7 +508,7 @@ const Sanalomake = () => {
         <Form.Group widths="equal">
           <Form.TextArea
             label="Viesti"
-            placeholder="Kommentti toiselle tutkijalle tms."
+            placeholder="Kommentti toiselle tutkijalle tms. Viestit näkyvät vain kirjautuneille käyttäjille."
             name="viesti"
             value={hakusanaTila.viesti}
             onChange={muutaHakusananTilaa}
