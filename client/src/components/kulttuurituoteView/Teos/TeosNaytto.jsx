@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import AktiivinenTeos from './AktiivinenTeos';
 import HakuKomponentti from '../../HakuKomponentti';
 import Kirjainhakukomponentti from '../../Kirjainhakukomponentti';
-import UserContext from '../../../context/userContext';
+import { useStateValue } from '../../../context/';
 import {
   suodata,
   suodataKulttuurituotteet,
@@ -25,8 +25,7 @@ const TeosNaytto = ({ className }) => {
   const [suodatusoptio, setSuodatusoptio] = useState('');
   const [hakutermi, setHakutermi] = useState('');
   const [suodatusPaalla, setSuodatusPaalla] = useState(false);
-  const sessioData = useContext(UserContext);
-
+  const [{ user }, dispatch] = useStateValue();
   const suodataTeosnimella = suodata('nimi');
   const suodataLajityypilla = suodata('lajityyppi');
   const suodataPaikkakunnalla = suodata('teos_paikkakunta');
@@ -99,7 +98,7 @@ const TeosNaytto = ({ className }) => {
 
     // jos käyttäjä ei ole kirjautuneena, poistetaan hakusanoista ne joissa ei ole
     // yhtään ilmentymää jossa valmis = true
-    if (!sessioData.token) {
+    if (!user) {
       suodatetutTeokset = suodatetutTeokset.filter(
         teos => teos['valmis'] === true,
       );
@@ -132,18 +131,16 @@ const TeosNaytto = ({ className }) => {
   const poistoHandler = poistettava => teos_id => hlo_id => {
     switch (poistettava) {
       case 'teos':
-        deleteData('/api/kulttuuriteos/', teos_id, sessioData.token).then(
-          result => {
-            if (result.status === 'success') {
-              haeTeokset().then(() => {
-                setAktiivinenTeos(null);
-              });
-            }
-          },
-        );
+        deleteData('/api/kulttuuriteos/', teos_id, user.token).then(result => {
+          if (result.status === 'success') {
+            haeTeokset().then(() => {
+              setAktiivinenTeos(null);
+            });
+          }
+        });
         break;
       case 'tekija':
-        deleteData('/api/henkilo/', hlo_id, sessioData.token).then(result => {
+        deleteData('/api/henkilo/', hlo_id, user.token).then(result => {
           if (result.status === 'success') {
             haeTeokset().then(() => {
               setAktiivinenTeos(null);
@@ -160,7 +157,7 @@ const TeosNaytto = ({ className }) => {
     const { tyyppi, id } = muutettava;
     switch (tyyppi) {
       case 'teos':
-        putData('/api/kulttuuriteos/', uusiData, id, sessioData.token).then(
+        putData('/api/kulttuuriteos/', uusiData, id, user.token).then(
           result => {
             if (result.status === 'success') {
               haeTeokset().then(() => {

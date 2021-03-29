@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { Button, Confirm, Table } from 'semantic-ui-react';
-import UserContext from '../../context/userContext';
+import { useStateValue } from '../../context/';
 import TapahtumaPaivitys from './TapahtumaPaivitys';
 import ViestiTutkijalle from '../ViestiTutkijalle';
 
@@ -13,7 +13,7 @@ const OrganisaationTapahtuma = ({
 }) => {
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
 
-  const sessioData = useContext(UserContext);
+  const [{ user }, dispatch] = useStateValue();
 
   const poistonVahvistus = () => {
     setVahvistaPoistoNakyvissa(true);
@@ -25,7 +25,7 @@ const OrganisaationTapahtuma = ({
   };
 
   const naytaMuokkauspainikkeet = () => {
-    if (sessioData.token !== null) {
+    if (user) {
       return (
         <Table.Row>
           <Table.Cell>
@@ -48,7 +48,7 @@ const OrganisaationTapahtuma = ({
   };
 
   const naytaViestiTutkijalle = () =>
-    sessioData.token && !tapahtuma.valmis ? (
+    user && !tapahtuma.valmis ? (
       <ViestiTutkijalle viesti={tapahtuma.viesti} />
     ) : null;
 
