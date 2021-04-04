@@ -16,7 +16,7 @@ exports.tulostaSanat = async function (req, res, next) {
 const hakusanat = async () => {
   // Etsitään kaikki hakusanat
   const hakusanat = await new Promise((resolve, reject) =>
-    connection.query("SELECT * FROM hakusana", (error, results) => {
+    connection.query("SELECT * FROM hakusana ORDER BY sana", (error, results) => {
       if (error) {
         reject(error);
       } else {
