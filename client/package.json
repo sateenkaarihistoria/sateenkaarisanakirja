@@ -21,6 +21,7 @@
     "@babel/cli": "^7.5.0",
     "babel-plugin-styled-components": "^1.10.0",
     "css-loader": "^2.1.1",
+    "cypress": "^7.0.1",
     "lint-staged": "^9.1.0",
     "prettier": "^1.18.2"
   },
@@ -30,7 +31,9 @@
     "serve": "npm run build && serve -s build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint src --ext .js,.jsx --fix"
+    "lint": "eslint src --ext .js,.jsx --fix",
+    "e2e": "cypress run",
+    "e2e:open": "cypress open"
   },
   "eslintConfig": {
     "extends": "react-app"
