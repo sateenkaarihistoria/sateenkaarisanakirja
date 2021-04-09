@@ -75,9 +75,18 @@ const MainStructure = ({ className }) => {
             Sanakirja-alasivun hakutoiminnot:
           </div>
           <p>
-            Hakukenttään voit kirjoittaa yksittäisiä hakusanoja. Voit käyttää
-            sanankatkaisuja esimerkiksi näin: <i>homos</i>. Kirjainvalikon
-            kautta voit etsiä kaikkia tietyllä kirjaimella alkavia sanoja, tai
+            Hakukenttään voit kirjoittaa yksittäisiä hakusanoja. Sanojen katkaisuun voi käyttää
+            *-merkkiä haun laajentamiseksi. Esimerkiksi haku: <i>homos*</i> antaa vastaukseksi 
+            kirjaimilla homos alkavat hakusanat.
+            <p>
+            <img className="img" width="50%" src="hakuscreen1.png"/>
+            </p>
+            Katkaisumerkkiä voi käyttää myös hakusana edellä; haku <i>*mies</i> antaa tulokseksi mies-loppuiset tietueet.
+          </p>
+          <p>
+            Hakua voi rajata myös vuoden perusteella, valitsemalla toiminnon <i>Rajaa vuoden perusteella</i>, 
+            vuosirajausta voi käyttää hakusanojen lisäksi tai ilman.
+            Kirjainvalikon kautta voit etsiä kaikkia tietyllä kirjaimella alkavia sanoja, tai
             voit vain selailla sivun vasemmassa reunassa näkyvää sanalistaa.
             Samaan aihepiiriin liittyviä sanoja voit hakea hakuvalikosta
             asiasanan avulla. Hakusanakirjassa toimivat asiasanat on listattu
@@ -237,6 +246,9 @@ const RdIntroduction = styled(MainStructure)`
     margin-top: 0rem;
     margin-bottom: 0rem;
     color: black;
+  }
+  img {
+  	border: 1px solid #555;
   }
 `;
 
