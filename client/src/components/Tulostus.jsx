@@ -2,11 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Container, Loader, Confirm, Message, Responsive } from 'semantic-ui-react';
 import { useHistory } from 'react-router-dom';
 import { getSuojattuData, deleteData } from '../api/api';
-//import UserContext from '../context/userContext';
 import { useStateValue, logOut } from '../context';
 
 const Tulostus = () => {
-  //const sessioData = useContext(UserContext);
   const [sanaData, setSanaData] = useState("");
   const [ladataan, setLadataan] = useState(false);
   const [errors, setErrors] = useState(null);
