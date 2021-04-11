@@ -27,6 +27,7 @@ import Kayttajat from './components/kayttajaView/Kayttajat';
 import KayttajaLomake from './components/kayttajaView/KayttajaLomake';
 import OmatTiedot from './components/kayttajaView/OmatTiedot';
 import SuojattuReitti from './components/SuojattuReitti';
+import Tulostus from './components/Tulostus';
 
 WebFont.load({
   google: {
@@ -60,6 +61,7 @@ const App = function AppContent() {
           <SuojattuReitti path={routes.NEWUSER} comp={KayttajaLomake} />
           <Route exact path={routes.INTRODUCTION} component={RdIntroduction} />
           <Route exact path={routes.OWNDATA} component={OmatTiedot} />
+          <SuojattuReitti path={routes.PRINTABLE} comp={Tulostus} />
         </Switch>
       </>
     </ThemeProvider>

@@ -11,10 +11,12 @@ const Tulostus = () => {
   const [{ user }, dispatch] = useStateValue();
 
   useEffect(() => {
+    //console.log("Tulostus.jsx");
     setLadataan(true)
     getSuojattuData('/api/tulostus', user.token).then(result => {
       if (result.status === 'success') {
         setSanaData(result.data);
+        //setSanaData("Helloworld!");
       } 
       else {
         setErrors(result.data.response.data.error);
