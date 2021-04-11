@@ -89,8 +89,8 @@ const MenuKomponentti = ({ className, activeItem, history }) => {
           active={activeItem === 'taustaa'}
           onClick={() => history.push('/taustaa')}
         />
-        { user
-          ? <Menu.Item
+        { user ? 
+          <Menu.Item
               name="Tulostusversio"
               active={activeItem === 'tulostus'}
               onClick={() => history.push('/tulostus')}
