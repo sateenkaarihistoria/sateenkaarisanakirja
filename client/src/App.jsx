@@ -69,8 +69,8 @@ const App = function AppContent() {
                     <SuojattuReitti path={routes.NEWUSER} comp={KayttajaLomake} />
                     <Route exact path={routes.INTRODUCTION} component={RdIntroduction} />
                     <Route exact path={routes.OWNDATA} component={OmatTiedot} />
-                    {/*<SuojattuReitti path={routes.PRINTABLE} comp={Tulostus} />*/}
-                    <Route exact path={routes.PRINTABLE} component={Tulostus} />
+                    <SuojattuReitti path={routes.PRINTABLE} comp={Tulostus} />
+                    {/*<Route exact path={routes.PRINTABLE} component={Tulostus} />*/}
                   </Switch>
                 </Router>
               );

@@ -101,6 +101,13 @@ const MenuKomponentti = ({ className, activeItem, history }) => {
           active={activeItem === 'taustaa'}
           onClick={() => history.push('/taustaa')}
         />
+        { sessioData.rooli
+          ? <Menu.Item
+              name="tulostusversio"
+              active={activeItem === 'tulostus'}
+              onClick={() => history.push('/tulostus')}
+            />
+          : null }
 
         <Menu.Menu position="right">
           { sessioData.rooli ? (

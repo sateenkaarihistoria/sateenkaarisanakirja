@@ -18,10 +18,8 @@ const Tulostus = () => {
       } 
       else {
         setErrors(result.data.response.data.error);
-        //console.log(result.data.response);
       }
     }).then(setLadataan(false));
-  // eslint-disable-next-line
   }, []);
 
   return (
