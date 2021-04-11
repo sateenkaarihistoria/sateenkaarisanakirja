@@ -1,8 +1,6 @@
-const Router = require('express').Router;
+const { Router } = require('express');
 
 const api = Router();
-
-api.use('/admin', require('./admin.js'))
 
 api.use('/:id', require('./id.js'));
 // /api/kayttaja

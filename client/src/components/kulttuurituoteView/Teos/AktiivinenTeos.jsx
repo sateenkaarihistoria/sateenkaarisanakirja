@@ -1,35 +1,37 @@
 import React, { useState, useContext } from 'react';
 import { Button, Confirm, Divider, Table, Header } from 'semantic-ui-react';
-import UserContext from '../../../context/userContext';
+import { useStateValue } from '../../../context/';
 import TeosIlmentyma from './TeosIlmentyma';
-import { valitseHakumetodi } from '../../../utilities/hakutoiminnot'
+import { valitseHakumetodi } from '../../../utilities/hakutoiminnot';
 import TeosPaivitys from '../Tekija/TeosPaivitys';
 
 import './AktiivinenTeos.css';
 
-const AktiivinenTeos = ({ aktiivinenTeos, suodatus, poistoHandler, updateHandler }) => {
-  const { suodatusPaalla, suodatusoptio, hakutermi } = suodatus
+const AktiivinenTeos = ({
+  aktiivinenTeos,
+  suodatus,
+  poistoHandler,
+  updateHandler,
+}) => {
+  const { suodatusPaalla, suodatusoptio, hakutermi } = suodatus;
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
-  const sessioData = useContext(UserContext);
+  const [{ user }, dispatch] = useStateValue();
 
   const naytaTekijät = () => {
-    let suodatetutTekijat = []
-    if (suodatusPaalla && suodatusoptio === 'asiasana' ) {
-      let { hakutermiTrim, predikaatti } = valitseHakumetodi (hakutermi)
-      suodatetutTekijat = aktiivinenTeos.teokset.filter(teos => 
-        predikaatti (hakutermiTrim) (teos['asiasanat'][0]))
+    let suodatetutTekijat = [];
+    if (suodatusPaalla && suodatusoptio === 'asiasana') {
+      let { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
+      suodatetutTekijat = aktiivinenTeos.teokset.filter(teos =>
+        predikaatti(hakutermiTrim)(teos['asiasanat'][0]),
+      );
     } else {
-      suodatetutTekijat = aktiivinenTeos.tekijat
+      suodatetutTekijat = aktiivinenTeos.tekijat;
     }
 
-    return suodatetutTekijat
-      .map(tekija => 
-        <TeosIlmentyma
-          key={tekija.id}
-          teos_tekija ={tekija}
-        />
-    )
-  }
+    return suodatetutTekijat.map(tekija => (
+      <TeosIlmentyma key={tekija.id} teos_tekija={tekija} />
+    ));
+  };
 
   const poistonVahvistus = () => {
     setVahvistaPoistoNakyvissa(true);
@@ -41,7 +43,7 @@ const AktiivinenTeos = ({ aktiivinenTeos, suodatus, poistoHandler, updateHandler
   };
 
   const naytaMuokkauspainikkeet = () => {
-    if (sessioData.token !== null) {
+    if (user) {
       return (
         <Table.Row>
           <Table.Cell>
@@ -60,12 +62,13 @@ const AktiivinenTeos = ({ aktiivinenTeos, suodatus, poistoHandler, updateHandler
     }
   };
 
-  const positionFromTop = document.getElementById("tuloksetGrid3").offsetTop * 2.5;
+  const positionFromTop =
+    document.getElementById('tuloksetGrid3').offsetTop * 2.5;
   let divPlace = window.scrollY - positionFromTop;
   divPlace = divPlace > 0 ? divPlace : 0;
 
   return (
-    <div className="" style={{ position: "relative", top: divPlace + "px" }}>
+    <div className="" style={{ position: 'relative', top: divPlace + 'px' }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
         {aktiivinenTeos.nimi}
       </Header>

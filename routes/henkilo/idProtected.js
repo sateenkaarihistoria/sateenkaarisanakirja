@@ -4,7 +4,6 @@ const kulttuuriteosController = require('../../controllers/kulttuuriteosControll
 const validointiController = require('../../controllers/validointiController');
 const loginController = require('../../controllers/loginController');
 const yleinenController = require('../../controllers/yleinenController');
-const inputController = require('../../controllers/inputController');
 
 const api = Router({ mergeParams: true });
 api.use(loginController.etsiToken, loginController.tarkistaToken);
@@ -16,11 +15,10 @@ api.put(
   '/',
   validointiController.tarkistaParam,
   validointiController.tarkistaHenkiloMuutos,
-  inputController.muunnaKulttuuriteostenKirjaimet,
   kulttuuriteosController.deleteLocation,
   yleinenController.poistaSijainti,
   kulttuuriteosController.addLocation,
-  kulttuuriteosController.updatePerson
+  kulttuuriteosController.updatePerson,
 );
 
 // DELETE: poistetaan yksi kulttuurieteoksen tekijä
@@ -32,7 +30,7 @@ api.delete(
   kulttuuriteosController.deleteTeokset,
   yleinenController.poistaAsiasana,
   yleinenController.poistaSijainti,
-  kulttuuriteosController.poistoVastaus
+  kulttuuriteosController.poistoVastaus,
 );
 
 module.exports = api;

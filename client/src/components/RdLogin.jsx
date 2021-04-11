@@ -1,28 +1,33 @@
 import React, { useState, useContext } from 'react';
 import styled from 'styled-components';
-import { Container, Button, Form, Grid, Message, Responsive } from 'semantic-ui-react';
+import {
+  Container,
+  Button,
+  Form,
+  Grid,
+  Message,
+  Responsive,
+} from 'semantic-ui-react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import RdHeader from './RdHeader';
 import RdMenu from './RdMenu';
 import MobileMenu from './MobileMenu';
 import { postLogin } from '../api/api';
-import UserContext from '../context/userContext';
+import { useStateValue, setUser } from '../context';
 
 const Kirjautuminen = ({ className }) => {
   const history = useHistory();
-  const sessioData = useContext(UserContext);
   const [nimi, setNimi] = useState('');
   const [salasana, setSalasana] = useState('');
   const [message, setMessage] = useState(undefined);
+  const [{ user }, dispatch] = useStateValue();
 
   const login = () => {
     postLogin(nimi, salasana).then(result => {
       if (result.status === 'success') {
-        sessioData.setToken(result.data.token);
-        sessioData.setId(result.data.id);
-        sessioData.setNimi(result.data.nimi);
-        sessioData.setRooli(result.data.rooli);
+        window.localStorage.setItem('loginData', JSON.stringify(result.data));
+        dispatch(setUser(result.data));
         setNimi('');
         setSalasana('');
         history.push('/sanakirja');
@@ -45,9 +50,7 @@ const Kirjautuminen = ({ className }) => {
         <Grid centered>
           <Grid.Column mobile={16} tablet={8} computer={5}>
             <div className="loginheader">
-              { message 
-                ? <Message negative>{ message }</Message> 
-                : null }
+              {message ? <Message negative>{message}</Message> : null}
             </div>
             <Form onSubmit={login}>
               <Form.Input

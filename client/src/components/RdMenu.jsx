@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Menu, Icon, Dropdown } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
-import UserContext from '../context/userContext';
+import { useStateValue, logOut } from '../context';
 
 const MenuKomponentti = ({ className, activeItem, history }) => {
-  const sessioData = useContext(UserContext);
+  const [{ user }, dispatch] = useStateValue();
 
   const tutkijaOptions = [
     {
@@ -14,24 +14,18 @@ const MenuKomponentti = ({ className, activeItem, history }) => {
       text: 'Omat tiedot',
       value: 'omatTiedot',
       onClick: () => history.push('/omat-tiedot'),
-    }, 
+    },
     {
       key: 'logout',
       icon: 'sign out',
       text: 'Kirjaudu ulos',
       value: 'logout',
-      href: '/',
+      onClick: () => dispatch(logOut()),
     },
   ];
 
   const adminOptions = [
-    {
-      key: 'omatTiedot',
-      icon: 'edit',
-      text: 'Omat tiedot',
-      value: 'omatTiedot',
-      onClick: () => history.push('/omat-tiedot'),
-    },    
+    tutkijaOptions[0],
     {
       key: 'kayttajat',
       icon: 'users',
@@ -46,18 +40,12 @@ const MenuKomponentti = ({ className, activeItem, history }) => {
       value: 'kayttaja',
       onClick: () => history.push('/kayttajalomake'),
     },
-    {
-      key: 'logout',
-      icon: 'sign out',
-      text: 'Kirjaudu ulos',
-      value: 'logout',
-      href: '/',
-    },
+    tutkijaOptions[1],
   ];
 
   return (
     <div id="menu" className={className}>
-      <Menu stackable size={ sessioData.token? "small": "large" } className="rdmenu">
+      <Menu stackable size={user ? 'small' : 'large'} className="rdmenu">
         <Menu.Item
           name="sanakirja"
           active={activeItem === 'sanakirja'}
@@ -73,13 +61,13 @@ const MenuKomponentti = ({ className, activeItem, history }) => {
           active={activeItem === 'organisaatiot'}
           onClick={() => history.push('/organisaatiot')}
         />
-        { sessioData.rooli
-          ? <Menu.Item
-              name="sanalomake"
-              active={activeItem === 'sanalomake'}
-              onClick={() => history.push('/sanalomake')}
-            />
-          : null }
+        {user ? (
+          <Menu.Item
+            name="sanalomake"
+            active={activeItem === 'sanalomake'}
+            onClick={() => history.push('/sanalomake')}
+          />
+        ) : null}
         <Menu.Item
           name="Johdanto"
           active={activeItem === 'johdanto'}
@@ -110,21 +98,23 @@ const MenuKomponentti = ({ className, activeItem, history }) => {
           : null }
 
         <Menu.Menu position="right">
-          { sessioData.rooli ? (
+          {user ? (
             <Menu.Item active={activeItem === 'käyttäjä'}>
-              { sessioData.rooli === 'admin'
-                ? <Dropdown
-                    icon="user"
-                    floating
-                    options = { adminOptions }
-                    trigger={<React.Fragment />}
-                  />
-                : <Dropdown
-                    icon="user"
-                    floating
-                    options = { tutkijaOptions }
-                    trigger={<React.Fragment />}
-                  /> }
+              {user.rooli === 'admin' ? (
+                <Dropdown
+                  icon="user"
+                  floating
+                  options={adminOptions}
+                  trigger={<React.Fragment />}
+                />
+              ) : (
+                <Dropdown
+                  icon="user"
+                  floating
+                  options={tutkijaOptions}
+                  trigger={<React.Fragment />}
+                />
+              )}
             </Menu.Item>
           ) : (
             <Menu.Item

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Button, Form, Search, Modal, Message } from 'semantic-ui-react';
 import { postData, getSuojattuData } from '../../api/api';
-import UserContext from '../../context/userContext';
+import { useStateValue, setToken } from '../../context/';
 
 import './Sanalomake.css';
 
 const Sanalomake = () => {
-  const sessioData = useContext(UserContext);
+  const [{ user }, dispatch] = useStateValue();
   const [lisattyAuki, setLisattyAuki] = useState(false);
   const [errors, setErrors] = useState(null);
 
@@ -17,6 +17,7 @@ const Sanalomake = () => {
     kuvaus: '',
     hakusana: '',
     selite: '',
+    selitemuokkaus: '',
     sanaluokka: '',
     tyyli: '',
     kayttoala: '',
@@ -31,7 +32,7 @@ const Sanalomake = () => {
     paivaysVirhe: false,
     asiasanaVirhe: false,
     hakusanaVirhe: false,
-    seliteVirhe: false,
+    selitemuokkausVirhe: false,
     sanaluokkaVirhe: false,
     tyyliVirhe: false,
     kayttoalaVirhe: false,
@@ -42,16 +43,16 @@ const Sanalomake = () => {
 
   //virheidenpäivitys
   const paivitaVirheet = (virhe, arvo) => {
-    setVirheet((prev) => ({
+    setVirheet(prev => ({
       ...prev,
       [virhe]: arvo,
     }));
   };
 
   // hakusanan tilan muuttaminen
-  const muutaHakusananTilaa = (e) => {
+  const muutaHakusananTilaa = e => {
     const { name, value } = e.target;
-    setHakusanaTila((prev) => ({
+    setHakusanaTila(prev => ({
       ...prev,
       [name]: value,
     }));
@@ -59,7 +60,7 @@ const Sanalomake = () => {
 
   // Checkboxin kontrolloiman valmis-arvon muuttaminen
   const muutaValmis = () => {
-    setHakusanaTila((prev) => ({
+    setHakusanaTila(prev => ({
       ...prev,
       valmis: !hakusanaTila.valmis,
     }));
@@ -88,6 +89,7 @@ const Sanalomake = () => {
       kuvaus: '',
       hakusana: '',
       selite: '',
+      selitemuokkaus: '',
       sanaluokka: '',
       tyyli: '',
       kayttoala: '',
@@ -98,7 +100,7 @@ const Sanalomake = () => {
       paivaysVirhe: false,
       asiasanaVirhe: false,
       hakusanaVirhe: false,
-      seliteVirhe: false,
+      selitemuokkausVirhe: false,
       sanaluokkaVirhe: false,
       tyyliVirhe: false,
       kayttoalaVirhe: false,
@@ -109,7 +111,7 @@ const Sanalomake = () => {
 
   //Metodi joka hakee lomakkeen sisällön typeaheadia varten
   const fetchResults = () => {
-    getSuojattuData('/api/sanalomake', sessioData.token).then((result) => {
+    getSuojattuData('/api/sanalomake', user.token).then(result => {
       if (result.status === 'success') {
         const mappedResults = result.data.reduce((prev, r) => {
           const [key, value] = Object.entries(r)[0];
@@ -156,11 +158,11 @@ const Sanalomake = () => {
     } else {
       paivitaVirheet('hakusanaVirhe', false);
     }
-    if (hakusanaTila['selite'].trim() === '') {
-      paivitaVirheet('seliteVirhe', true);
+    if (hakusanaTila['selitemuokkaus'].trim() === '') {
+      paivitaVirheet('selitemuokkausVirhe', true);
       virhe = true;
     } else {
-      paivitaVirheet('seliteVirhe', false);
+      paivitaVirheet('selitemuokkausVirhe', false);
     }
     if (hakusanaTila['sanaluokka'].trim() === '') {
       paivitaVirheet('sanaluokkaVirhe', true);
@@ -193,7 +195,7 @@ const Sanalomake = () => {
         paivays: hakusanaTila['paivays'],
         hs_osio: hakusanaTila['hs_osio'],
         sana: hakusanaTila['hakusana'],
-        selite: hakusanaTila['selite'],
+        selite: hakusanaTila['selitemuokkaus'],
         kuvaus: hakusanaTila['kuvaus'],
         sanaluokka: hakusanaTila['sanaluokka'],
         tyyli: hakusanaTila['tyyli'],
@@ -202,16 +204,17 @@ const Sanalomake = () => {
         viesti: hakusanaTila['viesti'],
         valmis: hakusanaTila['valmis'],
       };
-      
-      await postData('/api/hakusana', luoFormiobjekti, sessioData.token).then((result) => {
-        if (result.status === 'success') {
-          sessioData.setToken(result.data.token)
-          setLisattyAuki(true);
-        } 
-        else {
-          hoidaVirheet(result);
-        }
-      });
+
+      await postData('/api/hakusana', luoFormiobjekti, user.token).then(
+        result => {
+          if (result.status === 'success') {
+            dispatch(setToken(result.data.token));
+            setLisattyAuki(true);
+          } else {
+            hoidaVirheet(result);
+          }
+        },
+      );
 
       tyhjennaSanaLomake();
       fetchResults();
@@ -221,28 +224,30 @@ const Sanalomake = () => {
   };
 
   // Funktio palvelimen palauttamien virheiden käsittelyyn
-  const hoidaVirheet = (result) => {
-    setErrors(result.data.response.data.errors 
-      ? result.data.response.data.errors
-      // Jos serveri palauttaa yleisen virheen, sen muotdon käsittely vaatii kikkailua
-      : [{ msg: JSON.stringify(result.data.response.data) }]);
-  }
+  const hoidaVirheet = result => {
+    setErrors(
+      result.data.response.data.errors
+        ? result.data.response.data.errors
+        : // Jos serveri palauttaa yleisen virheen, sen muotdon käsittely vaatii kikkailua
+          [{ msg: JSON.stringify(result.data.response.data) }],
+    );
+  };
 
   // Effect hook hakee datan typeaheadia varten ennen komponentin renderöintiä
   useEffect(fetchResults, []);
 
   //Typeaheadin tulosten valintatilannetta käsittelevä metodi
-  const handleResultSelect = (name) => (e, { result }) =>
-    setHakusanaTila((prev) => ({
+  const handleResultSelect = name => (e, { result }) =>
+    setHakusanaTila(prev => ({
       ...prev,
       [name]: result.title,
     }));
 
   //Typeaheadin hakusanan tilan muutosta käsittelevä metodi
-  const handleSearchChange = (e) => {
-   const { name, value } = e.target;
+  const handleSearchChange = e => {
+    const { name, value } = e.target;
 
-    setIsLoading((prev) => ({
+    setIsLoading(prev => ({
       ...prev,
       [name]: true,
     }));
@@ -251,11 +256,11 @@ const Sanalomake = () => {
 
     //Tyhjennetään tulokset jos pituus nolla
     if (value.length < 1) {
-      setSearchResults((prev) => ({
+      setSearchResults(prev => ({
         ...prev,
         [name]: [],
       }));
-      setIsLoading((prev) => ({
+      setIsLoading(prev => ({
         ...prev,
         [name]: false,
       }));
@@ -265,7 +270,7 @@ const Sanalomake = () => {
     const re = new RegExp(`^${value.toLowerCase()}`);
 
     if (initialResults[name]) {
-      const filteredResults = initialResults[name].filter((result) => {
+      const filteredResults = initialResults[name].filter(result => {
         if (result.toLowerCase) {
           return re.test(result.toLowerCase());
         } else {
@@ -274,19 +279,19 @@ const Sanalomake = () => {
       });
 
       //Metodi joka säilöö lomakkeen haetut tiedot muuttujaan
-      const results = filteredResults.map((filteredResult) => ({
+      const results = filteredResults.map(filteredResult => ({
         title: `${filteredResult}`,
       }));
 
       //Metodi joka asettaa hakutulokset
-      setSearchResults((prev) => ({
+      setSearchResults(prev => ({
         ...prev,
         [name]: results,
       }));
     }
 
     //Metodi "lataus" -ikonia varten kentän oikeassa reunassa, joka ei nyt ole käytössä, vaan piilotettuna
-    setIsLoading((prev) => ({
+    setIsLoading(prev => ({
       ...prev,
       [name]: false,
     }));
@@ -295,17 +300,19 @@ const Sanalomake = () => {
   //Lomakkeen kentät ja niissä käytettävät tominnallisuudet
   return (
     <div>
-      { errors 
-        ? <Message negative>
-            <Message.Header>Syöttö epäonnistui</Message.Header>
-            {errors.map((error) => { return (<p key={ error.param }> { error.msg }</p>) })}
-          </Message> 
-        : null }
+      {errors ? (
+        <Message negative>
+          <Message.Header>Syöttö epäonnistui</Message.Header>
+          {errors.map(error => {
+            return <p key={error.param}> {error.msg}</p>;
+          })}
+        </Message>
+      ) : null}
       <Form name="Sanalomake" method="post">
-        <font size="6" color="purple">  
+        <font size="6" color="purple">
           Sanalomake
         </font>
-        <Form.Group widths="equal" style={{ marginTop: '1rem'}}>
+        <Form.Group widths="equal" style={{ marginTop: '1rem' }}>
           <Form.Input
             label="Päiväys"
             name="paivays"
@@ -363,16 +370,15 @@ const Sanalomake = () => {
             />
           </Form.Input>
           <Form.Input
-            label="Hakusanan selite"
+            label="Selitteen haku tietokannasta"
             placeholder="Selite"
             name="selite"
             value={hakusanaTila['selite']}
             onChange={muutaHakusananTilaa}
-            error={virheet['seliteVirhe']}
           >
             <Search
               loading={isLoading['selite']}
-              onResultSelect={handleResultSelect('selite')}
+              onResultSelect={handleResultSelect('selitemuokkaus')}
               onSearchChange={handleSearchChange}
               name="selite"
               results={searchResults['selite']}
@@ -383,6 +389,16 @@ const Sanalomake = () => {
           </Form.Input>
         </Form.Group>
         <Form.Group widths="equal">
+          <Form.TextArea
+            label="Selitteen muokkausalue"
+            placeholder="Jos selitteen haku kohdassa valitaan listauksesta jokin jo tietokannassa oleva selite, niin se kopioituu tähän. Sen jälkeen tekstiä voi muokata tarvittaessa."
+            name="selitemuokkaus"
+            value={hakusanaTila['selitemuokkaus']}
+            onChange={muutaHakusananTilaa}
+            error={virheet['selitemuokkausVirhe']}
+          />
+        </Form.Group>
+        <Form.Group widths="equal">
           <Form.Input
             label="Asiasana"
             name="kuvaus"
@@ -391,6 +407,7 @@ const Sanalomake = () => {
             error={virheet['asiasanaVirhe']}
           >
             <Search
+              placeholder="Asiasanat tulee erottaa toisistaan puolipisteellä, esim. queer;sukupuoli"
               loading={isLoading['kuvaus']}
               onResultSelect={handleResultSelect('kuvaus')}
               onSearchChange={handleSearchChange}
@@ -491,7 +508,7 @@ const Sanalomake = () => {
         <Form.Group widths="equal">
           <Form.TextArea
             label="Viesti"
-            placeholder="Kommentti toiselle tutkijalle tms."
+            placeholder="Kommentti toiselle tutkijalle tms. Viestit näkyvät vain kirjautuneille käyttäjille."
             name="viesti"
             value={hakusanaTila.viesti}
             onChange={muutaHakusananTilaa}
@@ -505,10 +522,12 @@ const Sanalomake = () => {
         </Button>
       </Form>
 
-      <Modal open={ lisattyAuki } size='tiny'>
+      <Modal open={lisattyAuki} size="tiny">
         <Modal.Content>Lisäys onnistui</Modal.Content>
         <Modal.Actions>
-          <Button color='green' onClick={ () => setLisattyAuki(false) }>Ok</Button>
+          <Button color="green" onClick={() => setLisattyAuki(false)}>
+            Ok
+          </Button>
         </Modal.Actions>
       </Modal>
     </div>
