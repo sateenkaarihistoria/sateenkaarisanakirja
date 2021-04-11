@@ -1,3 +1,4 @@
+require("dotenv").config();
 // haetaan tietokantayhteys config.js:stä
 const connection = require("../config.js");
 const asiasana = require("./asiasanaController");
@@ -44,8 +45,9 @@ exports.tulostaTeokset = async function (req, res, next) {
 
 	resStr += "</body></html>";
 
-	res.set('Content-Type', 'text/html');
-  	res.status(200).send(resStr);
+	//res.set('Content-Type', 'text/html');
+  res.set('Content-Type', 'text/plain');
+  res.status(200).send(resStr);
 };
 
 const hakusanat = async () => {
@@ -62,7 +64,8 @@ const hakusanat = async () => {
 
   //const res = await kaikkiSanat(hakusanat);
   const sanalista = await kaikkiSanat(hakusanat);
-  var res = "<html><body>";
+  //var res = "<html><body>";
+  var res = "";
 
   for (var i = 0; i < sanalista.sanat.length; i++) {
   	res += "<div><b>";
@@ -102,7 +105,7 @@ const hakusanat = async () => {
   	res += "</div><hr>";
   }
 
-  res += "</body></html>";
+  //res += "</body></html>";
 
   return res;
 };
