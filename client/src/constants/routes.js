@@ -14,4 +14,3 @@ export const USERS = `${ROOT}kayttajat`;
 export const NEWUSER = `${ROOT}kayttajalomake`;
 export const INTRODUCTION = `${ROOT}johdanto`;
 export const OWNDATA = `${ROOT}omat-tiedot`;
-export const PRINTABLE = `${ROOT}tulostus`;
