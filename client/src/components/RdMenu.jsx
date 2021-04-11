@@ -89,6 +89,13 @@ const MenuKomponentti = ({ className, activeItem, history }) => {
           active={activeItem === 'taustaa'}
           onClick={() => history.push('/taustaa')}
         />
+        { user
+          ? <Menu.Item
+              name="Tulostusversio"
+              active={activeItem === 'tulostus'}
+              onClick={() => history.push('/tulostus')}
+            />
+          : null }
 
         <Menu.Menu position="right">
           {user ? (
