@@ -91,8 +91,7 @@ const AktiivinenAsiasana = ({
   return (
     <div className="" style={{ position: 'relative', top: divPlace + 'px' }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
-        {String(aktiivinenAsiasana.sana)[0].toUpperCase() +
-          String(aktiivinenAsiasana.sana).slice(1)}
+        {String(aktiivinenAsiasana.sana)}
       </Header>
       <Table className={'very basic table'} textAlign="left">
         <Table.Body>
