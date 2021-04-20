@@ -227,6 +227,7 @@ const SanakirjaPlain = ({ className }) => {
           hakuOptiot={SANAKIRJA_HAKUOPTIOT}
           defaultHaku={SANAKIRJA_DEFAULT}
           suodatusMuutettu={suodatusMuutettu}
+          vuosiHaku={true}
         />
         <Grid columns={16} id="tuloksetGrid">
           <Grid.Row>
