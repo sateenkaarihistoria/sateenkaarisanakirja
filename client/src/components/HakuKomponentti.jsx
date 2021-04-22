@@ -3,7 +3,7 @@ import { Dropdown, Segment, Input, Button, Checkbox } from 'semantic-ui-react'
 
 import './HakuKomponentti.css'
 
-const Hakukomponentti = ({ suodatusMuutettu, hakuOptiot, defaultHaku }) => {
+const Hakukomponentti = ({ suodatusMuutettu, hakuOptiot, defaultHaku, vuosiHaku }) => {
 
   const [suodatusPaalla, setSuodatusPaalla] = useState(false)
   const [hakutermi, setHakutermi] = useState('')
@@ -79,10 +79,12 @@ const Hakukomponentti = ({ suodatusMuutettu, hakuOptiot, defaultHaku }) => {
         >
         </Dropdown>
         <div>
-          <Checkbox toggle 
-            label="Rajaa vuoden perusteella"
-            onChange={lisaOptiotMuutettu}
-            />
+          { vuosiHaku ?
+            <Checkbox toggle 
+              label="Rajaa vuoden perusteella"
+              onChange={lisaOptiotMuutettu}
+              /> : null
+          }
           { lisaOptiot ?
             <div>
             Ensimmäinen: 
