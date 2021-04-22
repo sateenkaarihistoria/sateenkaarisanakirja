@@ -128,6 +128,16 @@ const Sanalomake = () => {
     });
   };
 
+  // Funktio muuntaa sanan ensimmäisen kirjaimen isoksi
+  const muunnaKirjainIsoksi = (s) => {
+    return s[0].toUpperCase() + s.slice(1);
+  }
+
+  // Funktio muuntaa sanan ensimmäisen kirjaimen pieneksi
+  const muunnaKirjainPieneksi = (s) => {
+    return s[0].toLowerCase() + s.slice(1);
+  }
+
   //Tarkistetaan formi, että siinä on tarvittavat tiedot sanan tallennusta varten
   const tarkistaSanaLomake = async () => {
     let virhe = false;
@@ -193,14 +203,14 @@ const Sanalomake = () => {
     if (!virhe) {
       var luoFormiobjekti = {
         paivays: hakusanaTila['paivays'],
-        hs_osio: hakusanaTila['hs_osio'],
+        hs_osio: muunnaKirjainIsoksi(hakusanaTila['hs_osio']),
         sana: hakusanaTila['hakusana'],
-        selite: hakusanaTila['selitemuokkaus'],
-        kuvaus: hakusanaTila['kuvaus'],
-        sanaluokka: hakusanaTila['sanaluokka'],
-        tyyli: hakusanaTila['tyyli'],
-        kayttoala: hakusanaTila['kayttoala'],
-        lause: hakusanaTila['lause'],
+        selite: muunnaKirjainPieneksi(hakusanaTila['selitemuokkaus']),
+        kuvaus: muunnaKirjainPieneksi(hakusanaTila['kuvaus']),
+        sanaluokka: muunnaKirjainPieneksi(hakusanaTila['sanaluokka']),
+        tyyli: muunnaKirjainPieneksi(hakusanaTila['tyyli']),
+        kayttoala: muunnaKirjainPieneksi(hakusanaTila['kayttoala']),
+        lause: muunnaKirjainIsoksi(hakusanaTila['lause']),
         viesti: hakusanaTila['viesti'],
         valmis: hakusanaTila['valmis'],
       };
@@ -229,7 +239,7 @@ const Sanalomake = () => {
       result.data.response.data.errors
         ? result.data.response.data.errors
         : // Jos serveri palauttaa yleisen virheen, sen muotdon käsittely vaatii kikkailua
-          [{ msg: JSON.stringify(result.data.response.data) }],
+        [{ msg: JSON.stringify(result.data.response.data) }],
     );
   };
 

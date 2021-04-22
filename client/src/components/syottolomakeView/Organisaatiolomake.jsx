@@ -184,6 +184,16 @@ const Organisaatiolomake = () => {
     });
   };
 
+  // Funktio muuntaa sanan ensimmäisen kirjaimen isoksi
+  const muunnaKirjainIsoksi = (s) => {
+    return s[0].toUpperCase() + s.slice(1);
+  }
+
+  // Funktio muuntaa sanan ensimmäisen kirjaimen pieneksi
+  const muunnaKirjainPieneksi = (s) => {
+    return s[0].toLowerCase() + s.slice(1);
+  }
+
   //Tarkistetaan lomake, että siinä on tarvittavat tiedot sanan tallennusta varten
   const tarkistaOrganisaatiolomake = async () => {
     let virhe = false;
@@ -235,13 +245,13 @@ const Organisaatiolomake = () => {
 
     if (!virhe) {
       var luoFormiobjekti = {
-        org_nimi: organisaatioTila['org_nimi'],
-        maa: organisaatioTila['maa'],
-        paikkakunta: organisaatioTila['paikkakunta'],
-        tapahtuma_nimi: organisaatioTila['tapahtuma_nimi'],
-        luonne: organisaatioTila['tapahtuma_luonne'],
+        org_nimi: muunnaKirjainIsoksi(organisaatioTila['org_nimi']),
+        maa: muunnaKirjainIsoksi(organisaatioTila['maa']),
+        paikkakunta: muunnaKirjainIsoksi(organisaatioTila['paikkakunta']),
+        tapahtuma_nimi: muunnaKirjainIsoksi(organisaatioTila['tapahtuma_nimi']),
+        luonne: muunnaKirjainPieneksi(organisaatioTila['tapahtuma_luonne']),
         paivays: organisaatioTila['paivays'],
-        kuvaus: organisaatioTila['kuvaus'],
+        kuvaus: muunnaKirjainPieneksi(organisaatioTila['kuvaus']),
         viesti: organisaatioTila['viesti'],
         valmis: organisaatioTila['valmis'],
       };
@@ -270,7 +280,7 @@ const Organisaatiolomake = () => {
       result.data.response.data.errors
         ? result.data.response.data.errors
         : // Jos serveri palauttaa yleisen virheen, sen muotdon käsittely vaatii kikkailua
-          [{ msg: JSON.stringify(result.data.response.data) }],
+        [{ msg: JSON.stringify(result.data.response.data) }],
     );
   };
 
