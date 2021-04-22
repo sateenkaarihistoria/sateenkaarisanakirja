@@ -77,13 +77,11 @@ const AsiasananIlmentyma = ({ ilmentyma, poistoHandler, updateHandler }) => {
             <Table.Cell colSpan={2}>
               <div>{ilmentyma.hs_osio + ': "' + ilmentyma.lause + '"'}</div>
               <div>
-                {ilmentyma.sivunumero.slice(0, 6) +
-                  '-' +
-                  ilmentyma.sivunumero.slice(6, 8) +
-                  '-' +
-                  ilmentyma.sivunumero.slice(8, 10) +
-                  '-' +
-                  ilmentyma.sivunumero.slice(10, 13)}
+                {ilmentyma.sivunumero.slice(0, 2) +
+                  '-' + ilmentyma.sivunumero.slice(2, 6) +
+                  '-' + ilmentyma.sivunumero.slice(6, 8) +
+                  '-' + ilmentyma.sivunumero.slice(8, 10) +
+                  '-' + ilmentyma.sivunumero.slice(10, 13)}
               </div>
             </Table.Cell>
           </Table.Row>
