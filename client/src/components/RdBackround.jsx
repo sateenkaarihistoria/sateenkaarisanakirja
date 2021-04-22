@@ -55,7 +55,8 @@ const MainStructure = ({ className }) => {
             ohjelmiston rakentamisen aloittivat Ilmari Saaren johdolla Marjaana
             Laine ja Riku Mäenpää. Keväällä 2020 työtä jatkoivat muun muassa
             Arttu Ylikotilan johdolla Jarno Ihalainen, Roope Putila ja Christian
-            Schmidlechner.
+            Schmidlechner. Keväällä 2021 projektia jatkoivat muun muassa Tuomas Henriksson 
+            ja Sauli Nevalainen.
           </p>
           <div className="ui divider" />
           <p>
