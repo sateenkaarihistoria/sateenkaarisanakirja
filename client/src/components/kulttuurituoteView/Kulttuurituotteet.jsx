@@ -10,14 +10,12 @@ import TekijaNaytto from './Tekija/TekijaNaytto';
 import TeosNaytto from './Teos/TeosNaytto';
 
 const KulttuurituotteetPlain = ({ className }) => {
-  const [tekijaAktiivinen, setTekijaAktiivinen] = useState(true)
+  const [tekijaAktiivinen, setTekijaAktiivinen] = useState(true);
 
   const history = useHistory();
-    
-  const naytaValittuOsio = () => 
-    tekijaAktiivinen
-    ? <TekijaNaytto />
-    : <TeosNaytto />
+
+  const naytaValittuOsio = () =>
+    tekijaAktiivinen ? <TekijaNaytto /> : <TeosNaytto />;
 
   return (
     <div className={className}>
@@ -31,7 +29,9 @@ const KulttuurituotteetPlain = ({ className }) => {
         </Responsive>
         <Segment basic style={{ marginTop: '0rem', marginBottom: '0rem' }}>
           <Button onClick={() => setTekijaAktiivinen(true)}>Tekijät</Button>
-          <Button onClick={() => setTekijaAktiivinen(false)}>Kulttuurituotteet</Button>
+          <Button onClick={() => setTekijaAktiivinen(false)}>
+            Kulttuurituotteet
+          </Button>
         </Segment>
         {naytaValittuOsio()}
       </Container>

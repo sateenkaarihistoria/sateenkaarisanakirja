@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Menu, Icon, Dropdown } from 'semantic-ui-react';
-import { useStateValue } from '../context/';
+import { useStateValue } from '../context';
 
 const MobileMenu = ({ history, activeItem }) => {
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   const menuSisalto = [
     {
@@ -105,7 +105,7 @@ const MobileMenu = ({ history, activeItem }) => {
           icon="sidebar"
           floating
           options={menuSisalto}
-          trigger={<React.Fragment />}
+          trigger={<></>}
         />
       </Menu.Item>
       {user ? (
@@ -123,14 +123,14 @@ const MobileMenu = ({ history, activeItem }) => {
                 icon="user"
                 floating
                 options={adminOptions}
-                trigger={<React.Fragment />}
+                trigger={<></>}
               />
             ) : (
               <Dropdown
                 icon="user"
                 floating
                 options={tutkijaOptions}
-                trigger={<React.Fragment />}
+                trigger={<></>}
               />
             )}
           </Menu.Item>

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Container, Responsive } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import RdHeader from './RdHeader';
 import RdMenu from './RdMenu';
@@ -164,9 +163,5 @@ const RdIntroduction = styled(MainStructure)`
     color: black;
   }
 `;
-
-MainStructure.propTypes = {
-  className: PropTypes.string,
-};
 
 export default RdIntroduction;

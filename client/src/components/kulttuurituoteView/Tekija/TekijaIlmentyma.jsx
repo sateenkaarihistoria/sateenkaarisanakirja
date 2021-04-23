@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
-import { Button, Confirm, Table, List } from 'semantic-ui-react';
-import { useStateValue } from '../../../context/';
+import React, { useState } from 'react';
+import { Button, Confirm, Table } from 'semantic-ui-react';
+import { useStateValue } from '../../../context';
 import TeosPaivitys from './TeosPaivitys';
 import ViestiTutkijalle from '../../ViestiTutkijalle';
 
@@ -9,7 +9,7 @@ import './TekijaIlmentyma.css';
 const TekijaIlmentyma = ({ teos, poistoHandler, updateHandler }) => {
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
 
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   const poistonVahvistus = () => {
     setVahvistaPoistoNakyvissa(true);

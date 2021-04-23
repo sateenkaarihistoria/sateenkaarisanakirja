@@ -18,7 +18,7 @@ export default function TapahtumaPaivitys(props) {
   });
 
   useEffect(() => {
-    //setIsEdit(true);
+    // setIsEdit(true);
     setLomakeData({
       nimi: tapahtuma.nimi,
       luonne: tapahtuma.luonne,
@@ -40,7 +40,12 @@ export default function TapahtumaPaivitys(props) {
     setLomakeData({ ...lomakeData, [name]: !lomakeData.valmis });
   };
 
-  const lahetaPaivitettyData = e => {
+  const hallinnoiSulku = (e) => {
+    if (e) e.preventDefault();
+    setPaivitysModaaliAktiivinen(false);
+  };
+
+  const lahetaPaivitettyData = (e) => {
     if (e) e.preventDefault();
     // @body: JSON-objekti: tapahtuma_nimi, luonne, paivays, kuvaus, viesti, valmis
     const uusiData = {
@@ -65,11 +70,6 @@ export default function TapahtumaPaivitys(props) {
   };
 
   const hallinnoiAvaus = () => setPaivitysModaaliAktiivinen(true);
-
-  const hallinnoiSulku = e => {
-    if (e) e.preventDefault();
-    setPaivitysModaaliAktiivinen(false);
-  };
 
   return (
     <Modal

@@ -8,10 +8,10 @@ const init = () => {
   if (user) {
     if (isTokenExpired(user.token)) {
       return null;
-    } else {
-      return user;
     }
-  } else return null;
+    return user;
+  }
+  return null;
 };
 
 const initialState = {

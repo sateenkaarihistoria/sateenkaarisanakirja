@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Segment, Grid, Loader } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 
 import AktiivinenTeos from './AktiivinenTeos';
 import HakuKomponentti from '../../HakuKomponentti';
 import Kirjainhakukomponentti from '../../Kirjainhakukomponentti';
-import { useStateValue } from '../../../context/';
+import { useStateValue } from '../../../context';
 import {
   suodata,
   suodataKulttuurituotteet,
@@ -25,7 +24,7 @@ const TeosNaytto = ({ className }) => {
   const [suodatusoptio, setSuodatusoptio] = useState('');
   const [hakutermi, setHakutermi] = useState('');
   const [suodatusPaalla, setSuodatusPaalla] = useState(false);
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
   const suodataTeosnimella = suodata('nimi');
   const suodataLajityypilla = suodata('lajityyppi');
   const suodataPaikkakunnalla = suodata('teos_paikkakunta');
@@ -35,7 +34,7 @@ const TeosNaytto = ({ className }) => {
   const haeTeokset = React.useCallback(async () => {
     const result = await getKulttuurituotteet();
     if (result.status === 'success') {
-      result.data.teokset.sort((a, b) => (a['nimi'] < b['nimi'] ? -1 : 1));
+      result.data.teokset.sort((a, b) => (a.nimi < b.nimi ? -1 : 1));
       setTeokset(result.data.teokset);
     }
   }, []);
@@ -47,19 +46,21 @@ const TeosNaytto = ({ className }) => {
       haeTeokset().then(setLadataan(false));
     }
 
-    return () => (mounted = false);
+    return () => {
+      mounted = false;
+    };
   }, [haeTeokset]);
 
-  const suodatusMuutettu = (suodatusBool, optio, hakutermi) => {
+  const suodatusMuutettu = (suodatusBool, optio, htermi) => {
     setAktiivinenTeos(undefined);
     setSuodatusPaalla(suodatusBool);
     setSuodatusoptio(optio);
-    setHakutermi(hakutermi);
+    setHakutermi(htermi);
   };
 
   const naytaTeokset = () => {
     let suodatetutTeokset = [];
-    let { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
+    const { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
     if (suodatusPaalla) {
       switch (suodatusoptio) {
         case 'kirjainhaku':
@@ -100,21 +101,19 @@ const TeosNaytto = ({ className }) => {
     // yhtään ilmentymää jossa valmis = true
     if (!user) {
       suodatetutTeokset = suodatetutTeokset.filter(
-        teos => teos['valmis'] === true,
+        (teos) => teos.valmis === true,
       );
     }
 
     return (
       <>
-        {suodatetutTeokset.map((item, index) => {
-          return (
-            <Grid.Row key={index}>
-              <div className="menuitem" onClick={() => setAktiivinenTeos(item)}>
-                <b>{item.nimi}</b> {'(' + item.lajityyppi + ')'}
-              </div>
-            </Grid.Row>
-          );
-        })}
+        {suodatetutTeokset.map((item) => (
+          <Grid.Row key={item.nimi + item.lajityyppi}>
+            <div className="menuitem" onClick={() => setAktiivinenTeos(item)}>
+              <b>{item.nimi}</b> {`(${item.lajityyppi})`}
+            </div>
+          </Grid.Row>
+        ))}
       </>
     );
   };
@@ -128,19 +127,21 @@ const TeosNaytto = ({ className }) => {
 
   const KULTTUURITUOTTEET_DEFAULT = 'teosnimi';
 
-  const poistoHandler = poistettava => teos_id => hlo_id => {
+  const poistoHandler = (poistettava) => (teos_id) => (hlo_id) => {
     switch (poistettava) {
       case 'teos':
-        deleteData('/api/kulttuuriteos/', teos_id, user.token).then(result => {
-          if (result.status === 'success') {
-            haeTeokset().then(() => {
-              setAktiivinenTeos(null);
-            });
-          }
-        });
+        deleteData('/api/kulttuuriteos/', teos_id, user.token).then(
+          (result) => {
+            if (result.status === 'success') {
+              haeTeokset().then(() => {
+                setAktiivinenTeos(null);
+              });
+            }
+          },
+        );
         break;
       case 'tekija':
-        deleteData('/api/henkilo/', hlo_id, user.token).then(result => {
+        deleteData('/api/henkilo/', hlo_id, user.token).then((result) => {
           if (result.status === 'success') {
             haeTeokset().then(() => {
               setAktiivinenTeos(null);
@@ -153,12 +154,12 @@ const TeosNaytto = ({ className }) => {
     }
   };
 
-  const updateHandler = muutettava => uusiData => {
+  const updateHandler = (muutettava) => (uusiData) => {
     const { tyyppi, id } = muutettava;
     switch (tyyppi) {
       case 'teos':
         putData('/api/kulttuuriteos/', uusiData, id, user.token).then(
-          result => {
+          (result) => {
             if (result.status === 'success') {
               haeTeokset().then(() => {
                 setAktiivinenTeos(null);
@@ -210,9 +211,4 @@ const TeosNaytto = ({ className }) => {
     </>
   );
 };
-
-TeosNaytto.propTypes = {
-  className: PropTypes.string,
-};
-
 export default TeosNaytto;

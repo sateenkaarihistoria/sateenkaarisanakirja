@@ -8,7 +8,7 @@ const Kirjainhakukomponentti = ({ suodatusMuutettu }) => {
   const [suodatusPaalla, setSuodatusPaalla] = useState(false);
   const [valittuKirjain, setValittuKirjain] = useState('');
 
-  const kirjainValittu = kirjain => {
+  const kirjainValittu = (kirjain) => {
     setSuodatusPaalla(true);
     setValittuKirjain(kirjain);
     suodatusMuutettu(true, 'kirjainhaku', kirjain);
@@ -37,18 +37,17 @@ const Kirjainhakukomponentti = ({ suodatusMuutettu }) => {
         {CODES.map((c, i) => elementtiNumero(c, i))}
       </Button.Group>
     );
-  } else {
-    return (
-      <div className="kirjainhaku">
-        <p>
-          Suodatettu kirjaimella: <b>{valittuKirjain}</b>
-        </p>
-        <Button onClick={resetoiHaku} name="reset">
-          Poista suodatus
-        </Button>
-      </div>
-    );
   }
+  return (
+    <div className="kirjainhaku">
+      <p>
+        Suodatettu kirjaimella: <b>{valittuKirjain}</b>
+      </p>
+      <Button onClick={resetoiHaku} name="reset">
+        Poista suodatus
+      </Button>
+    </div>
+  );
 };
 
 export default Kirjainhakukomponentti;

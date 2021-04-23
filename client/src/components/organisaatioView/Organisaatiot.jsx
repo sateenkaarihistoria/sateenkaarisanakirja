@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
   Container,
@@ -13,7 +13,7 @@ import RdHeader from '../RdHeader';
 import RdMenu from '../RdMenu';
 import MobileMenu from '../MobileMenu';
 import { getOrganisaatiot, deleteData, putData } from '../../api/api';
-import { useStateValue } from '../../context/';
+import { useStateValue } from '../../context';
 import Kirjainhakukomponentti from '../Kirjainhakukomponentti';
 import Hakukomponentti from '../HakuKomponentti';
 import {
@@ -33,26 +33,24 @@ const OrganisaatiotPlain = ({ className }) => {
   const [suodatusoptio, setSuodatusoptio] = useState('');
   const [hakutermi, setHakutermi] = useState('');
   const [suodatusPaalla, setSuodatusPaalla] = useState(false);
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   const history = useHistory();
-
-  useEffect(() => {
-    setLadataan(true);
-    haeOrganisaatiot().then(setLadataan(false));
-  }, []);
 
   const haeOrganisaatiot = async () => {
     const result = await getOrganisaatiot();
     if (result.status === 'success') {
-      result.data.organisaatiot.sort((a, b) =>
-        a['nimi'] < b['nimi'] ? -1 : 1,
-      );
+      result.data.organisaatiot.sort((a, b) => (a.nimi < b.nimi ? -1 : 1));
       setOrganisaatiolista(result.data.organisaatiot);
     } else {
       // TODO FAILURE
     }
   };
+
+  useEffect(() => {
+    setLadataan(true);
+    haeOrganisaatiot().then(setLadataan(false));
+  }, []);
 
   const suodataOrgNimella = suodata('nimi');
   const suodataPaikkakunnalla = suodata('paikkakunta');
@@ -61,16 +59,16 @@ const OrganisaatiotPlain = ({ className }) => {
     'asiasana',
   );
 
-  const suodatusMuutettu = (suodatusBool, optio, hakutermi) => {
+  const suodatusMuutettu = (suodatusBool, optio, htermi) => {
     setAktiivinenOrganisaatio(undefined);
     setSuodatusPaalla(suodatusBool);
     setSuodatusoptio(optio);
-    setHakutermi(hakutermi);
+    setHakutermi(htermi);
   };
 
   const naytaOrganisaatiot = () => {
     let suodatetutOrganisaatiot = [];
-    let { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
+    const { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
     if (suodatusPaalla) {
       switch (suodatusoptio) {
         case 'kirjainhaku':
@@ -104,25 +102,23 @@ const OrganisaatiotPlain = ({ className }) => {
     // jos käyttäjä ei ole kirjautuneena, poistetaan organisaatioista ne joissa ei ole
     // yhtään tapahtumaa jossa valmis = true
     if (!user) {
-      suodatetutOrganisaatiot = suodatetutOrganisaatiot.filter(as =>
-        as.tapahtumat.some(tap => tap['valmis'] === true),
+      suodatetutOrganisaatiot = suodatetutOrganisaatiot.filter((as) =>
+        as.tapahtumat.some((tap) => tap.valmis === true),
       );
     }
 
     return (
       <>
-        {suodatetutOrganisaatiot.map((item, index) => {
-          return (
-            <Grid.Row key={index}>
-              <div
-                className="menuitem"
-                onClick={() => setAktiivinenOrganisaatio(item)}
-              >
-                <b>{item.nimi}</b>
-              </div>
-            </Grid.Row>
-          );
-        })}
+        {suodatetutOrganisaatiot.map((item) => (
+          <Grid.Row key={item.nimi}>
+            <div
+              className="menuitem"
+              onClick={() => setAktiivinenOrganisaatio(item)}
+            >
+              <b>{item.nimi}</b>
+            </div>
+          </Grid.Row>
+        ))}
       </>
     );
   };
@@ -136,10 +132,10 @@ const OrganisaatiotPlain = ({ className }) => {
 
   const ORGANISAATIOT_DEFAULT = 'nimi';
 
-  const poistoHandler = poistettava => org_id => tap_id => {
+  const poistoHandler = (poistettava) => (org_id) => (tap_id) => {
     switch (poistettava) {
       case 'organisaatio':
-        deleteData('/api/organisaatio/', org_id, user.token).then(result => {
+        deleteData('/api/organisaatio/', org_id, user.token).then((result) => {
           if (result.status === 'success') {
             haeOrganisaatiot().then(() => {
               setAktiivinenOrganisaatio(null);
@@ -148,7 +144,7 @@ const OrganisaatiotPlain = ({ className }) => {
         });
         break;
       case 'tapahtuma':
-        deleteData('/api/tapahtuma/', tap_id, user.token).then(result => {
+        deleteData('/api/tapahtuma/', tap_id, user.token).then((result) => {
           if (result.status === 'success') {
             haeOrganisaatiot().then(() => {
               setAktiivinenOrganisaatio(null);
@@ -161,20 +157,22 @@ const OrganisaatiotPlain = ({ className }) => {
     }
   };
 
-  const updateHandler = muutettava => uusiData => {
+  const updateHandler = (muutettava) => (uusiData) => {
     const { tyyppi, id } = muutettava;
     switch (tyyppi) {
       case 'organisaatio':
-        putData('/api/organisaatio/', uusiData, id, user.token).then(result => {
-          if (result.status === 'success') {
-            haeOrganisaatiot().then(() => {
-              setAktiivinenOrganisaatio(null);
-            });
-          }
-        });
+        putData('/api/organisaatio/', uusiData, id, user.token).then(
+          (result) => {
+            if (result.status === 'success') {
+              haeOrganisaatiot().then(() => {
+                setAktiivinenOrganisaatio(null);
+              });
+            }
+          },
+        );
         break;
       case 'tapahtuma':
-        putData('/api/tapahtuma/', uusiData, id, user.token).then(result => {
+        putData('/api/tapahtuma/', uusiData, id, user.token).then((result) => {
           if (result.status === 'success') {
             haeOrganisaatiot().then(() => {
               setAktiivinenOrganisaatio(null);
@@ -189,37 +187,35 @@ const OrganisaatiotPlain = ({ className }) => {
 
   const Latauskomponentti = () => <Loader active>Ladataan tietoja</Loader>;
 
-  const OrganisaatioListaus = () => {
-    return (
-      <div className={className}>
-        <Segment basic>
-          <Kirjainhakukomponentti suodatusMuutettu={suodatusMuutettu} />
-          <Hakukomponentti
-            hakuOptiot={ORGANISAATIOT_HAKUOPTIOT}
-            defaultHaku={ORGANISAATIOT_DEFAULT}
-            suodatusMuutettu={suodatusMuutettu}
-          />
-          <Grid columns={16} id="tuloksetGrid4">
-            <Grid.Row>
-              <Grid.Column width={6} textAlign="left">
-                {naytaOrganisaatiot()}
-              </Grid.Column>
-              <Grid.Column width={10}>
-                {aktiivinenOrganisaatio ? (
-                  <AktiivinenOrganisaatio
-                    aktiivinenOrganisaatio={aktiivinenOrganisaatio}
-                    suodatus={{ suodatusPaalla, suodatusoptio, hakutermi }}
-                    poistoHandler={poistoHandler}
-                    updateHandler={updateHandler}
-                  />
-                ) : null}
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Segment>
-      </div>
-    );
-  };
+  const OrganisaatioListaus = () => (
+    <div className={className}>
+      <Segment basic>
+        <Kirjainhakukomponentti suodatusMuutettu={suodatusMuutettu} />
+        <Hakukomponentti
+          hakuOptiot={ORGANISAATIOT_HAKUOPTIOT}
+          defaultHaku={ORGANISAATIOT_DEFAULT}
+          suodatusMuutettu={suodatusMuutettu}
+        />
+        <Grid columns={16} id="tuloksetGrid4">
+          <Grid.Row>
+            <Grid.Column width={6} textAlign="left">
+              {naytaOrganisaatiot()}
+            </Grid.Column>
+            <Grid.Column width={10}>
+              {aktiivinenOrganisaatio ? (
+                <AktiivinenOrganisaatio
+                  aktiivinenOrganisaatio={aktiivinenOrganisaatio}
+                  suodatus={{ suodatusPaalla, suodatusoptio, hakutermi }}
+                  poistoHandler={poistoHandler}
+                  updateHandler={updateHandler}
+                />
+              ) : null}
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Segment>
+    </div>
+  );
 
   return (
     <div className={className}>

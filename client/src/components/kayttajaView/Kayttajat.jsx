@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Loader,
@@ -21,17 +21,17 @@ const Kayttajat = () => {
   const [modaaliAuki, setModaaliAuki] = useState(false);
   const [poistettavaId, setPoistettavaId] = useState(null);
   const history = useHistory();
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   useEffect(() => {
     setLadataan(true);
     getSuojattuData('/api/kayttaja', user.token)
-      .then(result => {
+      .then((result) => {
         if (result.status === 'success') {
           setKayttajat(result.data);
         } else {
           setErrors(result.data.response.data.error);
-          //console.log(result.data.response);
+          // console.log(result.data.response);
         }
       })
       .then(setLadataan(false));
@@ -39,10 +39,10 @@ const Kayttajat = () => {
   }, []);
 
   function poistaKayttaja(id) {
-    deleteData('/api/kayttaja/', id, user.token).then(result => {
+    deleteData('/api/kayttaja/', id, user.token).then((result) => {
       if (result.status === 'success') {
         const muutettuKayttajat = kayttajat.filter(
-          kayttaja => kayttaja.id !== id,
+          (kayttaja) => kayttaja.id !== id,
         );
         setKayttajat(muutettuKayttajat);
         setModaaliAuki(false);

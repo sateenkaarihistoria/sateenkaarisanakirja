@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Divider, Table, Header, Button, Confirm } from 'semantic-ui-react';
 import TekijaIlmentyma from './TekijaIlmentyma';
 import { valitseHakumetodi } from '../../../utilities/hakutoiminnot';
-import { useStateValue } from '../../../context/';
+import { useStateValue } from '../../../context';
 import TekijaPaivitys from './TekijaPaivitys';
 
 import './AktiivinenTekija.css';
@@ -15,14 +15,14 @@ const AktiivinenTekija = ({
 }) => {
   const { suodatusPaalla, suodatusoptio, hakutermi } = suodatus;
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   const naytaTeokset = () => {
     let suodatetutTeokset = [];
     if (suodatusPaalla && suodatusoptio === 'asiasanat') {
-      let { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
-      suodatetutTeokset = aktiivinenTekija.teokset.filter(teos =>
-        predikaatti(hakutermiTrim)(teos['asiasanat'][0]),
+      const { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
+      suodatetutTeokset = aktiivinenTekija.teokset.filter((teos) =>
+        predikaatti(hakutermiTrim)(teos.asiasanat[0]),
       );
     } else {
       suodatetutTeokset = aktiivinenTekija.teokset;
@@ -32,11 +32,11 @@ const AktiivinenTekija = ({
     // valmis = true statuksella
     if (!user) {
       suodatetutTeokset = suodatetutTeokset.filter(
-        teos => teos['valmis'] === true,
+        (teos) => teos.valmis === true,
       );
     }
 
-    return suodatetutTeokset.map(teos => (
+    return suodatetutTeokset.map((teos) => (
       <TekijaIlmentyma
         key={teos.id}
         teos={teos}
@@ -84,11 +84,11 @@ const AktiivinenTekija = ({
   divPlace = divPlace > 0 ? divPlace : 0;
 
   return (
-    <div className="" style={{ position: 'relative', top: divPlace + 'px' }}>
+    <div className="" style={{ position: 'relative', top: `${divPlace}px` }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
-        {aktiivinenTekija.etunimi + ' ' + aktiivinenTekija.sukunimi}
+        {`${aktiivinenTekija.etunimi} ${aktiivinenTekija.sukunimi}`}
       </Header>
-      <Table className={'very basic table'} textAlign="left">
+      <Table className="very basic table" textAlign="left">
         <Table.Body>
           <Table.Row>
             <Table.Cell className="table-label-cell">

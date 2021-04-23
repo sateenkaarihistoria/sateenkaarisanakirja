@@ -1,17 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Header } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 
-const MainStructure = ({ className }) => {
-  return (
-    <div className={className}>
-      <Header className="header" as="h1">
-        SATEENKAARIHISTORIAN HAKUSANAKIRJA
-      </Header>
-    </div>
-  );
-};
+const MainStructure = ({ className }) => (
+  <div className={className}>
+    <Header className="header" as="h1">
+      SATEENKAARIHISTORIAN HAKUSANAKIRJA
+    </Header>
+  </div>
+);
 
 const RdHeader = styled(MainStructure)`
   .header {
@@ -27,9 +24,5 @@ const RdHeader = styled(MainStructure)`
     text-align: center;
   }
 `;
-
-MainStructure.propTypes = {
-  className: PropTypes.string,
-};
 
 export default RdHeader;

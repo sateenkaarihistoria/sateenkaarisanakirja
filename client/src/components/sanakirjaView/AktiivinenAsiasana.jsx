@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button, Confirm, Divider, Table, Header } from 'semantic-ui-react';
 import AsiasananIlmentyma from './AsiasananIlmentyma';
 import { valitseHakumetodi } from '../../utilities/hakutoiminnot';
-import { useStateValue } from '../../context/';
+import { useStateValue } from '../../context';
 import SanaPaivitys from './SanaPaivitys';
 
 import './AktiivinenAsiasana.css';
@@ -15,14 +15,14 @@ const AktiivinenAsiasana = ({
 }) => {
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
   const { suodatusPaalla, suodatusoptio, hakutermi } = suodatus;
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   const naytaIlmentymat = () => {
     let suodatetutIlmentymat = [];
     if (suodatusPaalla && suodatusoptio === 'asiasana') {
-      let { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
-      suodatetutIlmentymat = aktiivinenAsiasana.ilmentymat.filter(ilmentyma =>
-        ilmentyma['asiasana'].some(sana => predikaatti(hakutermiTrim)(sana)),
+      const { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
+      suodatetutIlmentymat = aktiivinenAsiasana.ilmentymat.filter((ilmentyma) =>
+        ilmentyma.asiasana.some((sana) => predikaatti(hakutermiTrim)(sana)),
       );
     } else {
       suodatetutIlmentymat = aktiivinenAsiasana.ilmentymat;
@@ -31,13 +31,13 @@ const AktiivinenAsiasana = ({
     // valmis = true statuksella
     if (!user) {
       suodatetutIlmentymat = suodatetutIlmentymat.filter(
-        ilm => ilm['valmis'] === true,
+        (ilm) => ilm.valmis === true,
       );
     }
 
     return suodatetutIlmentymat
-      .sort((a, b) => (a['paivays'] < b['paivays'] ? -1 : 1))
-      .map(ilmentyma => (
+      .sort((a, b) => (a.paivays < b.paivays ? -1 : 1))
+      .map((ilmentyma) => (
         <AsiasananIlmentyma
           key={ilmentyma.id}
           ilmentyma={ilmentyma}
@@ -47,10 +47,10 @@ const AktiivinenAsiasana = ({
       ));
   };
 
-  /*const editoiAsiasana = (uusiData) => { 
+  /* const editoiAsiasana = (uusiData) => { 
     updateHandler ({ tyyppi: 'hakusana', id: aktiivinenAsiasana.id }) (uusiData)
     setPaivitysModaaliAktiivinen(false)
-  }*/
+  } */
 
   const poistonVahvistus = () => {
     setVahvistaPoistoNakyvissa(true);
@@ -89,11 +89,11 @@ const AktiivinenAsiasana = ({
   divPlace = divPlace > 0 ? divPlace : 0;
 
   return (
-    <div className="" style={{ position: 'relative', top: divPlace + 'px' }}>
+    <div className="" style={{ position: 'relative', top: `${divPlace}px` }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
         {String(aktiivinenAsiasana.sana)}
       </Header>
-      <Table className={'very basic table'} textAlign="left">
+      <Table className="very basic table" textAlign="left">
         <Table.Body>
           <Table.Row>
             <Table.Cell className="table-label-cell">

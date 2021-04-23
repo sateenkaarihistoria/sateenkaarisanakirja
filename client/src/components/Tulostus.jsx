@@ -1,35 +1,34 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Container, Loader, Confirm, Message, Responsive } from 'semantic-ui-react';
-import { useHistory } from 'react-router-dom';
-import { getSuojattuData, deleteData } from '../api/api';
-import { useStateValue, logOut } from '../context';
+import React, { useState, useEffect } from 'react';
+import { Container } from 'semantic-ui-react';
+import { getSuojattuData } from '../api/api';
+import { useStateValue } from '../context';
 
 const Tulostus = () => {
-  const [sanaData, setSanaData] = useState("");
-  const [ladataan, setLadataan] = useState(false);
-  const [errors, setErrors] = useState(null);
-  const [{ user }, dispatch] = useStateValue();
+  const [sanaData, setSanaData] = useState('');
+  const [, setLadataan] = useState(false);
+  const [, setErrors] = useState(null);
+  const [{ user }] = useStateValue();
 
   useEffect(() => {
-    //console.log("Tulostus.jsx");
-    setLadataan(true)
-    getSuojattuData('/api/tulostus', user.token).then(result => {
-      if (result.status === 'success') {
-        setSanaData(result.data);
-        //setSanaData("Helloworld!");
-      } 
-      else {
-        setErrors(result.data.response.data.error);
-      }
-    }).then(setLadataan(false));
+    // console.log("Tulostus.jsx");
+    setLadataan(true);
+    getSuojattuData('/api/tulostus', user.token)
+      .then((result) => {
+        if (result.status === 'success') {
+          setSanaData(result.data);
+          // setSanaData("Helloworld!");
+        } else {
+          setErrors(result.data.response.data.error);
+        }
+      })
+      .then(setLadataan(false));
   }, []);
 
   return (
     <Container>
-      <div dangerouslySetInnerHTML={{__html: sanaData}}>
-      </div>
+      <div dangerouslySetInnerHTML={{ __html: sanaData }} />
     </Container>
   );
-}
+};
 
 export default Tulostus;
