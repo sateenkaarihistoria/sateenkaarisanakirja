@@ -130,7 +130,9 @@ const SanakirjaPlain = ({ className }) => {
   const haeAsiasanatV = async (alku, loppu) => {
     const result = await getAsiasanatV(alku, loppu);
     if (result.status === 'success') {
-      result.data.sanat.sort((a, b) => (a['sana'] < b['sana'] ? -1 : 1));
+      result.data.sanat.sort((a, b) =>
+        a['sana'].toLowerCase() < b['sana'].toLowerCase() ? -1 : 1,
+      );
       setAsiasanat(result.data.sanat);
     } else {
       // TODO FAILURE

@@ -17,6 +17,22 @@ const GlobalStyles = createGlobalStyle`
     font-family: ${({ theme }) => theme.typography.title.fontFamily};
   }
 
+  p a {
+    text-decoration: underline;
+  }
+
+  p a:link {
+    color: #6f00ff !important;
+  }
+
+  p a:visited {
+    color: #532d85 !important;
+  }
+
+  p a:hover {
+    color: #9900ff !important;
+  }
+
   @media screen and (max-width: 991px) {
     html {
       font-size: 0.93rem;
