@@ -182,6 +182,16 @@ const Kulttuurituotelomake = props => {
     }));
   };
 
+  // Funktio muuntaa sanan ensimmäisen kirjaimen isoksi
+  const muunnaKirjainIsoksi = (s) => {
+    return s[0].toUpperCase() + s.slice(1);
+  }
+
+  // Funktio muuntaa sanan ensimmäisen kirjaimen pieneksi
+  const muunnaKirjainPieneksi = (s) => {
+    return s[0].toLowerCase() + s.slice(1);
+  }
+
   //Tarkistetaan lomake, että siinä on tarvittavat tiedot tallennusta varten
   const tarkistaKulttuurituoteLomake = async () => {
     //let lehtiosiotarkistus = lehtiosio.value;
@@ -258,16 +268,16 @@ const Kulttuurituotelomake = props => {
 
     if (!virhe) {
       var luoFormiobjekti2 = {
-        etunimi: kulttuurituoteTila['etunimi'],
-        sukunimi: kulttuurituoteTila['sukunimi'],
-        henkilo_maa: kulttuurituoteTila['maa'],
-        henkilo_paikkakunta: kulttuurituoteTila['paikkakunta'],
-        ammattinimike: kulttuurituoteTila['ammatti'],
-        lajityyppi: kulttuurituoteTila['lajityyppi'],
-        nimi: kulttuurituoteTila['teos_nimi'],
-        kuvaus: kulttuurituoteTila['asiasana'],
-        teos_paikkakunta: kulttuurituoteTila['tapahtumapaikkakunta'],
-        teos_maa: kulttuurituoteTila['tapahtumamaa'],
+        etunimi: muunnaKirjainIsoksi(kulttuurituoteTila['etunimi']),
+        sukunimi: muunnaKirjainIsoksi(kulttuurituoteTila['sukunimi']),
+        henkilo_maa: muunnaKirjainIsoksi(kulttuurituoteTila['maa']),
+        henkilo_paikkakunta: muunnaKirjainIsoksi(kulttuurituoteTila['paikkakunta']),
+        ammattinimike: muunnaKirjainPieneksi(kulttuurituoteTila['ammatti']),
+        lajityyppi: muunnaKirjainPieneksi(kulttuurituoteTila['lajityyppi']),
+        nimi: muunnaKirjainIsoksi(kulttuurituoteTila['teos_nimi']),
+        kuvaus: muunnaKirjainPieneksi(kulttuurituoteTila['asiasana']),
+        teos_paikkakunta: muunnaKirjainIsoksi(kulttuurituoteTila['tapahtumapaikkakunta']),
+        teos_maa: muunnaKirjainIsoksi(kulttuurituoteTila['tapahtumamaa']),
         viesti: kulttuurituoteTila['viesti'],
         valmis: kulttuurituoteTila['valmis'],
       };
@@ -296,7 +306,7 @@ const Kulttuurituotelomake = props => {
       result.data.response.data.errors
         ? result.data.response.data.errors
         : // Jos serveri palauttaa yleisen virheen, sen muotdon käsittely vaatii kikkailua
-          [{ msg: JSON.stringify(result.data.response.data) }],
+        [{ msg: JSON.stringify(result.data.response.data) }],
     );
   };
 
