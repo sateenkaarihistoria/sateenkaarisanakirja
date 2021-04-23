@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
   Container,
@@ -8,7 +8,6 @@ import {
   Message,
   Responsive,
 } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import RdHeader from './RdHeader';
 import RdMenu from './RdMenu';
@@ -21,10 +20,10 @@ const Kirjautuminen = ({ className }) => {
   const [nimi, setNimi] = useState('');
   const [salasana, setSalasana] = useState('');
   const [message, setMessage] = useState(undefined);
-  const [{ user }, dispatch] = useStateValue();
+  const [, dispatch] = useStateValue();
 
   const login = () => {
-    postLogin(nimi, salasana).then(result => {
+    postLogin(nimi, salasana).then((result) => {
       if (result.status === 'success') {
         window.localStorage.setItem('loginData', JSON.stringify(result.data));
         dispatch(setUser(result.data));
@@ -86,9 +85,5 @@ const RdLogin = styled(Kirjautuminen)`
     margin-bottom: 3rem;
   }
 `;
-
-Kirjautuminen.propTypes = {
-  className: PropTypes.string,
-};
 
 export default RdLogin;

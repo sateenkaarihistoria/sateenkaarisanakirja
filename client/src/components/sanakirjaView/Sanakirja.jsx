@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import {
   Container,
@@ -17,7 +17,7 @@ import {
   deleteData,
   putData,
 } from '../../api/api';
-import { useStateValue } from '../../context/';
+import { useStateValue } from '../../context';
 
 import AktiivinenAsiasana from './AktiivinenAsiasana';
 import HakuKomponentti from '../HakuKomponentti';
@@ -34,11 +34,23 @@ const SanakirjaPlain = ({ className }) => {
   const [ladataan, setLadataan] = useState(true);
   const history = useHistory();
   const [aktiivinenAsiasana, setAktiivinenAsiasana] = useState(undefined);
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   const [suodatusoptio, setSuodatusoptio] = useState('');
   const [hakutermi, setHakutermi] = useState('');
   const [suodatusPaalla, setSuodatusPaalla] = useState(false);
+
+  const haeAsiasanat = async () => {
+    const result = await getAsiasanat();
+    if (result.status === 'success') {
+      result.data.sanat.sort((a, b) =>
+        a.sana.toLowerCase() < b.sana.toLowerCase() ? -1 : 1,
+      );
+      setAsiasanat(result.data.sanat);
+    } else {
+      // TODO FAILURE
+    }
+  };
 
   // Effect hook hakee asiasanat valmiiksi kutsumalla api.js haeAsiasanat-funktiota
   // ennen komponentin renderöintiä
@@ -56,7 +68,7 @@ const SanakirjaPlain = ({ className }) => {
   const hakusanojenSuodatus = () => {
     let suodatetutAsiasanat = [];
 
-    let { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
+    const { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
     if (suodatusPaalla) {
       switch (suodatusoptio) {
         case 'kirjainhaku':
@@ -84,19 +96,32 @@ const SanakirjaPlain = ({ className }) => {
     // jos käyttäjä ei ole kirjautuneena, poistetaan hakusanoista ne joissa ei ole
     // yhtään ilmentymää jossa valmis = true
     if (!user) {
-      suodatetutAsiasanat = suodatetutAsiasanat.filter(as =>
-        as.ilmentymat.some(ilm => ilm['valmis'] === true),
+      suodatetutAsiasanat = suodatetutAsiasanat.filter((as) =>
+        as.ilmentymat.some((ilm) => ilm.valmis === true),
       );
     }
 
     return suodatetutAsiasanat;
   };
 
-  const suodatusMuutettu = (suodatusBool, optio, hakutermi, alku, loppu) => {
+  // Vuodella rajatut asiasanat
+  const haeAsiasanatV = async (alku, loppu) => {
+    const result = await getAsiasanatV(alku, loppu);
+    if (result.status === 'success') {
+      result.data.sanat.sort((a, b) =>
+        a.sana.toLowerCase() < b.sana.toLowerCase() ? -1 : 1,
+      );
+      setAsiasanat(result.data.sanat);
+    } else {
+      // TODO FAILURE
+    }
+  };
+
+  const suodatusMuutettu = (suodatusBool, optio, htermi, alku, loppu) => {
     setAktiivinenAsiasana(undefined);
     setSuodatusPaalla(suodatusBool);
     setSuodatusoptio(optio);
-    setHakutermi(hakutermi);
+    setHakutermi(htermi);
 
     if (alku === 'undefined') {
       haeAsiasanat();
@@ -105,60 +130,34 @@ const SanakirjaPlain = ({ className }) => {
     }
   };
 
-  /*const suodatusVuosiMuutettu = (suodatusBool, optio, alku, loppu) => {
+  /* const suodatusVuosiMuutettu = (suodatusBool, optio, alku, loppu) => {
     setAktiivinenAsiasana(undefined);
     setSuodatusPaalla(suodatusBool);
     setSuodatusoptio(optio);
     setHakutermi(hakutermi);
 
     haeAsiasanatV(alku, loppu);
-  };*/
-
-  const haeAsiasanat = async () => {
-    const result = await getAsiasanat();
-    if (result.status === 'success') {
-      result.data.sanat.sort((a, b) =>
-        a['sana'].toLowerCase() < b['sana'].toLowerCase() ? -1 : 1,
-      );
-      setAsiasanat(result.data.sanat);
-    } else {
-      // TODO FAILURE
-    }
-  };
-
-  //Vuodella rajatut asiasanat
-  const haeAsiasanatV = async (alku, loppu) => {
-    const result = await getAsiasanatV(alku, loppu);
-    if (result.status === 'success') {
-      result.data.sanat.sort((a, b) =>
-        a['sana'].toLowerCase() < b['sana'].toLowerCase() ? -1 : 1,
-      );
-      setAsiasanat(result.data.sanat);
-    } else {
-      // TODO FAILURE
-    }
-  };
+  }; */
 
   const naytaAsiasanat = () => {
     const suodatetutAsiasanat = hakusanojenSuodatus();
     return (
       <>
-        {suodatetutAsiasanat.map((item, index) => {
-          return (
-            <Grid.Row key={index}>
-              <div
-                className="menuitem"
-                onClick={event => {
-                  item.y = event.target.offsetTop;
-                  setAktiivinenAsiasana(item);
-                }}
-              >
-                <b>{String(item.sana)[0] + String(item.sana).slice(1)}</b>{' '}
-                {'(' + item.sanaluokka + ')'}
-              </div>
-            </Grid.Row>
-          );
-        })}
+        {suodatetutAsiasanat.map((item) => (
+          <Grid.Row key={item.sana}>
+            <div
+              className="menuitem"
+              onClick={(event) => {
+                const sana = { ...item };
+                sana.y = event.target.offsetTop;
+                setAktiivinenAsiasana(sana);
+              }}
+            >
+              <b>{String(item.sana)[0] + String(item.sana).slice(1)}</b>{' '}
+              {`(${item.sanaluokka})`}
+            </div>
+          </Grid.Row>
+        ))}
       </>
     );
   };
@@ -170,10 +169,10 @@ const SanakirjaPlain = ({ className }) => {
 
   const SANAKIRJA_DEFAULT = 'hakusana';
 
-  const poistoHandler = poistettava => as_id => ilm_id => {
+  const poistoHandler = (poistettava) => (as_id) => (ilm_id) => {
     switch (poistettava) {
       case 'hakusana':
-        deleteData('/api/hakusana/', as_id, user.token).then(result => {
+        deleteData('/api/hakusana/', as_id, user.token).then((result) => {
           if (result.status === 'success') {
             haeAsiasanat().then(() => {
               setAktiivinenAsiasana(null);
@@ -182,7 +181,7 @@ const SanakirjaPlain = ({ className }) => {
         });
         break;
       case 'ilmentyma':
-        deleteData('/api/ilmentyma/', ilm_id, user.token).then(result => {
+        deleteData('/api/ilmentyma/', ilm_id, user.token).then((result) => {
           if (result.status === 'success') {
             haeAsiasanat().then(() => {
               setAktiivinenAsiasana(null);
@@ -195,11 +194,11 @@ const SanakirjaPlain = ({ className }) => {
     }
   };
 
-  const updateHandler = muutettava => uusiData => {
+  const updateHandler = (muutettava) => (uusiData) => {
     const { tyyppi, id } = muutettava;
     switch (tyyppi) {
       case 'hakusana':
-        putData('/api/hakusana/', uusiData, id, user.token).then(result => {
+        putData('/api/hakusana/', uusiData, id, user.token).then((result) => {
           if (result.status === 'success') {
             haeAsiasanat().then(() => {
               setAktiivinenAsiasana(null);
@@ -208,7 +207,7 @@ const SanakirjaPlain = ({ className }) => {
         });
         break;
       case 'ilmentyma':
-        putData('/api/ilmentyma/', uusiData, id, user.token).then(result => {
+        putData('/api/ilmentyma/', uusiData, id, user.token).then((result) => {
           if (result.status === 'success') {
             haeAsiasanat().then(() => {
               setAktiivinenAsiasana(null);
@@ -221,36 +220,34 @@ const SanakirjaPlain = ({ className }) => {
     }
   };
 
-  const Sanalistaus = () => {
-    return (
-      <Segment basic>
-        <Kirjainhakukomponentti suodatusMuutettu={suodatusMuutettu} />
-        <HakuKomponentti
-          hakuOptiot={SANAKIRJA_HAKUOPTIOT}
-          defaultHaku={SANAKIRJA_DEFAULT}
-          suodatusMuutettu={suodatusMuutettu}
-          vuosiHaku={true}
-        />
-        <Grid columns={16} id="tuloksetGrid">
-          <Grid.Row>
-            <Grid.Column width={6} textAlign="left">
-              {naytaAsiasanat()}
-            </Grid.Column>
-            <Grid.Column verticalAlign="top" width={10}>
-              {aktiivinenAsiasana ? (
-                <AktiivinenAsiasana
-                  aktiivinenAsiasana={aktiivinenAsiasana}
-                  suodatus={{ suodatusPaalla, suodatusoptio, hakutermi }}
-                  poistoHandler={poistoHandler}
-                  updateHandler={updateHandler}
-                />
-              ) : null}
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-      </Segment>
-    );
-  };
+  const Sanalistaus = () => (
+    <Segment basic>
+      <Kirjainhakukomponentti suodatusMuutettu={suodatusMuutettu} />
+      <HakuKomponentti
+        hakuOptiot={SANAKIRJA_HAKUOPTIOT}
+        defaultHaku={SANAKIRJA_DEFAULT}
+        suodatusMuutettu={suodatusMuutettu}
+        vuosiHaku
+      />
+      <Grid columns={16} id="tuloksetGrid">
+        <Grid.Row>
+          <Grid.Column width={6} textAlign="left">
+            {naytaAsiasanat()}
+          </Grid.Column>
+          <Grid.Column verticalAlign="top" width={10}>
+            {aktiivinenAsiasana ? (
+              <AktiivinenAsiasana
+                aktiivinenAsiasana={aktiivinenAsiasana}
+                suodatus={{ suodatusPaalla, suodatusoptio, hakutermi }}
+                poistoHandler={poistoHandler}
+                updateHandler={updateHandler}
+              />
+            ) : null}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Segment>
+  );
 
   const Latauskomponentti = () => <Loader active>Ladataan tietoja</Loader>;
 

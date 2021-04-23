@@ -8,7 +8,7 @@ const SuojattuReitti = ({ comp: Komponentti, ...rest }) => {
   return (
     <Route
       {...rest}
-      render={props =>
+      render={(props) =>
         user ? (
           <Komponentti {...rest} {...props} />
         ) : (

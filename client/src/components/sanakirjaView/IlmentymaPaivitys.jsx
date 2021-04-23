@@ -21,7 +21,7 @@ export default function IlmentymaPaivitys(props) {
   });
 
   useEffect(() => {
-    //setIsEdit(true);
+    // setIsEdit(true);
     setLomakeData({
       hs_osio: ilmentyma.hs_osio,
       paivays: ilmentyma.sivunumero,
@@ -46,7 +46,12 @@ export default function IlmentymaPaivitys(props) {
     setLomakeData({ ...lomakeData, [name]: !lomakeData.valmis });
   };
 
-  const lahetaPaivitettyData = e => {
+  const hallinnoiSulku = (e) => {
+    if (e) e.preventDefault();
+    setPaivitysModaaliAktiivinen(false);
+  };
+
+  const lahetaPaivitettyData = (e) => {
     if (e) e.preventDefault();
     // @body: hs_osio, paivays, selite, tyyli, kayttoala, lause, kuvaus, viesti, valmis
     const uusiData = {
@@ -77,11 +82,6 @@ export default function IlmentymaPaivitys(props) {
   };
 
   const hallinnoiAvaus = () => setPaivitysModaaliAktiivinen(true);
-
-  const hallinnoiSulku = e => {
-    if (e) e.preventDefault();
-    setPaivitysModaaliAktiivinen(false);
-  };
 
   return (
     <Modal

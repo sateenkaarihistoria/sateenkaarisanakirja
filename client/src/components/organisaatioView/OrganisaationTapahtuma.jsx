@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button, Confirm, Table } from 'semantic-ui-react';
-import { useStateValue } from '../../context/';
+import { useStateValue } from '../../context';
 import TapahtumaPaivitys from './TapahtumaPaivitys';
 import ViestiTutkijalle from '../ViestiTutkijalle';
 
@@ -13,7 +13,7 @@ const OrganisaationTapahtuma = ({
 }) => {
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
 
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   const poistonVahvistus = () => {
     setVahvistaPoistoNakyvissa(true);
@@ -77,10 +77,13 @@ const OrganisaationTapahtuma = ({
               <b>Tapahtuman vuosi</b>
             </Table.Cell>
             <Table.Cell className="table-content-cell">
-              {tapahtuma.paivays.slice(0, 2) + 
-              '-' + tapahtuma.paivays.slice(2, 6) +
-              '-' + tapahtuma.paivays.slice(6, 8) +
-              '-' + tapahtuma.paivays.slice(8, 10)}
+              {`${tapahtuma.paivays.slice(0, 2)}-${tapahtuma.paivays.slice(
+                2,
+                6,
+              )}-${tapahtuma.paivays.slice(6, 8)}-${tapahtuma.paivays.slice(
+                8,
+                10,
+              )}`}
             </Table.Cell>
           </Table.Row>
           <Table.Row>

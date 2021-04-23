@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import {
   Container,
   Form,
@@ -29,14 +29,24 @@ export default function OmatTiedot() {
     uusiSalasana: '',
   });
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     const { name, value } = event.target;
     setLomakeData({ ...lomakeData, [name]: value });
   };
 
+  function hoidaVirheet(result) {
+    setErrors(
+      result.data.response.data.errors
+        ? result.data.response.data.errors
+        : // Duplikaatti nimen aiheuttama virhe palauttaa virheen eri muodossa, käsittely vaatii kikkailua
+          [{ msg: JSON.stringify(result.data.response.data) }],
+    );
+    // console.log(result.data.response.data);
+  }
+
   function muutaTiedot() {
     putData('/api/kayttaja/oma/', lomakeData, user.id, user.token).then(
-      result => {
+      (result) => {
         if (result.status === 'success') {
           dispatch(setUser({ ...user, nimi: lomakeData.nimi }));
           setMuutettuAuki(true);
@@ -50,22 +60,12 @@ export default function OmatTiedot() {
 
   function poistaKayttaja() {
     setPoistoModaaliAuki(false);
-    deleteData('/api/kayttaja/', user.id, user.token).then(result => {
+    deleteData('/api/kayttaja/', user.id, user.token).then((result) => {
       if (result.status === 'success') {
         dispatch(logOut());
       }
     });
     setPoistettuAuki(true);
-  }
-
-  function hoidaVirheet(result) {
-    setErrors(
-      result.data.response.data.errors
-        ? result.data.response.data.errors
-        : // Duplikaatti nimen aiheuttama virhe palauttaa virheen eri muodossa, käsittely vaatii kikkailua
-          [{ msg: JSON.stringify(result.data.response.data) }],
-    );
-    //console.log(result.data.response.data);
   }
 
   return (
@@ -84,9 +84,9 @@ export default function OmatTiedot() {
         {errors ? (
           <Message negative>
             <Message.Header>Tarkista tiedot</Message.Header>
-            {errors.map(error => {
-              return <p key={error.param}> {error.msg}</p>;
-            })}
+            {errors.map((error) => (
+              <p key={error.param}> {error.msg}</p>
+            ))}
           </Message>
         ) : null}
         <Form>

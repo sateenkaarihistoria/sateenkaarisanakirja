@@ -25,7 +25,7 @@ const Hakukomponentti = ({
     setHakutermi(data.value);
   };
 
-  const hakuKlikattu = (e, data) => {
+  const hakuKlikattu = () => {
     if (lisaOptiot) {
       suodatusMuutettu(
         true,
@@ -52,7 +52,7 @@ const Hakukomponentti = ({
     setHakutermi('');
   };
 
-  const nappainPainettu = e => {
+  const nappainPainettu = (e) => {
     if (e.key === 'Enter') {
       hakuKlikattu();
     }
@@ -87,7 +87,7 @@ const Hakukomponentti = ({
           defaultValue={valittuSuodatusOptio}
           options={hakuOptiot}
           onChange={hakuoptioMuutettu}
-        ></Dropdown>
+        />
         <div>
           {vuosiHaku ? (
             <Checkbox
