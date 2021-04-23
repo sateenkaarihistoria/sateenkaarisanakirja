@@ -1,0 +1,44 @@
+{
+    "testiSanat": [
+        {
+            "sanaluokka": "verbi",
+            "paivays": "321022010",
+            "hs_osio": "Kulttuuri",
+            "hakusana": "TESTI E2E: SANALOMAKKEEN TÄYTTÖ",
+            "selite": "testi",
+            "asiasana": "sukupuoli",
+            "tyyli": "vanhahtava ilmaisu",
+            "kayttoala": "historia",
+            "lause": "testi",
+            "viesti": "testiviesti"
+        }
+    ],
+    "testiKulttuurituotteet": [
+        {
+            "tekija_etunimi": "Teppo",
+            "tekija_sukunimi": "Testaaja",
+            "tekija_ammatti": "muusikko",
+            "tekija_paikkakunta": "Tampere",
+            "tekija_maa": "Suomi",
+            "teos_nimi": "TESTI E2E: KULTTUURITUOTELOMAKKEEN TÄYTTÖ",
+            "teos_lajityyppi": "kirja",
+            "teos_asiasana": "sukupuoli",
+            "teos_paikkakunta": "Helsinki",
+            "teos_tapahtumamaa": "Suomi",
+            "viesti": "testiviesti -kulttuurituote"
+        }
+    ],
+    "testiOrganisaatiot" : [
+        {
+            "org_nimi": "Testaajat",
+            "org_paikkakunta": "Tampere",
+            "org_maa": "Suomi",
+            "tapahtuma_nimi": "TESTI E2E: ORGANISAATIOLOMAKKEEN TÄYTTÖ",
+            "tapahtuma_luonne": "kokous",
+            "tapahtuma_asiasana": "sukupuoli",
+            "tapahtuma_paivays": "HS19321022",
+            "teos_tapahtumamaa": "Suomi",
+            "viesti": "testiviesti -organisaatiot"
+        }
+    ]
+}
