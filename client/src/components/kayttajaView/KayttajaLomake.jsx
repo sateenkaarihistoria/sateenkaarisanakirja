@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Form,
@@ -12,11 +12,11 @@ import RdHeader from '../RdHeader';
 import RdMenu from '../RdMenu';
 import MobileMenu from '../MobileMenu';
 import { postData, putData } from '../../api/api';
-import { useStateValue } from '../../context/';
+import { useStateValue } from '../../context';
 
 export default function KayttajaLomake(props) {
   const history = useHistory();
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
   const [errors, setErrors] = useState(null);
   const [isEdit, setIsEdit] = useState(false);
   const [lisattyAuki, setLisattyAuki] = useState(false);
@@ -48,9 +48,18 @@ export default function KayttajaLomake(props) {
     const { name, value } = result || event.target;
     setLomakeData({ ...lomakeData, [name]: value });
   };
+  function hoidaVirheet(result) {
+    setErrors(
+      result.data.response.data.errors
+        ? result.data.response.data.errors
+        : // Duplikaatti nimen aiheuttama virhe palauttaa virheen eri muodossa, käsittely vaatii kikkailua
+          [{ msg: JSON.stringify(result.data.response.data) }],
+    );
+    // console.log(result.data.response.data);
+  }
 
   function lisaaKayttaja() {
-    postData('/api/kayttaja', lomakeData, user.token).then(result => {
+    postData('/api/kayttaja', lomakeData, user.token).then((result) => {
       if (result.status === 'success') {
         setLisattyAuki(true);
       } else {
@@ -65,23 +74,13 @@ export default function KayttajaLomake(props) {
       lomakeData,
       props.location.state.id,
       user.token,
-    ).then(result => {
+    ).then((result) => {
       if (result.status === 'success') {
         setMuutettuAuki(true);
       } else {
         hoidaVirheet(result);
       }
     });
-  }
-
-  function hoidaVirheet(result) {
-    setErrors(
-      result.data.response.data.errors
-        ? result.data.response.data.errors
-        : // Duplikaatti nimen aiheuttama virhe palauttaa virheen eri muodossa, käsittely vaatii kikkailua
-          [{ msg: JSON.stringify(result.data.response.data) }],
-    );
-    //console.log(result.data.response.data);
   }
 
   function vaihdaNakyma() {
@@ -104,9 +103,9 @@ export default function KayttajaLomake(props) {
         {errors ? (
           <Message negative>
             <Message.Header>Tarkista tiedot</Message.Header>
-            {errors.map(error => {
-              return <p key={error.param}> {error.msg}</p>;
-            })}
+            {errors.map((error) => (
+              <p key={error.param}> {error.msg}</p>
+            ))}
           </Message>
         ) : null}
         <Form>

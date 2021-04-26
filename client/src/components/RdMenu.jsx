@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Menu, Icon, Dropdown } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 import { useStateValue, logOut } from '../context';
 
 const MenuKomponentti = ({ className, activeItem, history }) => {
@@ -89,13 +88,13 @@ const MenuKomponentti = ({ className, activeItem, history }) => {
           active={activeItem === 'taustaa'}
           onClick={() => history.push('/taustaa')}
         />
-        { user ? 
+        {user ? (
           <Menu.Item
-              name="Tulostusversio"
-              active={activeItem === 'tulostus'}
-              onClick={() => history.push('/tulostus')}
-            />
-          : null }
+            name="Tulostusversio"
+            active={activeItem === 'tulostus'}
+            onClick={() => history.push('/tulostus')}
+          />
+        ) : null}
 
         <Menu.Menu position="right">
           {user ? (
@@ -105,14 +104,14 @@ const MenuKomponentti = ({ className, activeItem, history }) => {
                   icon="user"
                   floating
                   options={adminOptions}
-                  trigger={<React.Fragment />}
+                  trigger={<></>}
                 />
               ) : (
                 <Dropdown
                   icon="user"
                   floating
                   options={tutkijaOptions}
-                  trigger={<React.Fragment />}
+                  trigger={<></>}
                 />
               )}
             </Menu.Item>
@@ -142,11 +141,4 @@ const RdMenu = styled(MenuKomponentti)`
     color: ${({ theme }) => theme.palette.primary.darker};
   }
 `;
-
-MenuKomponentti.propTypes = {
-  activeItem: PropTypes.string,
-  history: PropTypes.object,
-  className: PropTypes.string,
-};
-
 export default RdMenu;

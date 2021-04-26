@@ -1,7 +1,7 @@
 export const ROOT = '/';
 export const DICTIONARY = `${ROOT}sanakirja`;
-export const ORGANIZATIONS = `${ROOT}organisaatiot`
-export const CULTUREPRODUCTS = `${ROOT}kulttuurituotteet`
+export const ORGANIZATIONS = `${ROOT}organisaatiot`;
+export const CULTUREPRODUCTS = `${ROOT}kulttuurituotteet`;
 export const LOGIN = `${ROOT}kirjautuminen`;
 export const WORDFORM = `${ROOT}sanalomake`;
 export const CULTUREFORM = `${ROOT}kulttuurilomake`;

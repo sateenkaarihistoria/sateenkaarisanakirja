@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { useRouteMatch } from 'react-router';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Form,
@@ -9,7 +8,7 @@ import {
   Modal,
 } from 'semantic-ui-react';
 import { postData, getSuojattuData } from '../../api/api';
-import { useStateValue, setToken } from '../../context/';
+import { useStateValue, setToken } from '../../context';
 
 const Organisaatiolomake = () => {
   const [{ user }, dispatch] = useStateValue();
@@ -27,7 +26,7 @@ const Organisaatiolomake = () => {
     paivays: false,
   });
 
-  //Hookki organisaatiolomakkeen kenttiä varten
+  // Hookki organisaatiolomakkeen kenttiä varten
   const [organisaatioTila, setOrganisaatioTila] = useState({
     org_nimi: '',
     kuvaus: '',
@@ -40,7 +39,7 @@ const Organisaatiolomake = () => {
     valmis: false,
   });
 
-  //virheisiin liittyvät tilat
+  // virheisiin liittyvät tilat
   const [virheet, setVirheet] = useState({
     org_nimiVirhe: false,
     asiasanaVirhe: false,
@@ -52,19 +51,20 @@ const Organisaatiolomake = () => {
     virheViesti: 'Täytä kaikki kentät',
     virhe: false,
   });
-  //virheidenpäivitys
+  // virheidenpäivitys
   const paivitaVirheet = (virhe, arvo) => {
-    setVirheet(prev => ({
+    setVirheet((prev) => ({
       ...prev,
       [virhe]: arvo,
     }));
   };
 
-  //Metodi joka hakee lomakkeen sisällön typeaheadia varten
+  // Metodi joka hakee lomakkeen sisällön typeaheadia varten
   const fetchResults = () => {
-    getSuojattuData('/api/organisaatiolomake', user.token).then(result => {
+    getSuojattuData('/api/organisaatiolomake', user.token).then((result) => {
       if (result.status === 'success') {
-        const mappedResults = result.data.reduce((prev, r) => {
+        const mappedResults = result.data.reduce((p, r) => {
+          const prev = { ...p };
           const [key, value] = Object.entries(r)[0];
           prev[key] = value;
 
@@ -82,85 +82,82 @@ const Organisaatiolomake = () => {
   // ennen komponentin renderöintiä
   useEffect(fetchResults, []);
 
-  //Typeaheadin tulosten valintatilannetta käsittelevä metodi
-  const handleResultSelect = name => (e, { result }) =>
-    setOrganisaatioTila(prev => ({
+  // Typeaheadin tulosten valintatilannetta käsittelevä metodi
+  const handleResultSelect = (name) => (e, { result }) =>
+    setOrganisaatioTila((prev) => ({
       ...prev,
       [name]: result.title,
     }));
-
-  //Typeaheadin hakusanan tilan muutosta käsittelevä metodi
-  const handleSearchChange = e => {
+  // organisaation tilan muuttaminen
+  const muutaOrganisaationTila = (e) => {
+    const { name, value } = e.target;
+    setOrganisaatioTila((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+  // Typeaheadin hakusanan tilan muutosta käsittelevä metodi
+  const handleSearchChange = (e) => {
     const { name, value } = e.target;
 
-    setIsLoading(prev => ({
+    setIsLoading((prev) => ({
       ...prev,
       [name]: true,
     }));
 
     muutaOrganisaationTila(e);
 
-    //Tyhjennetään hakutulokset jos pituus nolla
+    // Tyhjennetään hakutulokset jos pituus nolla
     if (value.length < 1) {
-      setSearchResults(prev => ({
+      setSearchResults((prev) => ({
         ...prev,
         [name]: [],
       }));
-      setIsLoading(prev => ({
+      setIsLoading((prev) => ({
         ...prev,
         [name]: false,
       }));
     }
 
-    //Haun säätäminen toimimaan sekä isoilla, että pienillä kirjaimilla
+    // Haun säätäminen toimimaan sekä isoilla, että pienillä kirjaimilla
     const re = new RegExp(`^${value.toLowerCase()}`);
 
     if (initialResults[name]) {
-      const filteredResults = initialResults[name].filter(result => {
+      const filteredResults = initialResults[name].filter((result) => {
         if (result.toLowerCase) {
           return re.test(result.toLowerCase());
-        } else {
-          return re.test(result);
         }
+        return re.test(result);
       });
 
-      //Metodi joka säilöö lomakkeen haetut tiedot muuttujaan
-      const results = filteredResults.map(filteredResult => ({
+      // Metodi joka säilöö lomakkeen haetut tiedot muuttujaan
+      const results = filteredResults.map((filteredResult) => ({
         title: `${filteredResult}`,
       }));
 
-      //Metodi joka asettaa hakutulokset
-      setSearchResults(prev => ({
+      // Metodi joka asettaa hakutulokset
+      setSearchResults((prev) => ({
         ...prev,
         [name]: results,
       }));
     }
 
-    //Metodi "lataus" -ikonia varten kentän oikeassa reunassa, joka ei nyt ole käytössä, vaan piilotettuna
-    setIsLoading(prev => ({
+    // Metodi "lataus" -ikonia varten kentän oikeassa reunassa, joka ei nyt ole käytössä, vaan piilotettuna
+    setIsLoading((prev) => ({
       ...prev,
       [name]: false,
     }));
   };
 
-  // organisaation tilan muuttaminen
-  const muutaOrganisaationTila = e => {
-    const { name, value } = e.target;
-    setOrganisaatioTila(prev => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
   // Checkboxin kontrolloiman valmis-arvon muuttaminen
   const muutaValmis = () => {
-    setOrganisaatioTila(prev => ({
+    setOrganisaatioTila((prev) => ({
       ...prev,
       valmis: !organisaatioTila.valmis,
     }));
   };
 
-  //Metodi joka tyhjentää lomakkeen
+  // Metodi joka tyhjentää lomakkeen
   const tyhjennaOrganisaatioLomake = () => {
     setOrganisaatioTila({
       org_nimi: '',
@@ -183,60 +180,65 @@ const Organisaatiolomake = () => {
       virhe: false,
     });
   };
+  // Funktio palvelimen palauttamien virheiden käsittelyyn
+  const hoidaVirheet = (result) => {
+    setErrors(
+      result.data.response.data.errors
+        ? result.data.response.data.errors
+        : // Jos serveri palauttaa yleisen virheen, sen muotdon käsittely vaatii kikkailua
+          [{ msg: JSON.stringify(result.data.response.data) }],
+    );
+  };
 
   // Funktio muuntaa sanan ensimmäisen kirjaimen isoksi
-  const muunnaKirjainIsoksi = (s) => {
-    return s[0].toUpperCase() + s.slice(1);
-  }
+  const muunnaKirjainIsoksi = (s) => s[0].toUpperCase() + s.slice(1);
 
   // Funktio muuntaa sanan ensimmäisen kirjaimen pieneksi
-  const muunnaKirjainPieneksi = (s) => {
-    return s[0].toLowerCase() + s.slice(1);
-  }
+  const muunnaKirjainPieneksi = (s) => s[0].toLowerCase() + s.slice(1);
 
-  //Tarkistetaan lomake, että siinä on tarvittavat tiedot sanan tallennusta varten
+  // Tarkistetaan lomake, että siinä on tarvittavat tiedot sanan tallennusta varten
   const tarkistaOrganisaatiolomake = async () => {
     let virhe = false;
 
-    //tarkastetaan ovatko kentät tyhjät
-    //jos ovat niin merkataan virhe todeksi
-    if (organisaatioTila['org_nimi'].trim() === '') {
+    // tarkastetaan ovatko kentät tyhjät
+    // jos ovat niin merkataan virhe todeksi
+    if (organisaatioTila.org_nimi.trim() === '') {
       paivitaVirheet('org_nimiVirhe', true);
       virhe = true;
     } else {
       paivitaVirheet('org_nimiVirhe', false);
     }
-    if (organisaatioTila['kuvaus'].trim() === '') {
+    if (organisaatioTila.kuvaus.trim() === '') {
       paivitaVirheet('asiasanaVirhe', true);
       virhe = true;
     } else {
       paivitaVirheet('asiasanaVirhe', false);
     }
-    if (organisaatioTila['tapahtuma_nimi'].trim() === '') {
+    if (organisaatioTila.tapahtuma_nimi.trim() === '') {
       paivitaVirheet('tapahtuma_nimiVirhe', true);
       virhe = true;
     } else {
       paivitaVirheet('tapahtuma_nimiVirhe', false);
     }
-    if (organisaatioTila['tapahtuma_luonne'].trim() === '') {
+    if (organisaatioTila.tapahtuma_luonne.trim() === '') {
       paivitaVirheet('tapahtuma_luonneVirhe', true);
       virhe = true;
     } else {
       paivitaVirheet('tapahtuma_luonneVirhe', false);
     }
-    if (organisaatioTila['paikkakunta'].trim() === '') {
+    if (organisaatioTila.paikkakunta.trim() === '') {
       paivitaVirheet('paikkakuntaVirhe', true);
       virhe = true;
     } else {
       paivitaVirheet('paikkakuntaVirhe', false);
     }
-    if (organisaatioTila['maa'].trim() === '') {
+    if (organisaatioTila.maa.trim() === '') {
       paivitaVirheet('maaVirhe', true);
       virhe = true;
     } else {
       paivitaVirheet('maaVirhe', false);
     }
-    if (organisaatioTila['paivays'].trim() === '') {
+    if (organisaatioTila.paivays.trim() === '') {
       paivitaVirheet('paivaysVirhe', true);
       virhe = true;
     } else {
@@ -244,20 +246,20 @@ const Organisaatiolomake = () => {
     }
 
     if (!virhe) {
-      var luoFormiobjekti = {
-        org_nimi: muunnaKirjainIsoksi(organisaatioTila['org_nimi']),
-        maa: muunnaKirjainIsoksi(organisaatioTila['maa']),
-        paikkakunta: muunnaKirjainIsoksi(organisaatioTila['paikkakunta']),
-        tapahtuma_nimi: muunnaKirjainIsoksi(organisaatioTila['tapahtuma_nimi']),
-        luonne: muunnaKirjainPieneksi(organisaatioTila['tapahtuma_luonne']),
-        paivays: organisaatioTila['paivays'],
-        kuvaus: muunnaKirjainPieneksi(organisaatioTila['kuvaus']),
-        viesti: organisaatioTila['viesti'],
-        valmis: organisaatioTila['valmis'],
+      const luoFormiobjekti = {
+        org_nimi: muunnaKirjainIsoksi(organisaatioTila.org_nimi),
+        maa: muunnaKirjainIsoksi(organisaatioTila.maa),
+        paikkakunta: muunnaKirjainIsoksi(organisaatioTila.paikkakunta),
+        tapahtuma_nimi: muunnaKirjainIsoksi(organisaatioTila.tapahtuma_nimi),
+        luonne: muunnaKirjainPieneksi(organisaatioTila.tapahtuma_luonne),
+        paivays: organisaatioTila.paivays,
+        kuvaus: muunnaKirjainPieneksi(organisaatioTila.kuvaus),
+        viesti: organisaatioTila.viesti,
+        valmis: organisaatioTila.valmis,
       };
 
       await postData('/api/organisaatio', luoFormiobjekti, user.token).then(
-        result => {
+        (result) => {
           if (result.status === 'success') {
             dispatch(setToken(result.data.token));
             setLisattyAuki(true);
@@ -270,29 +272,19 @@ const Organisaatiolomake = () => {
       tyhjennaOrganisaatioLomake();
       fetchResults();
     } else {
-      //console.log('Kenttiä puuttuu');
+      // console.log('Kenttiä puuttuu');
     }
   };
 
-  // Funktio palvelimen palauttamien virheiden käsittelyyn
-  const hoidaVirheet = result => {
-    setErrors(
-      result.data.response.data.errors
-        ? result.data.response.data.errors
-        : // Jos serveri palauttaa yleisen virheen, sen muotdon käsittely vaatii kikkailua
-        [{ msg: JSON.stringify(result.data.response.data) }],
-    );
-  };
-
-  //Lomakkeen kentät ja niissä käytettävät tominnallisuudet
+  // Lomakkeen kentät ja niissä käytettävät tominnallisuudet
   return (
     <Container>
       {errors ? (
         <Message negative>
           <Message.Header>Syöttö epäonnistui</Message.Header>
-          {errors.map(error => {
-            return <p key={error.param}> {error.msg}</p>;
-          })}
+          {errors.map((error) => (
+            <p key={error.param}> {error.msg}</p>
+          ))}
         </Message>
       ) : null}
       <Form name="Organisaatiolomake" method="post">
@@ -304,17 +296,17 @@ const Organisaatiolomake = () => {
             fluid
             label="Organisaation nimi"
             name="org_nimi"
-            value={organisaatioTila['org_nimi']}
+            value={organisaatioTila.org_nimi}
             onChange={muutaOrganisaationTila}
-            error={virheet['org_nimiVirhe']}
+            error={virheet.org_nimiVirhe}
           >
             <Search
-              loading={isLoading['org_nimi']}
+              loading={isLoading.org_nimi}
               onResultSelect={handleResultSelect('org_nimi')}
               onSearchChange={handleSearchChange}
               name="org_nimi"
-              results={searchResults['org_nimi']}
-              value={organisaatioTila['org_nimi']}
+              results={searchResults.org_nimi}
+              value={organisaatioTila.org_nimi}
               label="Organisaation nimi"
               icon={null}
             />
@@ -324,17 +316,17 @@ const Organisaatiolomake = () => {
             fluid
             label="Organisaation paikkakunta"
             name="paikkakunta"
-            value={organisaatioTila['paikkakunta']}
+            value={organisaatioTila.paikkakunta}
             onChange={muutaOrganisaationTila}
-            error={virheet['paikkakuntaVirhe']}
+            error={virheet.paikkakuntaVirhe}
           >
             <Search
-              loading={isLoading['paikkakunta']}
+              loading={isLoading.paikkakunta}
               onResultSelect={handleResultSelect('paikkakunta')}
               onSearchChange={handleSearchChange}
               name="paikkakunta"
-              results={searchResults['paikkakunta']}
-              value={organisaatioTila['paikkakunta']}
+              results={searchResults.paikkakunta}
+              value={organisaatioTila.paikkakunta}
               label="Paikkakunta"
               icon={null}
             />
@@ -343,17 +335,17 @@ const Organisaatiolomake = () => {
             fluid
             label="Organisaation maa"
             name="maa"
-            value={organisaatioTila['maa']}
+            value={organisaatioTila.maa}
             onChange={muutaOrganisaationTila}
-            error={virheet['maaVirhe']}
+            error={virheet.maaVirhe}
           >
             <Search
-              loading={isLoading['maa']}
+              loading={isLoading.maa}
               onResultSelect={handleResultSelect('maa')}
               onSearchChange={handleSearchChange}
               name="maa"
-              results={searchResults['maa']}
-              value={organisaatioTila['maa']}
+              results={searchResults.maa}
+              value={organisaatioTila.maa}
               label="Maa"
               icon={null}
             />
@@ -364,17 +356,17 @@ const Organisaatiolomake = () => {
             fluid
             label="Tapahtuman nimi"
             name="tapahtuma_nimi"
-            value={organisaatioTila['tapahtuma_nimi']}
+            value={organisaatioTila.tapahtuma_nimi}
             onChange={muutaOrganisaationTila}
-            error={virheet['tapahtuma_nimiVirhe']}
+            error={virheet.tapahtuma_nimiVirhe}
           >
             <Search
-              loading={isLoading['tapahtuma_nimi']}
+              loading={isLoading.tapahtuma_nimi}
               onResultSelect={handleResultSelect('tapahtuma_nimi')}
               onSearchChange={handleSearchChange}
               name="tapahtuma_nimi"
-              results={searchResults['tapahtuma_nimi']}
-              value={organisaatioTila['tapahtuma_nimi']}
+              results={searchResults.tapahtuma_nimi}
+              value={organisaatioTila.tapahtuma_nimi}
               label="Tapahtuma nimi"
               icon={null}
             />
@@ -383,17 +375,17 @@ const Organisaatiolomake = () => {
             fluid
             label="Tapahtuman luonne"
             name="tapahtuma_luonne"
-            value={organisaatioTila['tapahtuma_luonne']}
+            value={organisaatioTila.tapahtuma_luonne}
             onChange={muutaOrganisaationTila}
-            error={virheet['tapahtuma_luonneVirhe']}
+            error={virheet.tapahtuma_luonneVirhe}
           >
             <Search
-              loading={isLoading['tapahtuma_luonne']}
+              loading={isLoading.tapahtuma_luonne}
               onResultSelect={handleResultSelect('tapahtuma_luonne')}
               onSearchChange={handleSearchChange}
               name="tapahtuma_luonne"
-              results={searchResults['tapahtuma_luonne']}
-              value={organisaatioTila['tapahtuma_luonne']}
+              results={searchResults.tapahtuma_luonne}
+              value={organisaatioTila.tapahtuma_luonne}
               label="Tapahtuman luonne"
               icon={null}
             />
@@ -404,17 +396,17 @@ const Organisaatiolomake = () => {
             width={8}
             label="Tapahtuman asiasana"
             name="kuvaus"
-            value={organisaatioTila['kuvaus']}
+            value={organisaatioTila.kuvaus}
             onChange={muutaOrganisaationTila}
-            error={virheet['asiasanaVirhe']}
+            error={virheet.asiasanaVirhe}
           >
             <Search
-              loading={isLoading['kuvaus']}
+              loading={isLoading.kuvaus}
               onResultSelect={handleResultSelect('kuvaus')}
               onSearchChange={handleSearchChange}
               name="kuvaus"
-              results={searchResults['kuvaus']}
-              value={organisaatioTila['kuvaus']}
+              results={searchResults.kuvaus}
+              value={organisaatioTila.kuvaus}
               label="Asiasana"
               icon={null}
             />
@@ -424,17 +416,17 @@ const Organisaatiolomake = () => {
             width={8}
             label="Tapahtuman uutisointi"
             name="paivays"
-            value={organisaatioTila['paivays']}
+            value={organisaatioTila.paivays}
             onChange={muutaOrganisaationTila}
-            error={virheet['paivaysVirhe']}
+            error={virheet.paivaysVirhe}
           >
             <Search
-              loading={isLoading['paivays']}
+              loading={isLoading.paivays}
               onResultSelect={handleResultSelect('paivays')}
               onSearchChange={handleSearchChange}
               name="paivays"
-              results={searchResults['paivays']}
-              value={organisaatioTila['paivays']}
+              results={searchResults.paivays}
+              value={organisaatioTila.paivays}
               label="Tapahtuman uutisointi"
               icon={null}
             />

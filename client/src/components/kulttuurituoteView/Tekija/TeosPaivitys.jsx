@@ -40,8 +40,12 @@ export default function TeosPaivitys(props) {
     const { name } = result || event.target;
     setLomakeData({ ...lomakeData, [name]: !lomakeData.valmis });
   };
+  const hallinnoiSulku = (e) => {
+    if (e) e.preventDefault();
+    setPaivitysModaaliAktiivinen(false);
+  };
 
-  const lahetaPaivitettyData = e => {
+  const lahetaPaivitettyData = (e) => {
     if (e) e.preventDefault();
     // @body: hs_osio, paivays, selite, tyyli, kayttoala, lause, kuvaus, viesti, valmis
     const uusiData = {
@@ -68,11 +72,6 @@ export default function TeosPaivitys(props) {
   };
 
   const hallinnoiAvaus = () => setPaivitysModaaliAktiivinen(true);
-
-  const hallinnoiSulku = e => {
-    if (e) e.preventDefault();
-    setPaivitysModaaliAktiivinen(false);
-  };
 
   return (
     <Modal

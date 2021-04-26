@@ -1,4 +1,4 @@
-export const setUser = user => {
+export const setUser = (user) => {
   if (user) window.localStorage.setItem('loginData', JSON.stringify(user));
   return {
     type: 'SET_USER',
@@ -21,7 +21,7 @@ export const logOut = () => {
   };
 };
 
-export const setToken = token => {
+export const setToken = (token) => {
   const user = JSON.parse(window.localStorage.getItem('loginData'));
   user.token = token;
   window.localStorage.setItem('loginData', JSON.stringify(user));

@@ -1,21 +1,20 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Container, Button, Grid, Responsive } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import RdHeader from '../RdHeader';
 import RdMenu from '../RdMenu';
 import MobileMenu from '../MobileMenu';
 
-import Sanalomake from './Sanalomake'
-import Kulttuurituotelomake from './Kulttuurituotelomake'
-import Organisaatiolomake from './Organisaatiolomake'
+import Sanalomake from './Sanalomake';
+import Kulttuurituotelomake from './Kulttuurituotelomake';
+import Organisaatiolomake from './Organisaatiolomake';
 
 const SyottoLomakeRaw = ({ className }) => {
   const history = useHistory();
 
   const [activeFormId, setActiveFormId] = useState('form1');
-  const handleActiveFormChange = v => setActiveFormId(v);
+  const handleActiveFormChange = (v) => setActiveFormId(v);
 
   const FormSelectButton = ({ formId, children }) => (
     <Button onClick={() => handleActiveFormChange(formId)}>{children}</Button>
@@ -34,7 +33,7 @@ const SyottoLomakeRaw = ({ className }) => {
         <div className="infoheader">
           <Grid centered>
             <FormSelectButton
-              formId={'form1'}
+              formId="form1"
               centered
               input
               type="reset"
@@ -43,7 +42,7 @@ const SyottoLomakeRaw = ({ className }) => {
               Lisää sana
             </FormSelectButton>
             <FormSelectButton
-              formId={'form2'}
+              formId="form2"
               centered
               input
               type="reset"
@@ -52,7 +51,7 @@ const SyottoLomakeRaw = ({ className }) => {
               Lisää kulttuurituote
             </FormSelectButton>
             <FormSelectButton
-              formId={'form3'}
+              formId="form3"
               centered
               input
               type="reset"
@@ -61,21 +60,15 @@ const SyottoLomakeRaw = ({ className }) => {
               Lisää organisaatio
             </FormSelectButton>
           </Grid>
-          <br></br>
-          <br></br>
-          <br></br>
+          <br />
+          <br />
+          <br />
           <Grid centered>
             <Grid.Column mobile={16} tablet={14} computer={12}>
-              {activeFormId === 'form1' && (
-                <Sanalomake />
-              )}
-              {activeFormId === 'form2' && (
-                <Kulttuurituotelomake />
-              )}
+              {activeFormId === 'form1' && <Sanalomake />}
+              {activeFormId === 'form2' && <Kulttuurituotelomake />}
 
-              {activeFormId === 'form3' && (
-                <Organisaatiolomake />
-              )}
+              {activeFormId === 'form3' && <Organisaatiolomake />}
             </Grid.Column>
           </Grid>
         </div>
@@ -94,9 +87,5 @@ const SyottoLomake = styled(SyottoLomakeRaw)`
     margin-bottom: 3rem;
   }
 `;
-
-SyottoLomakeRaw.propTypes = {
-  className: PropTypes.string,
-};
 
 export default SyottoLomake;

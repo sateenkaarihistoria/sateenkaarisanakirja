@@ -1,8 +1,8 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button, Confirm, Divider, Table, Header } from 'semantic-ui-react';
 import OrganisaationTapahtuma from './OrganisaationTapahtuma';
 import { valitseHakumetodi } from '../../utilities/hakutoiminnot';
-import { useStateValue } from '../../context/';
+import { useStateValue } from '../../context';
 import OrganisaatioPaivitys from './OrganisaatioPaivitys';
 
 import './AktiivinenOrganisaatio.css';
@@ -16,14 +16,14 @@ const AktiivinenOrganisaatio = ({
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
   const { suodatusPaalla, suodatusoptio, hakutermi } = suodatus;
 
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   const naytaTapahtumat = () => {
     let suodatetutTapahtumat = [];
     if (suodatusPaalla && suodatusoptio === 'asiasana') {
-      let { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
+      const { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
       suodatetutTapahtumat = aktiivinenOrganisaatio.tapahtumat.filter(
-        tapahtuma => predikaatti(hakutermiTrim)(tapahtuma['asiasana'][0]),
+        (tapahtuma) => predikaatti(hakutermiTrim)(tapahtuma.asiasana[0]),
       );
     } else {
       suodatetutTapahtumat = aktiivinenOrganisaatio.tapahtumat;
@@ -33,10 +33,10 @@ const AktiivinenOrganisaatio = ({
     // valmis = true statuksella
     if (!user) {
       suodatetutTapahtumat = suodatetutTapahtumat.filter(
-        tap => tap['valmis'] === true,
+        (tap) => tap.valmis === true,
       );
     }
-    return suodatetutTapahtumat.map(tapahtuma => (
+    return suodatetutTapahtumat.map((tapahtuma) => (
       <OrganisaationTapahtuma
         key={tapahtuma.id}
         tapahtuma={tapahtuma}
@@ -84,11 +84,11 @@ const AktiivinenOrganisaatio = ({
   divPlace = divPlace > 0 ? divPlace : 0;
 
   return (
-    <div className="" style={{ position: 'relative', top: divPlace + 'px' }}>
+    <div className="" style={{ position: 'relative', top: `${divPlace}px` }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
         {aktiivinenOrganisaatio.nimi}
       </Header>
-      <Table className={'very basic table'} textAlign="left">
+      <Table className="very basic table" textAlign="left">
         <Table.Body>
           <Table.Row>
             <Table.Cell className="table-label-cell">

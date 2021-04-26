@@ -1,15 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import 'fomantic-ui-css/semantic.css';
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  useLocation,
-} from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import WebFont from 'webfontloader';
 import { ThemeProvider } from 'styled-components';
-
-import { useStateValue, setUser } from './context';
 
 import Sanakirja from './components/sanakirjaView/Sanakirja';
 import Organisaatiot from './components/organisaatioView/Organisaatiot';
@@ -36,13 +29,6 @@ WebFont.load({
 });
 
 const App = function AppContent() {
-  const path = useLocation();
-  const [{ user }, dispatch] = useStateValue();
-
-  /*useEffect(() => {
-    
-  }, [path]);*/
-
   return (
     <ThemeProvider theme={theme}>
       <>

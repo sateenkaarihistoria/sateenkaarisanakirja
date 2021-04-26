@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Container, Responsive } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import RdHeader from './RdHeader';
 import RdMenu from './RdMenu';
@@ -230,7 +229,7 @@ const MainStructure = ({ className }) => {
           <h4 className="ui content header">Lähteen merkintä</h4>
           <p>
             Esimerkkilauseen ilmeneminen on seurattavissa tiettyyn lehteen (HS,
-             <i> Helsingin Sanomat</i>), ja siinä ilmestyneen tekstikatkelman
+            <i> Helsingin Sanomat</i>), ja siinä ilmestyneen tekstikatkelman
             julkaisuvuoteen, kuukauteen ja -päivään, sekä lehden sivunumeroon
             (HSvvvv-kk-pp-000).
           </p>
@@ -409,9 +408,5 @@ const RdInformation = styled(MainStructure)`
     margin-top: 0.5rem;
   }
 `;
-
-MainStructure.propTypes = {
-  className: PropTypes.string,
-};
 
 export default RdInformation;

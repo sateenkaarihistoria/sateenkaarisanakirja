@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button, Confirm, Divider, Table, Header } from 'semantic-ui-react';
-import { useStateValue } from '../../../context/';
+import { useStateValue } from '../../../context';
 import TeosIlmentyma from './TeosIlmentyma';
 import { valitseHakumetodi } from '../../../utilities/hakutoiminnot';
 import TeosPaivitys from '../Tekija/TeosPaivitys';
@@ -15,20 +15,20 @@ const AktiivinenTeos = ({
 }) => {
   const { suodatusPaalla, suodatusoptio, hakutermi } = suodatus;
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   const naytaTekijät = () => {
     let suodatetutTekijat = [];
     if (suodatusPaalla && suodatusoptio === 'asiasana') {
-      let { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
-      suodatetutTekijat = aktiivinenTeos.teokset.filter(teos =>
-        predikaatti(hakutermiTrim)(teos['asiasanat'][0]),
+      const { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
+      suodatetutTekijat = aktiivinenTeos.teokset.filter((teos) =>
+        predikaatti(hakutermiTrim)(teos.asiasanat[0]),
       );
     } else {
       suodatetutTekijat = aktiivinenTeos.tekijat;
     }
 
-    return suodatetutTekijat.map(tekija => (
+    return suodatetutTekijat.map((tekija) => (
       <TeosIlmentyma key={tekija.id} teos_tekija={tekija} />
     ));
   };
@@ -68,11 +68,11 @@ const AktiivinenTeos = ({
   divPlace = divPlace > 0 ? divPlace : 0;
 
   return (
-    <div className="" style={{ position: 'relative', top: divPlace + 'px' }}>
+    <div className="" style={{ position: 'relative', top: `${divPlace}px` }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
         {aktiivinenTeos.nimi}
       </Header>
-      <Table className={'very basic table'} textAlign="left">
+      <Table className="very basic table" textAlign="left">
         <Table.Body>
           <Table.Row>
             <Table.Cell className="table-label-cell">
