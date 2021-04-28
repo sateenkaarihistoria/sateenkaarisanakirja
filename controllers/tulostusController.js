@@ -60,8 +60,15 @@ const hakusanat = async () => {
     })
  	);
 
-  //const res = await kaikkiSanat(hakusanat);
-  const sanalista = await kaikkiSanat(hakusanat);
+  var collator = new Intl.Collator('fi');
+  var hakusanatSorted = hakusanat.sort(function(a, b) {
+      return a.sana.localeCompare(b.sana, 'fi')
+    });
+
+  //console.log(hakusanatSorted);
+  //const sanalista = await kaikkiSanat(hakusanat.sort(new Intl.Collator('fi').compare));
+  //const sanalista = await kaikkiSanat(hakusanat);
+  const sanalista = await kaikkiSanat(hakusanatSorted);
   var res = "<html><body>";
 
   for (var i = 0; i < sanalista.sanat.length; i++) {
@@ -81,7 +88,7 @@ const hakusanat = async () => {
   		ilm += "<div><i>" + sanalista.sanat[i].ilmentymat[j].lause + "</i>";
   		//ilm += "(" + sanalista.sanat[i].ilmentymat[j].paivays  + ", " + sanalista.sanat[i].ilmentymat[j].sivunumero;
   		var pvm = new Date(sanalista.sanat[i].ilmentymat[j].paivays);
-  		ilm += "(" + pvm.getDay() + "." + pvm.getMonth() + "." + pvm.getFullYear() + ", " + sanalista.sanat[i].ilmentymat[j].sivunumero;
+  		ilm += "(" + pvm.getDate() + "." + (pvm.getMonth() + 1) + "." + pvm.getFullYear() + ", " + sanalista.sanat[i].ilmentymat[j].sivunumero;
 
   		ilm += ", " + sanalista.sanat[i].ilmentymat[j].hs_osio  + ", " + sanalista.sanat[i].ilmentymat[j].kayttoala + ")";
 
