@@ -18,8 +18,8 @@ exports.haeKaikki = async () => {
 }
 
 exports.haeKaikkiVuosilla = async (alku = 0, loppu = 9999) => {
-  const alkuPvm = new Date(alku, 1, 1);
-  const loppuPvm = new Date(loppu, 12, 31);
+  const alkuPvm = new Date(alku, 0, 1);
+  const loppuPvm = new Date(loppu, 11, 31);
   const paluu = await hakusana.haeKaikkiTiedotVuosilla(alkuPvm, loppuPvm);
   return paluu;
 }
