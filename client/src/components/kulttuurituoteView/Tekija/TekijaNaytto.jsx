@@ -108,7 +108,7 @@ const TekijaNaytto = ({ className }) => {
     return (
       <>
         {suodatetutTekijat.map((item) => (
-          <Grid.Row key={item.etunimi + item.sukunimi}>
+          <Grid.Row key={item.id + item.etunimi + item.sukunimi}>
             <div className="menuitem" onClick={() => setAktiivinenTekija(item)}>
               <b>{`${item.sukunimi}, ${item.etunimi}`}</b>{' '}
               {`(${item.ammattinimike})`}

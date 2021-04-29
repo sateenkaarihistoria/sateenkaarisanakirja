@@ -108,7 +108,7 @@ const TeosNaytto = ({ className }) => {
     return (
       <>
         {suodatetutTeokset.map((item) => (
-          <Grid.Row key={item.nimi + item.lajityyppi}>
+          <Grid.Row key={item.id + item.nimi + item.lajityyppi}>
             <div className="menuitem" onClick={() => setAktiivinenTeos(item)}>
               <b>{item.nimi}</b> {`(${item.lajityyppi})`}
             </div>

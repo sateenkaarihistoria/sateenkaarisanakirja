@@ -38,7 +38,7 @@ const AktiivinenTekija = ({
 
     return suodatetutTeokset.map((teos) => (
       <TekijaIlmentyma
-        key={teos.id}
+        key={`${teos.id};${teos.nimi}`}
         teos={teos}
         updateHandler={updateHandler}
         poistoHandler={poistoHandler('teos')(aktiivinenTekija.id)}

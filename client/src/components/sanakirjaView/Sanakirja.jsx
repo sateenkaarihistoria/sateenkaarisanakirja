@@ -144,7 +144,7 @@ const SanakirjaPlain = ({ className }) => {
     return (
       <>
         {suodatetutAsiasanat.map((item) => (
-          <Grid.Row key={item.sana}>
+          <Grid.Row key={`${item.sana};${item.sanaluokka}`}>
             <div
               className="menuitem"
               onClick={(event) => {
