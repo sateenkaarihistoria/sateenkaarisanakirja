@@ -13,9 +13,3 @@
 ## Wiki
 - Sovelluksen Wiki-sivulta löytyy sovelluksen dokumentaatio sekä asennusohjeet
 
-## Toisen kehityskierroksen projektiryhmäläiset / Kevät 2021
-- Loviisa Halttunen
-- Tellervo Kettunen
-- Joel Rauma
-- Sauli Nevalainen
-- Tuomas Henriksson
