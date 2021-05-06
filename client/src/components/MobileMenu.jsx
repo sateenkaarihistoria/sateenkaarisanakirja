@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Menu, Icon, Dropdown } from 'semantic-ui-react';
-import UserContext from '../context/userContext';
+import { useStateValue } from '../context';
 
 const MobileMenu = ({ history, activeItem }) => {
-  const sessioData = useContext(UserContext);
-  
+  const [{ user }] = useStateValue();
+
   const menuSisalto = [
     {
       key: 'sanak',
@@ -57,7 +57,7 @@ const MobileMenu = ({ history, activeItem }) => {
       text: 'Omat tiedot',
       value: 'omatTiedot',
       onClick: () => history.push('/omat-tiedot'),
-    }, 
+    },
     {
       key: 'logout',
       icon: 'sign out',
@@ -74,7 +74,7 @@ const MobileMenu = ({ history, activeItem }) => {
       text: 'Omat tiedot',
       value: 'omatTiedot',
       onClick: () => history.push('/omat-tiedot'),
-    },    
+    },
     {
       key: 'kayttajat',
       icon: 'users',
@@ -99,49 +99,49 @@ const MobileMenu = ({ history, activeItem }) => {
   ];
 
   return (
-    <Menu style={{backgroundColor: '#ecf0f1' }}>
+    <Menu style={{ backgroundColor: '#ecf0f1' }}>
       <Menu.Item>
         <Dropdown
           icon="sidebar"
           floating
-          options={ menuSisalto }
-          trigger={<React.Fragment />}
+          options={menuSisalto}
+          trigger={<></>}
         />
       </Menu.Item>
-      { sessioData.rooli
-          ? <Menu.Item
-              name="sanalomake"
-              active={activeItem === 'sanalomake'}
-              onClick={() => history.push('/sanalomake')}
-            />
-          : null }
+      {user ? (
+        <Menu.Item
+          name="sanalomake"
+          active={activeItem === 'sanalomake'}
+          onClick={() => history.push('/sanalomake')}
+        />
+      ) : null}
       <Menu.Menu position="right">
-          { sessioData.rooli ? (
-            <Menu.Item>
-              { sessioData.rooli === 'admin'
-                ? <Dropdown
-                    icon="user"
-                    floating
-                    options = { adminOptions }
-                    trigger={<React.Fragment />}
-                  />
-                : <Dropdown
-                    icon="user"
-                    floating
-                    options = { tutkijaOptions }
-                    trigger={<React.Fragment />}
-                  /> }
-            </Menu.Item>
-          ) : (
-            <Menu.Item
-              onClick={() => history.push('/kirjautuminen')}
-            >
-              <Icon name="sign in" />
-            </Menu.Item>
-          )}
-        </Menu.Menu>
+        {user ? (
+          <Menu.Item>
+            {user.rooli === 'admin' ? (
+              <Dropdown
+                icon="user"
+                floating
+                options={adminOptions}
+                trigger={<></>}
+              />
+            ) : (
+              <Dropdown
+                icon="user"
+                floating
+                options={tutkijaOptions}
+                trigger={<></>}
+              />
+            )}
+          </Menu.Item>
+        ) : (
+          <Menu.Item onClick={() => history.push('/kirjautuminen')}>
+            <Icon name="sign in" />
+          </Menu.Item>
+        )}
+      </Menu.Menu>
     </Menu>
   );
-}
+};
 
 export default MobileMenu;

@@ -1,7 +1,9 @@
 /node_modules
 /tietokanta
 
-package-lock.json
+/test/db_dump
 
 .env
 .vscode
+
+client/cypress/videos

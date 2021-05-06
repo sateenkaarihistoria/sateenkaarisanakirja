@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button, Confirm, Table } from 'semantic-ui-react';
-import UserContext from '../../context/userContext';
+import { useStateValue } from '../../context';
 import TapahtumaPaivitys from './TapahtumaPaivitys';
 import ViestiTutkijalle from '../ViestiTutkijalle';
 
@@ -13,7 +13,7 @@ const OrganisaationTapahtuma = ({
 }) => {
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
 
-  const sessioData = useContext(UserContext);
+  const [{ user }] = useStateValue();
 
   const poistonVahvistus = () => {
     setVahvistaPoistoNakyvissa(true);
@@ -25,7 +25,7 @@ const OrganisaationTapahtuma = ({
   };
 
   const naytaMuokkauspainikkeet = () => {
-    if (sessioData.token !== null) {
+    if (user) {
       return (
         <Table.Row>
           <Table.Cell>
@@ -48,7 +48,7 @@ const OrganisaationTapahtuma = ({
   };
 
   const naytaViestiTutkijalle = () =>
-    sessioData.token && !tapahtuma.valmis ? (
+    user && !tapahtuma.valmis ? (
       <ViestiTutkijalle viesti={tapahtuma.viesti} />
     ) : null;
 
@@ -77,7 +77,13 @@ const OrganisaationTapahtuma = ({
               <b>Tapahtuman vuosi</b>
             </Table.Cell>
             <Table.Cell className="table-content-cell">
-              {tapahtuma.paivays}
+              {`${tapahtuma.paivays.slice(0, 2)}-${tapahtuma.paivays.slice(
+                2,
+                6,
+              )}-${tapahtuma.paivays.slice(6, 8)}-${tapahtuma.paivays.slice(
+                8,
+                10,
+              )}`}
             </Table.Cell>
           </Table.Row>
           <Table.Row>

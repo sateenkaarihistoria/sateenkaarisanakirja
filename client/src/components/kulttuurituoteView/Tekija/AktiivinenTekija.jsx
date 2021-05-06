@@ -1,55 +1,62 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Divider, Table, Header, Button, Confirm } from 'semantic-ui-react';
 import TekijaIlmentyma from './TekijaIlmentyma';
-import { valitseHakumetodi } from '../../../utilities/hakutoiminnot'
-import UserContext from '../../../context/userContext'
-import TekijaPaivitys from './TekijaPaivitys'
+import { valitseHakumetodi } from '../../../utilities/hakutoiminnot';
+import { useStateValue } from '../../../context';
+import TekijaPaivitys from './TekijaPaivitys';
 
-import './AktiivinenTekija.css'
+import './AktiivinenTekija.css';
 
-const AktiivinenTekija = ({ aktiivinenTekija, suodatus, poistoHandler, updateHandler }) => {
-  const { suodatusPaalla, suodatusoptio, hakutermi } = suodatus
-  const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false)
-  const sessioData = useContext(UserContext);
-  
+const AktiivinenTekija = ({
+  aktiivinenTekija,
+  suodatus,
+  poistoHandler,
+  updateHandler,
+}) => {
+  const { suodatusPaalla, suodatusoptio, hakutermi } = suodatus;
+  const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
+  const [{ user }] = useStateValue();
+
   const naytaTeokset = () => {
-    let suodatetutTeokset = []
-    if (suodatusPaalla && suodatusoptio === 'asiasana' ) {
-      let { hakutermiTrim, predikaatti } = valitseHakumetodi (hakutermi)
-      suodatetutTeokset = aktiivinenTekija.teokset.filter(teos => 
-        predikaatti (hakutermiTrim) (teos['asiasana'][0]))
+    let suodatetutTeokset = [];
+    if (suodatusPaalla && suodatusoptio === 'asiasanat') {
+      const { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
+      suodatetutTeokset = aktiivinenTekija.teokset.filter((teos) =>
+        predikaatti(hakutermiTrim)(teos.asiasanat[0]),
+      );
     } else {
-      suodatetutTeokset = aktiivinenTekija.teokset
+      suodatetutTeokset = aktiivinenTekija.teokset;
     }
 
     // jos käyttäjä ei ole kirjautunut, poistetaan ne ilmentymät jotka eivät ole
     // valmis = true statuksella
-    if (!sessioData.token) {
-      suodatetutTeokset = suodatetutTeokset.filter(teos => teos['valmis'] === true)
+    if (!user) {
+      suodatetutTeokset = suodatetutTeokset.filter(
+        (teos) => teos.valmis === true,
+      );
     }
 
-    return suodatetutTeokset
-      .map(teos => 
-        <TekijaIlmentyma
-          key={teos.id}
-          teos={teos}
-          updateHandler={updateHandler}
-          poistoHandler={poistoHandler ('teos') (aktiivinenTekija.id)}
-        />
-    )
-  }
-  
-  const poistonVahvistus = () =>{ 
-    setVahvistaPoistoNakyvissa(true)
-  }
+    return suodatetutTeokset.map((teos) => (
+      <TekijaIlmentyma
+        key={`${teos.id};${teos.nimi}`}
+        teos={teos}
+        updateHandler={updateHandler}
+        poistoHandler={poistoHandler('teos')(aktiivinenTekija.id)}
+      />
+    ));
+  };
+
+  const poistonVahvistus = () => {
+    setVahvistaPoistoNakyvissa(true);
+  };
 
   const poistaTekija = () => {
-    poistoHandler ('tekija') (aktiivinenTekija.id) (null)
-    setVahvistaPoistoNakyvissa(false)
-  }
+    poistoHandler('tekija')(aktiivinenTekija.id)(null);
+    setVahvistaPoistoNakyvissa(false);
+  };
 
   const naytaMuokkauspainikkeet = () => {
-    if (sessioData.token !== null) {
+    if (user !== null) {
       return (
         <Table.Row>
           <Table.Cell>
@@ -57,28 +64,40 @@ const AktiivinenTekija = ({ aktiivinenTekija, suodatus, poistoHandler, updateHan
               aktiivinenTekija={aktiivinenTekija}
               updateHandler={updateHandler}
             />
-            <Button style={{ margin: '0.5rem' }} compact size='mini' onClick={poistonVahvistus}>Poista</Button>
+            <Button
+              style={{ margin: '0.5rem' }}
+              compact
+              size="mini"
+              onClick={poistonVahvistus}
+            >
+              Poista
+            </Button>
           </Table.Cell>
         </Table.Row>
-      )
+      );
     }
-  }
+  };
+
+  const positionFromTop =
+    document.getElementById('tuloksetGrid2').offsetTop * 2.5;
+  let divPlace = window.scrollY - positionFromTop;
+  divPlace = divPlace > 0 ? divPlace : 0;
 
   return (
-    <div className="">
+    <div className="" style={{ position: 'relative', top: `${divPlace}px` }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
-        {aktiivinenTekija.etunimi + " " + aktiivinenTekija.sukunimi}
+        {`${aktiivinenTekija.etunimi} ${aktiivinenTekija.sukunimi}`}
       </Header>
-      <Table className={"very basic table"} textAlign='left'>
+      <Table className="very basic table" textAlign="left">
         <Table.Body>
           <Table.Row>
             <Table.Cell className="table-label-cell">
               <b>Ammatti</b>
             </Table.Cell>
             <Table.Cell className="table-content-cell">
-                {aktiivinenTekija.ammattinimike}
+              {aktiivinenTekija.ammattinimike}
             </Table.Cell>
-          </Table.Row>          
+          </Table.Row>
           <Table.Row>
             <Table.Cell className="table-label-cell">
               <b>Paikkakunta</b>
@@ -101,16 +120,16 @@ const AktiivinenTekija = ({ aktiivinenTekija, suodatus, poistoHandler, updateHan
       <Divider />
       {naytaTeokset()}
       <Confirm
-        open={ vahvistaPoistoNakyvissa }
-        content='Oletko varma, että haluat poistaa tekijän ja kaikki häneen liittyvät teokset?'
-        size='tiny'
-        cancelButton='Peru'
-        confirmButton='Poista'
+        open={vahvistaPoistoNakyvissa}
+        content="Oletko varma, että haluat poistaa tekijän ja kaikki häneen liittyvät teokset?"
+        size="tiny"
+        cancelButton="Peru"
+        confirmButton="Poista"
         onCancel={() => setVahvistaPoistoNakyvissa(false)}
-        onConfirm= {poistaTekija}
+        onConfirm={poistaTekija}
       />
     </div>
-  )
-}
+  );
+};
 
 export default AktiivinenTekija;

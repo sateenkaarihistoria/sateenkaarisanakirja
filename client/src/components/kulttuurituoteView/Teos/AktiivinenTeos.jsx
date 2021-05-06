@@ -1,14 +1,37 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Button, Confirm, Divider, Table, Header } from 'semantic-ui-react';
-import UserContext from '../../../context/userContext';
+import { useStateValue } from '../../../context';
 import TeosIlmentyma from './TeosIlmentyma';
+import { valitseHakumetodi } from '../../../utilities/hakutoiminnot';
 import TeosPaivitys from '../Tekija/TeosPaivitys';
 
 import './AktiivinenTeos.css';
 
-const AktiivinenTeos = ({ aktiivinenTeos, poistoHandler, updateHandler }) => {
+const AktiivinenTeos = ({
+  aktiivinenTeos,
+  suodatus,
+  poistoHandler,
+  updateHandler,
+}) => {
+  const { suodatusPaalla, suodatusoptio, hakutermi } = suodatus;
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
-  const sessioData = useContext(UserContext);
+  const [{ user }] = useStateValue();
+
+  const naytaTekijät = () => {
+    let suodatetutTekijat = [];
+    if (suodatusPaalla && suodatusoptio === 'asiasana') {
+      const { hakutermiTrim, predikaatti } = valitseHakumetodi(hakutermi);
+      suodatetutTekijat = aktiivinenTeos.teokset.filter((teos) =>
+        predikaatti(hakutermiTrim)(teos.asiasanat[0]),
+      );
+    } else {
+      suodatetutTekijat = aktiivinenTeos.tekijat;
+    }
+
+    return suodatetutTekijat.map((tekija) => (
+      <TeosIlmentyma key={tekija.id} teos_tekija={tekija} />
+    ));
+  };
 
   const poistonVahvistus = () => {
     setVahvistaPoistoNakyvissa(true);
@@ -20,7 +43,7 @@ const AktiivinenTeos = ({ aktiivinenTeos, poistoHandler, updateHandler }) => {
   };
 
   const naytaMuokkauspainikkeet = () => {
-    if (sessioData.token !== null) {
+    if (user) {
       return (
         <Table.Row>
           <Table.Cell>
@@ -39,12 +62,17 @@ const AktiivinenTeos = ({ aktiivinenTeos, poistoHandler, updateHandler }) => {
     }
   };
 
+  const positionFromTop =
+    document.getElementById('tuloksetGrid3').offsetTop * 2.5;
+  let divPlace = window.scrollY - positionFromTop;
+  divPlace = divPlace > 0 ? divPlace : 0;
+
   return (
-    <div className="">
+    <div className="" style={{ position: 'relative', top: `${divPlace}px` }}>
       <Header as="h2" style={{ textAlign: 'left', marginBottom: '1rem' }}>
         {aktiivinenTeos.nimi}
       </Header>
-      <Table className={'very basic table'} textAlign="left">
+      <Table className="very basic table" textAlign="left">
         <Table.Body>
           <Table.Row>
             <Table.Cell className="table-label-cell">
@@ -75,14 +103,14 @@ const AktiivinenTeos = ({ aktiivinenTeos, poistoHandler, updateHandler }) => {
               <b>Asiasana</b>
             </Table.Cell>
             <Table.Cell className="table-content-cell">
-              {aktiivinenTeos.asiasana.join(', ')}
+              {aktiivinenTeos.asiasanat.join(', ')}
             </Table.Cell>
           </Table.Row>
           {naytaMuokkauspainikkeet()}
         </Table.Body>
       </Table>
       <Divider />
-      <TeosIlmentyma teos_tekija={aktiivinenTeos.teos_tekija} />
+      {naytaTekijät()}
       <Confirm
         open={vahvistaPoistoNakyvissa}
         content="Oletko varma, teoksen"

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Container, Responsive } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import RdHeader from './RdHeader';
 import RdMenu from './RdMenu';
@@ -75,12 +74,29 @@ const MainStructure = ({ className }) => {
             Sanakirja-alasivun hakutoiminnot:
           </div>
           <p>
-            Hakukenttään voit kirjoittaa yksittäisiä hakusanoja. Voit käyttää
-            sanankatkaisuja esimerkiksi näin: <i>homos</i>. Kirjainvalikon
-            kautta voit etsiä kaikkia tietyllä kirjaimella alkavia sanoja, tai
-            voit vain selailla sivun vasemmassa reunassa näkyvää sanalistaa.
-            Samaan aihepiiriin liittyviä sanoja voit hakea hakuvalikosta
-            asiasanan avulla. Hakusanakirjassa toimivat asiasanat on listattu
+            Hakukenttään voit kirjoittaa yksittäisiä hakusanoja. Sanojen
+            katkaisuun voi käyttää *-merkkiä haun laajentamiseksi. Esimerkiksi
+            haku: <i>homos*</i> antaa vastaukseksi kirjaimilla homos alkavat
+            hakusanat.
+            <p>
+              <img
+                className="img"
+                width="50%"
+                src="hakuscreen1.png"
+                alt="hakuesimerkki"
+              />
+            </p>
+            Katkaisumerkkiä voi käyttää myös hakusana edellä; haku <i>*mies</i>{' '}
+            antaa tulokseksi mies-loppuiset tietueet.
+          </p>
+          <p>
+            Hakua voi rajata myös vuoden perusteella, valitsemalla toiminnon{' '}
+            <i>Rajaa vuoden perusteella</i>, vuosirajausta voi käyttää
+            hakusanojen lisäksi tai ilman. Kirjainvalikon kautta voit etsiä
+            kaikkia tietyllä kirjaimella alkavia sanoja, tai voit vain selailla
+            sivun vasemmassa reunassa näkyvää sanalistaa. Samaan aihepiiriin
+            liittyviä sanoja voit hakea hakuvalikosta asiasanan avulla.
+            Hakusanakirjassa toimivat asiasanat on listattu
             Valinnat-välilehdellä
           </p>
         </div>
@@ -238,10 +254,9 @@ const RdIntroduction = styled(MainStructure)`
     margin-bottom: 0rem;
     color: black;
   }
+  img {
+    border: 1px solid #555;
+  }
 `;
-
-MainStructure.propTypes = {
-  className: PropTypes.string,
-};
 
 export default RdIntroduction;

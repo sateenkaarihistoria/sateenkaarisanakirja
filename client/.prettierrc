@@ -1,4 +1,6 @@
 {
+  "disableLanguages": [],
   "singleQuote": true,
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "semi": true
 }

@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { Table, Button, Confirm } from 'semantic-ui-react';
-import UserContext from '../../context/userContext';
+import { useStateValue } from '../../context';
 import IlmentymaPaivitys from './IlmentymaPaivitys';
 import ViestiTutkijalle from '../ViestiTutkijalle';
 
@@ -9,7 +9,7 @@ import './AsiasananIlmentyma.css';
 const AsiasananIlmentyma = ({ ilmentyma, poistoHandler, updateHandler }) => {
   const [vahvistaPoistoNakyvissa, setVahvistaPoistoNakyvissa] = useState(false);
 
-  const sessioData = useContext(UserContext);
+  const [{ user }] = useStateValue();
 
   const poistonVahvistus = () => {
     setVahvistaPoistoNakyvissa(true);
@@ -21,7 +21,7 @@ const AsiasananIlmentyma = ({ ilmentyma, poistoHandler, updateHandler }) => {
   };
 
   const naytaMuokkauspainikkeet = () => {
-    if (sessioData.token !== null) {
+    if (user) {
       return (
         <Table.Row>
           <Table.Cell>
@@ -44,7 +44,7 @@ const AsiasananIlmentyma = ({ ilmentyma, poistoHandler, updateHandler }) => {
   };
 
   const naytaViestiTutkijalle = () =>
-    sessioData.token &&
+    user &&
     ilmentyma.viesti !== null &&
     ilmentyma.viesti !== undefined &&
     ilmentyma.viesti !== '' ? (
@@ -75,15 +75,21 @@ const AsiasananIlmentyma = ({ ilmentyma, poistoHandler, updateHandler }) => {
           </Table.Row>
           <Table.Row>
             <Table.Cell colSpan={2}>
-              <div>{ilmentyma.hs_osio + ': "' + ilmentyma.lause + '"'}</div>
+              <div>{`${ilmentyma.hs_osio}: "${ilmentyma.lause}"`}</div>
               <div>
-                {ilmentyma.sivunumero.slice(0, 6) +
-                  '-' +
-                  ilmentyma.sivunumero.slice(6, 8) +
-                  '-' +
-                  ilmentyma.sivunumero.slice(8, 10) +
-                  '-' +
-                  ilmentyma.sivunumero.slice(10, 13)}
+                {`${ilmentyma.sivunumero.slice(
+                  0,
+                  2,
+                )}-${ilmentyma.sivunumero.slice(
+                  2,
+                  6,
+                )}-${ilmentyma.sivunumero.slice(
+                  6,
+                  8,
+                )}-${ilmentyma.sivunumero.slice(
+                  8,
+                  10,
+                )}-${ilmentyma.sivunumero.slice(10, 13)}`}
               </div>
             </Table.Cell>
           </Table.Row>

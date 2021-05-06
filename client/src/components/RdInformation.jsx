@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Container, Responsive } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import RdHeader from './RdHeader';
 import RdMenu from './RdMenu';
@@ -204,7 +203,7 @@ const MainStructure = ({ className }) => {
             <li>Ilmoitus (tapahtumailmoitukset ym.)</li>
             <li>
               Kulttuuri (ml. kotimainen ja ulkomainen kirjallisuus, kotimaiset
-              ja ulkomaiset näytelmät
+              ja ulkomaiset näytelmät)
             </li>
             <li>Mainos</li>
             <li>Mielipide</li>
@@ -215,7 +214,7 @@ const MainStructure = ({ className }) => {
               Tiede (lääkärien ym. kirjoittamat sivistävät ja tiedottavat
               tekstit)
             </li>
-            <li>Ulkomaat (ulkomaan uutiset</li>
+            <li>Ulkomaat (ulkomaan uutiset)</li>
             <li>Urheilu</li>
             <li>Kotimaa (kotimaan uutiset)</li>
           </ul>
@@ -230,7 +229,7 @@ const MainStructure = ({ className }) => {
           <h4 className="ui content header">Lähteen merkintä</h4>
           <p>
             Esimerkkilauseen ilmeneminen on seurattavissa tiettyyn lehteen (HS,
-            <i>Helsingin Sanomat</i>), ja siinä ilmestyneen tekstikatkelman
+            <i> Helsingin Sanomat</i>), ja siinä ilmestyneen tekstikatkelman
             julkaisuvuoteen, kuukauteen ja -päivään, sekä lehden sivunumeroon
             (HSvvvv-kk-pp-000).
           </p>
@@ -371,7 +370,7 @@ const MainStructure = ({ className }) => {
           <h4 className="ui content header">Päiväys</h4>
           <p>
             Uutisen ilmestyminen on ilmaistu kertomalla lehti, julkaisuvuosi,
-            kuukausi, ja -päivä (HSvvvvkkpp).
+            kuukausi, ja -päivä (HS-vvvv-kk-pv).
           </p>
           <h4 className="ui content header">Hakumahdollisuudet</h4>
           <p>
@@ -409,9 +408,5 @@ const RdInformation = styled(MainStructure)`
     margin-top: 0.5rem;
   }
 `;
-
-MainStructure.propTypes = {
-  className: PropTypes.string,
-};
 
 export default RdInformation;

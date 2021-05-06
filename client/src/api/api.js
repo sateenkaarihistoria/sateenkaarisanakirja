@@ -1,78 +1,78 @@
 import axios from 'axios';
 
 export function getSuojattuData(osoite, token) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     axios
-      .get(osoite, { headers: { 'Authorization' : 'Bearer ' + token }})
-      .then(result => {
+      .get(osoite, { headers: { Authorization: `Bearer ${token}` } })
+      .then((result) => {
         result.status === 200
           ? resolve({ status: 'success', data: result.data })
           : resolve({ status: 'failure', data: result.data });
       })
-      .catch(error => {
+      .catch((error) => {
         resolve({ status: 'failure', data: error });
       });
   });
 }
 
 export function postData(osoite, data, token) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     axios
-      .post(osoite, data, { headers: { 'Authorization' : 'Bearer ' + token }})
-      .then(result => {
+      .post(osoite, data, { headers: { Authorization: `Bearer ${token}` } })
+      .then((result) => {
         result.status === 201
           ? resolve({ status: 'success', data: result.data })
           : resolve({ status: 'failure' });
       })
-      .catch(error => {
+      .catch((error) => {
         resolve({ status: 'error', data: error });
       });
   });
 }
 
 export function putData(osoite, data, id, token) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     axios
-      .put(osoite + id, data, { headers: { 'Authorization' : 'Bearer ' + token }})
-      .then(result => {
+      .put(osoite + id, data, { headers: { Authorization: `Bearer ${token}` } })
+      .then((result) => {
         result.status === 200
           ? resolve({ status: 'success' })
           : resolve({ status: 'failure' });
       })
-      .catch(error => {
+      .catch((error) => {
         resolve({ status: 'error', data: error });
       });
   });
 }
 
 export function deleteData(osoite, id, token) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     axios
-      .delete(osoite + id, { headers: { 'Authorization' : 'Bearer ' + token }})
-      .then(result => {
+      .delete(osoite + id, { headers: { Authorization: `Bearer ${token}` } })
+      .then((result) => {
         result.status === 200 || 204
           ? resolve({ status: 'success' })
           : resolve({ status: 'failure', data: result.data });
       })
-      .catch(error => {
+      .catch((error) => {
         resolve({ status: 'failure', data: error });
       });
   });
 }
 
 export function postLogin(nimi, salasana) {
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     axios
       .post('/login/', {
-        nimi: nimi,
-        salasana: salasana,
+        nimi,
+        salasana,
       })
-      .then(result => {
+      .then((result) => {
         result.status === 200
           ? resolve({ status: 'success', data: result.data })
           : resolve({ status: 'failed', data: null });
       })
-      .catch(error => {
+      .catch((error) => {
         resolve({ status: 'failed', data: error });
       });
   });
@@ -84,14 +84,34 @@ export function postLogin(nimi, salasana) {
  */
 export function getAsiasanat() {
   return new Promise((resolve, reject) => {
+    console.log('getAsiasanat()');
     axios
       .get('/api/hakusana')
-      .then(result => {
+      .then((result) => {
         result.status === 200
           ? resolve({ status: 'success', data: result.data })
           : resolve({ status: 'failure', data: null });
       })
-      .catch(error => {
+      .catch((error) => {
+        reject({ status: 'error', data: error });
+      });
+  });
+}
+
+/**
+ * Hakee asiasanat annetulta aikaväliltä.
+ */
+export function getAsiasanatV(alku, loppu) {
+  return new Promise((resolve, reject) => {
+    console.log('getAsiasanatV()');
+    axios
+      .get('/api/hakusana', { params: { alkuvuosi: alku, loppuvuosi: loppu } })
+      .then((result) => {
+        result.status === 200
+          ? resolve({ status: 'success', data: result.data })
+          : resolve({ status: 'failure', data: null });
+      })
+      .catch((error) => {
         reject({ status: 'error', data: error });
       });
   });
@@ -101,12 +121,27 @@ export function getKulttuurituotteet() {
   return new Promise((resolve, reject) => {
     axios
       .get('/api/kulttuuriteos')
-      .then(result => {
+      .then((result) => {
         result.status === 200
           ? resolve({ status: 'success', data: result.data })
           : resolve({ status: 'failure', data: null });
       })
-      .catch(error => {
+      .catch((error) => {
+        reject({ status: 'error', data: error });
+      });
+  });
+}
+
+export function getHenkilot() {
+  return new Promise((resolve, reject) => {
+    axios
+      .get('/api/henkilo')
+      .then((result) => {
+        result.status === 200
+          ? resolve({ status: 'success', data: result.data })
+          : resolve({ status: 'failure', data: null });
+      })
+      .catch((error) => {
         reject({ status: 'error', data: error });
       });
   });
@@ -116,12 +151,12 @@ export function getOrganisaatiot() {
   return new Promise((resolve, reject) => {
     axios
       .get('/api/organisaatio')
-      .then(result => {
+      .then((result) => {
         result.status === 200
           ? resolve({ status: 'success', data: result.data })
           : resolve({ status: 'failure', data: null });
       })
-      .catch(error => {
+      .catch((error) => {
         reject({ status: 'error', data: error });
       });
   });

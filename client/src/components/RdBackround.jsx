@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { Container, Responsive } from 'semantic-ui-react';
-import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import RdHeader from './RdHeader';
 import RdMenu from './RdMenu';
@@ -55,7 +54,8 @@ const MainStructure = ({ className }) => {
             ohjelmiston rakentamisen aloittivat Ilmari Saaren johdolla Marjaana
             Laine ja Riku Mäenpää. Keväällä 2020 työtä jatkoivat muun muassa
             Arttu Ylikotilan johdolla Jarno Ihalainen, Roope Putila ja Christian
-            Schmidlechner.
+            Schmidlechner. Keväällä 2021 projektia jatkoivat Tuomas Henrikssonin
+            johdolla muun muassa Sauli Nevalainen.
           </p>
           <div className="ui divider" />
           <p>
@@ -127,9 +127,5 @@ const RdBackround = styled(MainStructure)`
     margin-top: 0.5rem;
   }
 `;
-
-MainStructure.propTypes = {
-  className: PropTypes.string,
-};
 
 export default RdBackround;
