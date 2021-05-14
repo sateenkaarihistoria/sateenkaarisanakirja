@@ -12,7 +12,12 @@ const api = require("./routes/api_router");
 
 // Setup middleware stack
 app.use(compression());
-app.use(helmet());
+//app.use(helmet());
+app.use(
+  helmet({
+    frameguard: false,
+  })
+);
 app.use(cors());
 app.use(express.json());
 app.use(
